@@ -1,3 +1,3 @@
 export function AdminHome() {
-  return <div>Hello, World!</div>;
+  return <div>This is the admin home component.</div>;
 }

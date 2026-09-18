@@ -1,3 +1,4 @@
+/* eslint-disable perfectionist/sort-objects */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -5,20 +6,39 @@ import './styles/global.scss';
 import './styles/index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
+import { AdminLogin } from './admin-routes/authentication/AdminLogin';
+import { AdminRequired } from './admin-routes/authentication/AdminRequired';
 import { AdminHome } from './admin-routes/home/Home';
 import { Home } from './client-routes/home/Home';
+import { AuthProvider } from './components/AuthProvider';
 
 const router = createBrowserRouter([
-  // Admin routes
   {
-    Component: AdminHome,
-    path: '/admin',
+    Component: AuthProvider,
+    children: [
+      {
+        // Admin routes
+        Component: AdminRequired,
+        children: [
+          {
+            path: '/admin',
+            Component: AdminHome,
+          },
+        ],
+      },
+    ],
   },
 
   // Client routes
   {
-    Component: Home,
     path: '/',
+    Component: Home,
+  },
+
+  // Auth routes
+  {
+    path: '/admin/login',
+    Component: AdminLogin,
   },
 ]);
 

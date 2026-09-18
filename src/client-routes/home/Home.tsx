@@ -1,3 +1,3 @@
 export function Home() {
-  return <div>Hello, World!</div>;
+  return <div>This is the client home component.</div>;
 }

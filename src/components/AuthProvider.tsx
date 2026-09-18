@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 import { auth } from '../firebase/firebase';
 
 export function AuthProvider() {
-  const [user, setUser] = useState<null | User>(null);
+  const [user, setUser] = useState<null | User>(auth.currentUser);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
