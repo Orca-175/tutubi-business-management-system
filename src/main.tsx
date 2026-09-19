@@ -9,11 +9,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AdminLogin } from './admin-routes/authentication/AdminLogin';
 import { AdminRequired } from './admin-routes/authentication/AdminRequired';
 import { AdminHome } from './admin-routes/home/Home';
+import { AdminLayout } from './admin-routes/layout/AdminLayout';
 import { Home } from './client-routes/home/Home';
 import { AuthProvider } from './components/AuthProvider';
 
-const router = createBrowserRouter([
-  {
+  const router = createBrowserRouter([
+    {
     Component: AuthProvider,
     children: [
       {
@@ -21,8 +22,13 @@ const router = createBrowserRouter([
         Component: AdminRequired,
         children: [
           {
-            path: '/admin',
-            Component: AdminHome,
+            Component: AdminLayout,
+            children: [
+              {
+                path: '/admin',
+                Component: AdminHome,
+              },
+            ],
           },
         ],
       },

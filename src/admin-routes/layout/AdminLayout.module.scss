@@ -1,0 +1,59 @@
+@use 'sass:color';
+
+@use '../../styles/colors.scss';
+@use '../../styles/variables.scss';
+
+.brand {
+    color: colors.$secondary-text;
+    margin-bottom: 2rem;
+}
+
+.sidebar {
+    background-color: colors.$primary-background;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+
+    .bottomNavItems {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: end;
+    }
+
+    .logoutButton {
+        all: unset;
+    }
+
+    ul {
+        color: colors.$secondary-text;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 1rem;
+        list-style: none;
+        padding: 0;
+    }
+
+    a, .logoutButton {
+        align-items: center;
+        border-left: 2px solid colors.$primary-border;
+        border-radius: variables.$border-radius-small;
+        display: flex;
+        gap: .5rem;
+        padding: .5rem 0;
+        padding-left: 1rem;
+
+        &:hover {
+            background-color: colors.$primary-background-hover;
+            cursor: pointer;
+        }
+    }
+}
+
+.root {
+    display: grid;
+    grid-template-columns: 20rem 1fr;
+    min-height: 100dvh
+}

@@ -7,9 +7,11 @@ $neutral-800: #444444;
 $neutral-900: #202020;
 $neutral-1000: #000000;
 
+$purple-50: #f2e3ff;
 $purple-300: #9e58d8;
 $purple-500: #6c29a3;
 $purple-800: #44245e;
+$purple-900: #3b1758;
 
 $red-300: #ff6262;
 
@@ -17,6 +19,9 @@ $yellow-500: #ffff5f;
 
 // Semantic tokens
 $primary: $purple-500;
+$primary-background: $purple-800;
+$primary-background-hover: $purple-900;
+$primary-border: $purple-50;
 
 $primary-text: $neutral-900;
 $secondary-text: $neutral-0;
