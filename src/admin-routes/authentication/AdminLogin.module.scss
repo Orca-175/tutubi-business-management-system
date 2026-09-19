@@ -1,0 +1,25 @@
+@use '../../styles/mixins.scss';
+
+.authForm {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    @include mixins.card;
+}
+
+.formButton {
+    @include mixins.button-filled;
+}
+
+.formInput {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading {
+    margin-bottom: 1rem;
+}

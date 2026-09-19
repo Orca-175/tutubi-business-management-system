@@ -1,0 +1,27 @@
+@use 'sass:color';
+
+@use './colors.scss';
+@use './variables.scss';
+
+@mixin button-filled($background-color: colors.$primary, $color: colors.$secondary-text) {
+    all: unset;
+    background-color: $background-color;
+    border-radius: variables.$border-radius-small;
+    color: $color;
+    padding: .25em 1em;
+
+    &:hover {
+        background-color: color.scale($background-color, $lightness: -10%);
+        cursor: pointer;
+    }
+}
+
+@mixin card() {
+    @include box-shadow;
+    border-radius: variables.$border-radius-small;
+    padding: 1rem;
+}
+
+@mixin box-shadow($color: colors.$shadow) {
+    box-shadow: 0 2px 2px 2px color.scale($color, $alpha: -90%);
+}

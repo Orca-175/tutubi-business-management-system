@@ -1,0 +1,30 @@
+// Color tokens
+$green-300: #8dff8d;
+
+$neutral-0: #ffffff;
+$neutral-500: #888888;
+$neutral-800: #444444;
+$neutral-900: #202020;
+$neutral-1000: #000000;
+
+$purple-300: #9e58d8;
+$purple-500: #6c29a3;
+$purple-800: #44245e;
+
+$red-300: #ff6262;
+
+$yellow-500: #ffff5f;
+
+// Semantic tokens
+$primary: $purple-500;
+
+$primary-text: $neutral-900;
+$secondary-text: $neutral-0;
+
+$border: $neutral-500;
+
+$shadow: $neutral-800;
+
+$success: $green-300;
+$danger: $red-300;
+$warning: $yellow-500;
