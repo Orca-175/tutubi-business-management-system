@@ -9,12 +9,17 @@ import {
   BiSolidNotepad,
   BiSolidPurchaseTag,
 } from 'react-icons/bi';
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 
+import { adminPaths } from '../../constants/route-paths/adminPaths';
 import { auth } from '../../firebase/firebase';
 import styles from './AdminLayout.module.scss';
 
 export function AdminLayout() {
+  const location = useLocation();
+  const currentPageEntry = Object.entries(adminPaths).find(([_, path]) => path == location.pathname);
+  const currentPageHeading = currentPageEntry ? currentPageEntry[0] : '';
+
   return (
     <div className={styles.root}>
       <nav className={styles.sidebar}>
@@ -80,6 +85,9 @@ export function AdminLayout() {
       </nav>
 
       <main>
+        <h1 className={styles.pageHeading}>
+          {currentPageHeading}
+        </h1>
         <Outlet />
       </main>
     </div>

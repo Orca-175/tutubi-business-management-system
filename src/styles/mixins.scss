@@ -11,7 +11,7 @@
     padding: .25em 1em;
 
     &:hover {
-        background-color: color.scale($background-color, $lightness: -10%);
+        background-color: color.scale($background-color, $lightness: variables.$hover-color-lightness);
         cursor: pointer;
     }
 }
@@ -23,5 +23,5 @@
 }
 
 @mixin box-shadow($color: colors.$shadow) {
-    box-shadow: 0 2px 2px 2px color.scale($color, $alpha: -90%);
+    box-shadow: 0 2px 2px 2px color.scale($color, $alpha: variables.$shadow-color-alpha);
 }
