@@ -26,3 +26,22 @@ input {
     border-style: normal;
     border-radius: variables.$border-radius-small;
 }
+
+table {
+    border: 1px solid colors.$border;
+    border-radius: variables.$border-radius-small;
+    border-spacing: 0;
+
+    td, th {
+        padding: .5rem;
+        border-bottom: 1px solid colors.$border;
+    }
+
+    th {
+        text-align: start;
+    }
+
+    tr:last-child > td {
+        border: none;
+    }
+}
