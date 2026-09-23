@@ -6,7 +6,7 @@
     flex-direction: column;
 
     hr {
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
     }
 }
 
@@ -20,7 +20,12 @@
     }
 }
 
+.tableAdmin th {
+    background-color: colors.$primary;
+    color: colors.$secondary-text;
+}
+
 .tableContainer {
     overflow-x: auto;
-    padding-bottom: 1rem;
+    padding-bottom: .5rem;
 }

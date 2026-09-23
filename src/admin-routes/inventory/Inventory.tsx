@@ -1,4 +1,4 @@
-import common from '../../styles/common-styles/Common.module.scss';
+import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Inventory() {
   return (
@@ -7,7 +7,7 @@ export function Inventory() {
       <hr />
       <div className={common.card}>
         <div className={common.tableContainer}>
-          <table>
+          <table className={common.tableAdmin}>
             <thead>
               <tr>
                 <th>Field</th>
@@ -20,6 +20,15 @@ export function Inventory() {
             </thead>
             <tbody>
               <tr>
+                <td>Value</td>
+                <td>Value</td>
+                <td>Value</td>
+                <td>Value</td>
+                <td>Value</td>
+                <td>Value</td>
+              </tr>
+              <tr>
+                <td>Value</td>
                 <td>Value</td>
                 <td>Value</td>
                 <td>Value</td>
