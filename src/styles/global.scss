@@ -9,6 +9,12 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
+hr {
+    border-style:solid;
+    border-radius: variables.$border-radius-small;
+    color: colors.$border;
+}
+
 html {
     color: colors.$primary-text;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 

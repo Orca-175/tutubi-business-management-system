@@ -10,6 +10,7 @@
 
 main {
     padding: 1rem;
+    min-width: 0;
 }
 
 .pageHeading {
@@ -64,5 +65,5 @@ main {
 .root {
     display: grid;
     grid-template-columns: 16rem 1fr;
-    min-height: 100dvh
+    min-height: 100dvh;
 }
