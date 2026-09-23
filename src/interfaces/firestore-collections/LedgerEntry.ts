@@ -8,3 +8,7 @@ export interface LedgerEntry {
   quantity: number;
   supplierId: string;
 }
+
+export interface LedgerEntryData extends LedgerEntry {
+  docId: string;
+}
