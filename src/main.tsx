@@ -11,6 +11,7 @@ import { AdminRequired } from './admin-routes/authentication/AdminRequired';
 import { AdminHome } from './admin-routes/home/Home';
 import { Inventory } from './admin-routes/inventory/Inventory';
 import { AdminLayout } from './admin-routes/layout/AdminLayout';
+import { Ledger } from './admin-routes/ledger/Ledger';
 import { Home } from './client-routes/home/Home';
 import { AuthProvider } from './components/AuthProvider';
 
@@ -32,6 +33,10 @@ import { AuthProvider } from './components/AuthProvider';
               {
                 path: '/admin/inventory',
                 Component: Inventory,
+              },
+              {
+                path: '/admin/ledger',
+                Component: Ledger,
               },
             ],
           },

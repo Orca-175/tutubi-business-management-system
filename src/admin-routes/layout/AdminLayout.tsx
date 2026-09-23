@@ -39,7 +39,7 @@ export function AdminLayout() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/admin/ledger">
               <BiSolidBookOpen />
               <div>Ledger</div>
             </Link>
