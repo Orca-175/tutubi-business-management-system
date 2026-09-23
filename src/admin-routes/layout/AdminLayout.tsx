@@ -33,7 +33,7 @@ export function AdminLayout() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/admin/inventory">
               <BiSolidCylinder />
               <div>Inventory</div>
             </Link>

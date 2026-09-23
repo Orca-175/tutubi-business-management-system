@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AdminLogin } from './admin-routes/authentication/AdminLogin';
 import { AdminRequired } from './admin-routes/authentication/AdminRequired';
 import { AdminHome } from './admin-routes/home/Home';
+import { Inventory } from './admin-routes/inventory/Inventory';
 import { AdminLayout } from './admin-routes/layout/AdminLayout';
 import { Home } from './client-routes/home/Home';
 import { AuthProvider } from './components/AuthProvider';
@@ -27,6 +28,10 @@ import { AuthProvider } from './components/AuthProvider';
               {
                 path: '/admin',
                 Component: AdminHome,
+              },
+              {
+                path: '/admin/inventory',
+                Component: Inventory,
               },
             ],
           },
