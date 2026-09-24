@@ -1,9 +1,9 @@
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import type { LedgerEntryData } from '../../interfaces/firestore-collections/LedgerEntry';
 
-import { ledgerConverter } from '../../firebase/converters/collectionConverters';
+import { ledgerConverter, productConverter, supplierConverter } from '../../firebase/converters/collectionConverters';
 import { db } from '../../firebase/firebase';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 
@@ -20,7 +20,27 @@ export function Ledger() {
         limit(itemsPerPage),
         orderBy('createdAt'),
       ))).docs;
-      const ledgerData = ledgerDocSnaps.map((doc) => ({ docId: doc.id, ...doc.data() }));
+
+      const ledgerData = await Promise.all(ledgerDocSnaps.map(async document => {
+        const productDoc = await getDoc(
+          doc(db, `products/${document.data().productId}`)
+            .withConverter(productConverter),
+        );
+        const productName = productDoc.exists() ? productDoc.data().name : '';
+
+        const supplierDoc = await getDoc(
+          doc(db, `suppliers/${document.data().supplierId}`)
+            .withConverter(supplierConverter),
+        );
+        const supplierName = supplierDoc.exists() ? supplierDoc.data().businessName : '';
+
+        return {
+          docId: document.id,
+          productName: productName,
+          supplierName: supplierName,
+          ...document.data(),
+        };
+      }));
 
       setLedgerData(ledgerData);
       setIsLoading(false);
@@ -57,13 +77,15 @@ function LedgerTable({ ledgerData }: {
     <table className={common.tableAdmin}>
       <thead>
         <tr>
-          <th>Total</th>
-          <th>Price</th>
+          <th>Product</th>
           <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
           <th>Paid</th>
           <th>Paid At</th>
           <th>Head</th>
           <th>Menudencia</th>
+          <th>Supplier</th>
         </tr>
       </thead>
       <tbody>
@@ -73,6 +95,7 @@ function LedgerTable({ ledgerData }: {
 
           return (
             <tr key={ledgerEntry.docId}>
+              <td>{ledgerEntry.productName}</td>
               <td>{totalPrice}</td>
               <td>P {ledgerEntry.price}</td>
               <td>{ledgerEntry.quantity}</td>
@@ -80,6 +103,7 @@ function LedgerTable({ ledgerData }: {
               <td>{paidAt}</td>
               <td>{String(ledgerEntry.head)}</td>
               <td>{String(ledgerEntry.menudencia)}</td>
+              <td>{ledgerEntry.supplierName}</td>
             </tr>
           );
         })}
