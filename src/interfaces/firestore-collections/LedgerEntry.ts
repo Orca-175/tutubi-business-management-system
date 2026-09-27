@@ -10,6 +10,7 @@ export interface LedgerEntry {
   quantity: number; // In kg
   supplierId: string;
   supplierName: string;
+  totalPrice: number;
 }
 
 export interface LedgerEntryData extends LedgerEntry {

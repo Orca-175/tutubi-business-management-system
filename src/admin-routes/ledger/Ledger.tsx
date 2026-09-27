@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, QueryConstraint } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import type { LedgerEntryData } from '../../interfaces/firestore-collections/LedgerEntry';
@@ -12,11 +12,12 @@ import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Ledger() {
   const [ledgerData, setLedgerData] = useState<LedgerEntryData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Loading on initial render
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('asc');
+  const [queryConstraints, setQueryConstraints] = useState<QueryConstraint[]>([]);
 
-  const itemsPerPage = 20;
+  const itemsPerPage = 1;
 
   const {
     currentStartDocId,
@@ -32,31 +33,51 @@ export function Ledger() {
 
   useEffect(() => {
     async function getInitialLedgerEntries() {
-      const ledgerDocSnaps = (await getDocs(query(
+      const docs = (await getDocs(query(
         collection(db, ledger)
           .withConverter(ledgerConverter),
         limit(itemsPerPage + 1),
         orderBy(orderByString, orderByDirection),
       ))).docs;
-      const nextPageExists = ledgerDocSnaps.length > itemsPerPage;
+      const nextPageExists = docs.length > itemsPerPage;
 
       if (nextPageExists) {
-        ledgerDocSnaps.pop();
+        docs.pop();
       }
 
-      const ledgerData = await Promise.all(
-        ledgerDocSnaps.map(async document => ({ docId: document.id, ...document.data() })),
-      );
+      const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
 
-      initPagination(ledgerDocSnaps[0], ledgerDocSnaps.at(-1)!, nextPageExists);
-      setLedgerData(ledgerData);
+      initPagination(docs[0], docs.at(-1)!, nextPageExists);
+      setLedgerData(data);
       setIsLoading(false);
+    }
+
+    async function refreshLedgerEntries() {
+      const docs = (await getDocs(query(
+        collection(db, ledger)
+          .withConverter(ledgerConverter),
+        limit(itemsPerPage + 1),
+        orderBy(orderByString, orderByDirection),
+        ...queryConstraints,
+      ))).docs;
+      const nextPageExists = docs.length > itemsPerPage;
+
+      if (nextPageExists) {
+        docs.pop();
+      }
+
+      const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
+
+      initPagination(docs[0], docs.at(-1)!, nextPageExists);
+      setLedgerData(data);
     }
 
     if (isLoading) {
       getInitialLedgerEntries();
+    } else {
+      refreshLedgerEntries();
     }
-  }, [initPagination, isLoading, orderByDirection, orderByString]);
+  }, [initPagination, isLoading, orderByDirection, orderByString, queryConstraints]);
 
   return (
     <div className={common.root}>
@@ -117,7 +138,7 @@ function LedgerTable({ ledgerData }: {
           return (
             <tr key={ledgerEntry.docId}>
               <td>{ledgerEntry.productName}</td>
-              <td>{ledgerEntry.quantity}kg</td>
+              <td>{ledgerEntry.quantity} kg</td>
               <td>P{ledgerEntry.price}</td>
               <td>P{totalPrice}</td>
               <td>{String(ledgerEntry.paid)}</td>

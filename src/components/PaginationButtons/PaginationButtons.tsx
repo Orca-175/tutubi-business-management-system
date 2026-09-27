@@ -53,10 +53,10 @@ export function PaginationButtons({
               <button
                 className={classNames(
                   styles.paginationButton,
-                  currentStartDocId === doc.id ||
+                  currentStartDocId === doc?.id ||
                   pageStack.length === 0 ? styles.active : styles.inactive,
                 )}
-                key={`pageButton${doc.id}`}
+                key={`pageButton${doc?.id}`}
                 onClick={() => handlePageBtnClick(orderByString, orderByDirection, index + 1)}
               >
                 {index + 1}
