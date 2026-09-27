@@ -6,12 +6,12 @@ export interface LedgerEntry {
   paidAt: string;
   price: number;
   productId: string;
-  quantity: number;
+  productName: string;
+  quantity: number; // In kg
   supplierId: string;
+  supplierName: string;
 }
 
 export interface LedgerEntryData extends LedgerEntry {
   docId: string;
-  productName: string;
-  supplierName: string;
 }

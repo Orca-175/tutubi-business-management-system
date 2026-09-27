@@ -1,53 +1,62 @@
-import { collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 import type { LedgerEntryData } from '../../interfaces/firestore-collections/LedgerEntry';
 
-import { ledgerConverter, productConverter, supplierConverter } from '../../firebase/converters/collectionConverters';
+import { PaginationButtons } from '../../components/PaginationButtons/PaginationButtons';
+import { ledger } from '../../constants/firebaseCollectionStrings';
+import { ledgerConverter } from '../../firebase/converters/collectionConverters';
 import { db } from '../../firebase/firebase';
+import { usePagination } from '../../hooks/usePagination';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Ledger() {
   const [ledgerData, setLedgerData] = useState<LedgerEntryData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [orderByString, setOrderByString] = useState('createdAt');
+  const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('asc');
+
   const itemsPerPage = 20;
+
+  const {
+    currentStartDocId,
+    getFilteredPageStack,
+    handleNextBtnClick,
+    handlePageBtnClick,
+    handlePrevBtnClick,
+    initPagination,
+    nextPageExists,
+    pageStack,
+    prevPageExists,
+  } = usePagination(setLedgerData, ledger, ledgerConverter, itemsPerPage);
 
   useEffect(() => {
     async function getInitialLedgerEntries() {
       const ledgerDocSnaps = (await getDocs(query(
-        collection(db, 'ledger')
+        collection(db, ledger)
           .withConverter(ledgerConverter),
-        limit(itemsPerPage),
-        orderBy('createdAt'),
+        limit(itemsPerPage + 1),
+        orderBy(orderByString, orderByDirection),
       ))).docs;
+      const nextPageExists = ledgerDocSnaps.length > itemsPerPage;
 
-      const ledgerData = await Promise.all(ledgerDocSnaps.map(async document => {
-        const productDoc = await getDoc(
-          doc(db, `products/${document.data().productId}`)
-            .withConverter(productConverter),
-        );
-        const productName = productDoc.exists() ? productDoc.data().name : '';
+      if (nextPageExists) {
+        ledgerDocSnaps.pop();
+      }
 
-        const supplierDoc = await getDoc(
-          doc(db, `suppliers/${document.data().supplierId}`)
-            .withConverter(supplierConverter),
-        );
-        const supplierName = supplierDoc.exists() ? supplierDoc.data().businessName : '';
+      const ledgerData = await Promise.all(
+        ledgerDocSnaps.map(async document => ({ docId: document.id, ...document.data() })),
+      );
 
-        return {
-          docId: document.id,
-          productName: productName,
-          supplierName: supplierName,
-          ...document.data(),
-        };
-      }));
-
+      initPagination(ledgerDocSnaps[0], ledgerDocSnaps.at(-1)!, nextPageExists);
       setLedgerData(ledgerData);
       setIsLoading(false);
     }
 
-    getInitialLedgerEntries();
-  }, []);
+    if (isLoading) {
+      getInitialLedgerEntries();
+    }
+  }, [initPagination, isLoading, orderByDirection, orderByString]);
 
   return (
     <div className={common.root}>
@@ -66,6 +75,18 @@ export function Ledger() {
           )}
         </div>
       </div>
+      <PaginationButtons
+        currentStartDocId={currentStartDocId}
+        getFilteredPageStack={getFilteredPageStack}
+        handleNextBtnClick={handleNextBtnClick}
+        handlePageBtnClick={handlePageBtnClick}
+        handlePrevBtnClick={handlePrevBtnClick}
+        nextPageExists={nextPageExists}
+        orderByDirection={orderByDirection}
+        orderByString={orderByString}
+        pageStack={pageStack}
+        prevPageExists={prevPageExists}
+      />
     </div>
   );
 }
@@ -96,9 +117,9 @@ function LedgerTable({ ledgerData }: {
           return (
             <tr key={ledgerEntry.docId}>
               <td>{ledgerEntry.productName}</td>
-              <td>{totalPrice}</td>
-              <td>P {ledgerEntry.price}</td>
-              <td>{ledgerEntry.quantity}</td>
+              <td>{ledgerEntry.quantity}kg</td>
+              <td>P{ledgerEntry.price}</td>
+              <td>P{totalPrice}</td>
               <td>{String(ledgerEntry.paid)}</td>
               <td>{paidAt}</td>
               <td>{String(ledgerEntry.head)}</td>
