@@ -33,9 +33,6 @@ export function usePagination<T>(
     endDoc: QueryDocumentSnapshot<T>,
     nextPageExists: boolean,
   ) => {
-    console.log(startDoc);
-    console.log(endDoc);
-
     setPageStack([startDoc]);
     setCurrentStartDoc(startDoc);
     setCurrentEndDoc(endDoc);
@@ -44,10 +41,10 @@ export function usePagination<T>(
 
   // For limiting the amount of pagination buttons on a page
   function getFilteredPageStack() {
-    const numberOfPageBtns = 3;
+    const numberOfPageBtns = 5;
     const currentStartDocIndex = pageStack.findIndex(doc => doc?.id === currentStartDoc?.id);
 
-    if (pageStack.length > numberOfPageBtns && currentStartDocIndex > numberOfPageBtns - 1) {
+    if (pageStack.length > numberOfPageBtns && currentStartDocIndex > (numberOfPageBtns - 1)) {
       return pageStack.filter((_, index) => (
         index >= (currentStartDocIndex - (numberOfPageBtns - 1)) && index <= currentStartDocIndex
       ));
@@ -121,7 +118,7 @@ export function usePagination<T>(
     const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
     setData(data);
 
-    if (!pageStack.some(doc => doc.id == docs[0]?.id)) {
+    if (!pageStack.some(doc => doc.id === docs[0]?.id)) {
       setPageStack([...pageStack, docs[0]]);
     }
 
@@ -131,6 +128,7 @@ export function usePagination<T>(
   }
 
   return {
+    currentStartDocId: currentStartDoc?.id,
     getFilteredPageStack: getFilteredPageStack,
     handleNextBtnClick: handleNextBtnClick,
     handlePageBtnClick: handlePageBtnClick,

@@ -1,0 +1,37 @@
+@use '../../styles/colors.scss';
+@use '../../styles/mixins.scss';
+
+.active {
+    @include mixins.button-filled;
+}
+
+.inactive {
+    @include mixins.button-ghost;
+}
+
+.paginationButton {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    height: 1.75rem;
+    width: 1.75rem;
+
+    svg {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
+}
+
+.paginationButtons {
+    display: grid;
+    grid-template-columns: 6rem 9rem 6rem;
+    place-items: center;
+    place-content: center;
+}
+
+.pageButtons {
+    display: flex;
+    gap: .5rem;
+}
