@@ -7,6 +7,7 @@ import {
   limitToLast,
   orderBy,
   query,
+  QueryConstraint,
   type QueryDocumentSnapshot,
   startAfter,
   startAt,
@@ -58,6 +59,7 @@ export function usePagination<T>(
     orderByString: string,
     orderByDirection: 'asc' | 'desc',
     pageNumber: number,
+    queryConstraints: QueryConstraint[] = [],
   ) {
     const docs = (await getDocs(query(
       collection(db, collectionString)
@@ -65,6 +67,7 @@ export function usePagination<T>(
         limit(itemsPerPage + 1),
         orderBy(orderByString, orderByDirection),
         startAt(pageStack[pageNumber - 1]),
+        ...queryConstraints,
     ))).docs;
     const nextPageExists = docs.length > itemsPerPage;
 
@@ -82,6 +85,7 @@ export function usePagination<T>(
   async function handlePrevBtnClick(
     orderByString: string,
     orderByDirection: 'asc' | 'desc',
+    queryConstraints: QueryConstraint[] = [],
   ) {
     const docs = (await getDocs(query(
       collection(db, collectionString)
@@ -89,6 +93,7 @@ export function usePagination<T>(
         limitToLast(itemsPerPage),
         orderBy(orderByString, orderByDirection),
         endBefore(currentStartDoc),
+        ...queryConstraints,
     ))).docs;
 
     const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
@@ -101,6 +106,7 @@ export function usePagination<T>(
   async function handleNextBtnClick(
     orderByString: string,
     orderByDirection: 'asc' | 'desc',
+    queryConstraints: QueryConstraint[] = [],
   ) {
     const docs = (await getDocs(query(
       collection(db, collectionString)
@@ -108,6 +114,7 @@ export function usePagination<T>(
         limit(itemsPerPage + 1),
         orderBy(orderByString, orderByDirection),
         startAfter(currentEndDoc),
+        ...queryConstraints,
     ))).docs;
     const nextPageExists = docs.length > itemsPerPage;
 
