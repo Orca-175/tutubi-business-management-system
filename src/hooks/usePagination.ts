@@ -1,5 +1,17 @@
-import { collection, endAt, type FirestoreDataConverter, getDocs, limit, orderBy, query, type QueryDocumentSnapshot, startAfter, startAt } from 'firebase/firestore';
-import { useState } from 'react';
+import {
+  collection,
+  endBefore,
+  type FirestoreDataConverter,
+  getDocs,
+  limit,
+  limitToLast,
+  orderBy,
+  query,
+  type QueryDocumentSnapshot,
+  startAfter,
+  startAt,
+} from 'firebase/firestore';
+import { useCallback, useState } from 'react';
 
 import { db } from '../firebase/firebase';
 
@@ -13,6 +25,36 @@ export function usePagination<T>(
   const [currentStartDoc, setCurrentStartDoc] = useState<QueryDocumentSnapshot<T>>();
   const [currentEndDoc, setCurrentEndDoc] = useState<QueryDocumentSnapshot<T>>();
   const [nextPageExists, setNextPageExists] = useState(true);
+
+  const prevPageExists = currentStartDoc?.id !== pageStack[0]?.id;
+
+  const initPagination = useCallback((
+    startDoc: QueryDocumentSnapshot<T>,
+    endDoc: QueryDocumentSnapshot<T>,
+    nextPageExists: boolean,
+  ) => {
+    console.log(startDoc);
+    console.log(endDoc);
+
+    setPageStack([startDoc]);
+    setCurrentStartDoc(startDoc);
+    setCurrentEndDoc(endDoc);
+    setNextPageExists(nextPageExists);
+  }, []);
+
+  // For limiting the amount of pagination buttons on a page
+  function getFilteredPageStack() {
+    const numberOfPageBtns = 3;
+    const currentStartDocIndex = pageStack.findIndex(doc => doc?.id === currentStartDoc?.id);
+
+    if (pageStack.length > numberOfPageBtns && currentStartDocIndex > numberOfPageBtns - 1) {
+      return pageStack.filter((_, index) => (
+        index >= (currentStartDocIndex - (numberOfPageBtns - 1)) && index <= currentStartDocIndex
+      ));
+    }
+
+    return pageStack.toSpliced(numberOfPageBtns);
+  }
 
   // Query objects should have a limit of itemsPerPage + 1 to check for existence of next page
   async function handlePageBtnClick(
@@ -47,9 +89,9 @@ export function usePagination<T>(
     const docs = (await getDocs(query(
       collection(db, collectionString)
         .withConverter(converter),
-        limit(itemsPerPage),
+        limitToLast(itemsPerPage),
         orderBy(orderByString, orderByDirection),
-        endAt(currentStartDoc),
+        endBefore(currentStartDoc),
     ))).docs;
 
     const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
@@ -78,16 +120,24 @@ export function usePagination<T>(
 
     const data = docs.map(doc => ({ docId: doc.id, ...doc.data() }));
     setData(data);
-    setPageStack([...pageStack, docs[0]]);
+
+    if (!pageStack.some(doc => doc.id == docs[0]?.id)) {
+      setPageStack([...pageStack, docs[0]]);
+    }
+
     setCurrentStartDoc(docs[0]);
     setCurrentEndDoc(docs.at(-1));
     setNextPageExists(nextPageExists);
   }
 
   return {
+    getFilteredPageStack: getFilteredPageStack,
     handleNextBtnClick: handleNextBtnClick,
     handlePageBtnClick: handlePageBtnClick,
     handlePrevBtnClick: handlePrevBtnClick,
+    initPagination: initPagination,
     nextPageExists: nextPageExists,
+    pageStack: pageStack,
+    prevPageExists: prevPageExists,
   };
 }
