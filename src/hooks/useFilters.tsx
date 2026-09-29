@@ -1,17 +1,19 @@
 import { type QueryConstraint, where } from 'firebase/firestore';
 import { useState } from 'react';
 
+import type { FilterFieldValues } from '../interfaces/FilterFieldValues';
+import type { FilterFieldOptions } from '../interfaces/firestore-collections/FilterFieldOptions';
+
 export function useFilters() {
   // Object that stores all the available options for each filter field
-  const [fieldOptions, setFieldOptions] = useState<{ [field: string]: (boolean | number | string)[] }>({});
+  const [filterFieldOptions, setFilterFieldOptions] = useState<FilterFieldOptions>({});
 
   // Object that stores all the current values of each text or dropdown filter input
-  const [filterValues, setFilterValues] = useState<{ [field: string]: string }>({});
+  const [filterFieldValues, setFilterFieldValues] = useState<FilterFieldValues>({});
   const [queryConstraints, setQueryConstraints] = useState<QueryConstraint[]>([]);
 
   function applyFilters() {
-    const filterValuesEntries = Object.entries(filterValues);
-    const tempQueryConstraints = filterValuesEntries.flatMap(([field, value]) => {
+    const tempQueryConstraints = Object.entries(filterFieldValues).flatMap(([field, value]) => {
       if (value === '') {
         return [];
       }
@@ -34,10 +36,10 @@ export function useFilters() {
 
   return {
     applyFilters: applyFilters,
-    fieldOptions: fieldOptions,
-    filterValues: filterValues,
+    filterFieldOptions: filterFieldOptions,
+    filterFieldValues: filterFieldValues,
     queryConstraints: queryConstraints,
-    setFieldOptions: setFieldOptions,
-    setFilterValues: setFilterValues,
+    setFilterFieldOptions: setFilterFieldOptions,
+    setFilterFieldValues: setFilterFieldValues,
   };
 }

@@ -1,10 +1,12 @@
-export function FilterSelectInput({ field, filterValues, id, label, options, setFilterValues }: {
+import type { FilterFieldValues } from '../../interfaces/FilterFieldValues';
+
+export function FilterSelectInput({ field, filterFieldValues, id, label, options, setFilterFieldValues }: {
   field: string;
-  filterValues: { [field: string]: string };
+  filterFieldValues: FilterFieldValues;
   id: string;
   label: string;
-  options: { [field: string]: string };
-  setFilterValues: (filterValues: { [field: string]: string }) => void;
+  options: FilterFieldValues;
+  setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
   return (
     <div>
@@ -13,12 +15,12 @@ export function FilterSelectInput({ field, filterValues, id, label, options, set
         id={id}
         onChange={(event) => {
           const value = event.target.value;
-          const tempFilterValues = { ...filterValues };
+          const tempFilterValues = { ...filterFieldValues };
           tempFilterValues[field] = value;
 
-          setFilterValues(tempFilterValues);
+          setFilterFieldValues(tempFilterValues);
         }}
-        value={filterValues[field] || ''}
+        value={filterFieldValues[field] || ''}
       >
         <option value="">All</option>
         {Object.entries(options).map(option => {
@@ -32,12 +34,12 @@ export function FilterSelectInput({ field, filterValues, id, label, options, set
   );
 }
 
-export function FilterTextInput({ field, filterValues, id, label, setFilterValues }: {
+export function FilterTextInput({ field, filterFieldValues, id, label, setFilterFieldValues }: {
   field: string;
-  filterValues: { [field: string]: string };
+  filterFieldValues: FilterFieldValues;
   id: string;
   label: string;
-  setFilterValues: (filterValues: { [field: string]: string }) => void;
+  setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
   return (
     <div>
@@ -46,13 +48,13 @@ export function FilterTextInput({ field, filterValues, id, label, setFilterValue
         id={id}
         onChange={(event) => {
           const value = event.target.value;
-          const tempFilterValues = {...filterValues};
+          const tempFilterValues = {...filterFieldValues};
           tempFilterValues[field] = value;
 
-          setFilterValues(tempFilterValues);
+          setFilterFieldValues(tempFilterValues);
         }}
         type="text"
-        value={filterValues[field]}
+        value={filterFieldValues[field]}
       />
     </div>
   );

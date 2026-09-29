@@ -1,7 +1,9 @@
 import { initializeApp } from 'firebase-admin/app';
-import { DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
 import { onDocumentCreated } from 'firebase-functions/firestore';
+
+import { FilterFieldOptions } from './shared/firestore-collections/FilterFieldOptions';
 
 setGlobalOptions({maxInstances: 10});
 
@@ -16,7 +18,7 @@ export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntr
   await addToFilterFieldOptions('ledger', doc);
 });
 
-async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot | undefined) {
+async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
   if (doc) {
     // Getting specific collection document from filterFieldOptions collection
     const fieldOptionsDoc = await db
@@ -24,9 +26,7 @@ async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot
       .doc(collection)
       .get();
 
-    const fieldOptionsData: {
-      [field: string]: (boolean | number | string)[]
-    } = fieldOptionsDoc.exists ? (
+    const fieldOptionsData: FilterFieldOptions = fieldOptionsDoc.exists ? (
       fieldOptionsDoc.data()!
     ) : (
       {}
@@ -34,20 +34,18 @@ async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot
 
     const data = doc.data();
 
-    for (const field in data) {
-      const currentDataValue = data[field];
-
+    for (const [dataField, dataValue] of Object.entries(data)) {
       // Skip iteration if currentDataValue is a number or date
-      if (!Number.isNaN(Number(currentDataValue)) || !isNaN(new Date(currentDataValue).getTime())) {
+      if (!Number.isNaN(Number(dataValue)) || !isNaN(new Date(dataValue).getTime())) {
         continue;
       }
 
-      if (fieldOptionsData[field]) {
-        if (!fieldOptionsData[field].some(value => value == currentDataValue)) {
-          fieldOptionsData[field].push(currentDataValue);
+      if (fieldOptionsData[dataField]) {
+        if (!fieldOptionsData[dataField].some(value => value == dataValue)) {
+          fieldOptionsData[dataField].push(dataValue);
         }
       } else {
-        fieldOptionsData[field] = [currentDataValue];
+        fieldOptionsData[dataField] = [dataValue];
       }
     }
 
