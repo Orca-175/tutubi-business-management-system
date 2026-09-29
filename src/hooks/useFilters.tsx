@@ -11,10 +11,7 @@ export function useFilters() {
 
   function applyFilters() {
     const filterValuesEntries = Object.entries(filterValues);
-    const tempQueryConstraints = filterValuesEntries.flatMap(filterValue => {
-      const field = filterValue[0];
-      const value = filterValue[1];
-
+    const tempQueryConstraints = filterValuesEntries.flatMap(([field, value]) => {
       if (value === '') {
         return [];
       }
