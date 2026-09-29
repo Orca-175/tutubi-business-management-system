@@ -1,32 +1,59 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { initializeApp } from 'firebase-admin/app';
+import { DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
+import { setGlobalOptions } from 'firebase-functions';
+import { onDocumentCreated } from 'firebase-functions/firestore';
 
-import {setGlobalOptions} from "firebase-functions";
-// import {onRequest} from "firebase-functions/https";
-// import * as logger from "firebase-functions/logger";
-
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
 setGlobalOptions({maxInstances: 10});
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+initializeApp();
+
+const db = getFirestore();
+
+export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to ledger document of filterFieldOptions if they are not already there
+  await addToFilterFieldOptions('ledger', doc);
+});
+
+async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot | undefined) {
+  if (doc) {
+    // Getting specific collection document from filterFieldOptions collection
+    const fieldOptionsDoc = await db
+      .collection('filterFieldOptions')
+      .doc(collection)
+      .get();
+
+    const fieldOptionsData: {
+      [field: string]: (boolean | number | string)[]
+    } = fieldOptionsDoc.exists ? (
+      fieldOptionsDoc.data()!
+    ) : (
+      {}
+    );
+
+    const data = doc.data();
+
+    for (const field in data) {
+      const currentDataValue = data[field];
+
+      // Skip iteration if currentDataValue is a number or date
+      if (!Number.isNaN(Number(currentDataValue)) || !isNaN(new Date(currentDataValue).getTime())) {
+        continue;
+      }
+
+      if (fieldOptionsData[field]) {
+        if (!fieldOptionsData[field].some(value => value == currentDataValue)) {
+          fieldOptionsData[field].push(currentDataValue);
+        }
+      } else {
+        fieldOptionsData[field] = [currentDataValue];
+      }
+    }
+
+    await db
+      .collection('filterFieldOptions')
+      .doc(collection)
+      .set(fieldOptionsData);
+  }
+}
