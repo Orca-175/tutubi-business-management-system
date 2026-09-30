@@ -3,7 +3,7 @@ import { getFirestore, QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
 import { onDocumentCreated } from 'firebase-functions/firestore';
 
-import { FilterFieldOptions } from './shared/firestore-collections/FilterFieldOptions';
+import { FilterFieldOptions } from './shared/interfaces/firestore-collections/FilterFieldOptions';
 
 setGlobalOptions({maxInstances: 10});
 
@@ -32,22 +32,26 @@ async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSna
       {}
     );
 
-    const data = doc.data();
+    const dataEntries = Object.entries(doc.data());
 
-    for (const [dataField, dataValue] of Object.entries(data)) {
-      // Skip iteration if currentDataValue is a number or date
-      if (!Number.isNaN(Number(dataValue)) || !isNaN(new Date(dataValue).getTime())) {
-        continue;
-      }
-
-      if (fieldOptionsData[dataField]) {
-        if (!fieldOptionsData[dataField].some(value => value == dataValue)) {
-          fieldOptionsData[dataField].push(dataValue);
+    const addFieldOptions = (entries: typeof dataEntries) => {
+      for (const [key, value] of entries) {
+        if (value && typeof value === 'object') {
+          addFieldOptions(Object.entries(value));
+        } else if (Number.isNaN(Number(value)) && isNaN(new Date(value).getTime())) {
+          if (fieldOptionsData[key]) {
+            if (!fieldOptionsData[key].some(someValue => someValue == value)) {
+              fieldOptionsData[key].push(value);
+            }
+          } else {
+            fieldOptionsData[key] = [value];
+          }
         }
-      } else {
-        fieldOptionsData[dataField] = [dataValue];
       }
-    }
+
+      return;
+    };
+    addFieldOptions(dataEntries);
 
     await db
       .collection('filterFieldOptions')
