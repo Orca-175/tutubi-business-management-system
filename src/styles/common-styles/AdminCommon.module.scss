@@ -21,6 +21,27 @@
     }
 }
 
+.filterButtonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.filters {
+    align-self: center;
+
+    button {
+        @include mixins.button-filled;
+    }
+
+    .filterInputs {
+        columns: 2;
+
+        > * {
+            margin-bottom: 1rem;
+        }
+    }
+}
+
 .tableAdmin th {
     background-color: colors.$primary;
     color: colors.$secondary-text;

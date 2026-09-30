@@ -1,0 +1,13 @@
+.filterInput {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+
+    select {
+        width: 8rem;
+    }
+
+    input {
+        width: 8rem;
+    }
+}

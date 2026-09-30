@@ -1,6 +1,13 @@
 @use './colors.scss';
 @use './variables.scss';
 
+@mixin input() {
+    border: 1px solid colors.$border;
+    border-style: normal;
+    border-radius: variables.$border-radius-small;
+    height: 1.75rem;
+}
+
 a {
     all: unset;
 }
@@ -22,9 +29,12 @@ html {
 }
 
 input {
-    border: 1px solid colors.$border;
-    border-style: normal;
-    border-radius: variables.$border-radius-small;
+    @include input;
+}
+
+select {
+    @include input;
+    background-color: colors.$input-background;
 }
 
 table {

@@ -1,5 +1,7 @@
 import type { FilterFieldValues } from '../../interfaces/FilterFieldValues';
 
+import styles from './FilterInputs.module.scss';
+
 export function FilterSelectInput({ field, filterFieldValues, id, label, options, setFilterFieldValues }: {
   field: string;
   filterFieldValues: FilterFieldValues;
@@ -9,7 +11,7 @@ export function FilterSelectInput({ field, filterFieldValues, id, label, options
   setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
   return (
-    <div>
+    <div className={styles.filterInput}>
       <label htmlFor={id}>{label}:</label>
       <select
         id={id}
@@ -42,7 +44,7 @@ export function FilterTextInput({ field, filterFieldValues, id, label, setFilter
   setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
   return (
-    <div>
+    <div className={styles.filterInput}>
       <label htmlFor={id}>{label}:</label>
       <input
         id={id}
