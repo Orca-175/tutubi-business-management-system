@@ -47,7 +47,25 @@
     color: colors.$secondary-text;
 }
 
+.tableButtonCell {
+    display: flex;
+    justify-content: center;
+
+    button {
+        @include mixins.button-ghost;
+    }
+    svg {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+}
+
+.tableButtonHeading {
+    text-align: center;
+}
+
 .tableContainer {
     overflow-x: auto;
     padding-bottom: .5rem;
 }
+
