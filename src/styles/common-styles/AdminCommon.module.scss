@@ -28,17 +28,27 @@
 
 .filters {
     align-self: center;
+    margin-bottom: 1rem;
+    max-width: 55rem;
 
     button {
         @include mixins.button-filled;
     }
 
-    .filterInputs {
-        columns: 2;
+}
 
-        > * {
-            margin-bottom: 1rem;
-        }
+.filterInputs {
+    .normalInputs {
+        columns: 2;
+    }
+
+    > * {
+        margin-bottom: 1rem;
+    }
+
+    .rangeInputs {
+        display: flex;
+        gap: 1rem;
     }
 }
 
@@ -54,6 +64,7 @@
     button {
         @include mixins.button-ghost;
     }
+
     svg {
         height: 1.25rem;
         width: 1.25rem;
