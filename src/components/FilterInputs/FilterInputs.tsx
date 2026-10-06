@@ -2,7 +2,14 @@ import type { FilterFieldValues } from '../../interfaces/FilterFieldValues';
 
 import styles from './FilterInputs.module.scss';
 
-export function FilterSelectInput({ field, filterFieldValues, id, label, options, setFilterFieldValues }: {
+export function FilterSelectInput({
+  field,
+  filterFieldValues,
+  id,
+  label,
+  options,
+  setFilterFieldValues,
+}: {
   field: string;
   filterFieldValues: FilterFieldValues;
   id: string;
@@ -36,7 +43,13 @@ export function FilterSelectInput({ field, filterFieldValues, id, label, options
   );
 }
 
-export function FilterTextInput({ field, filterFieldValues, id, label, setFilterFieldValues }: {
+export function FilterTextInput({
+  field,
+  filterFieldValues,
+  id,
+  label,
+  setFilterFieldValues,
+}: {
   field: string;
   filterFieldValues: FilterFieldValues;
   id: string;
@@ -61,3 +74,4 @@ export function FilterTextInput({ field, filterFieldValues, id, label, setFilter
     </div>
   );
 }
+

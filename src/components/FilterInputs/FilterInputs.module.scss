@@ -1,3 +1,5 @@
+@use '../../styles/variables.scss';
+
 .filterInput {
     align-items: start;
     display: flex;
@@ -11,3 +13,8 @@
         width: 8rem;
     }
 }
+
+.rangeInput {
+    border-radius: variables.$border-radius-small;
+}
+

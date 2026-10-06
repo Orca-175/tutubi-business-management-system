@@ -20,3 +20,4 @@ export interface LedgerEntry {
 export interface LedgerEntryData extends LedgerEntry {
   docId: string;
 }
+

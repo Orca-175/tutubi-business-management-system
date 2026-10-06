@@ -13,12 +13,12 @@ export function useFilters() {
   const [queryConstraints, setQueryConstraints] = useState<QueryConstraint[]>([]);
 
   function applyFilters() {
-    const tempQueryConstraints = Object.entries(filterFieldValues).flatMap(([field, value]) => {
+    const newQueryConstraints = Object.entries(filterFieldValues).flatMap(([field, value]) => {
       if (value === '') {
         return [];
       }
 
-      let finalValue;
+      let finalValue: boolean | number | string;
 
       if (value === 'true' || value === 'false') {
         finalValue = value === 'true' ? true : false;
@@ -31,7 +31,7 @@ export function useFilters() {
       return where(field, '==', finalValue);
     });
 
-    setQueryConstraints(tempQueryConstraints);
+    setQueryConstraints(newQueryConstraints);
   }
 
   return {
@@ -43,3 +43,4 @@ export function useFilters() {
     setFilterFieldValues: setFilterFieldValues,
   };
 }
+
