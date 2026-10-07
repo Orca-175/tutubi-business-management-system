@@ -1,20 +1,10 @@
 export interface LedgerEntry {
-  createdAt: string;
-  paid: boolean;
-  paidAt: string;
-  partyCollection?: 'clients' | 'suppliers'; // undefined when transaction is from retail storefront.
-  partyId?: string; // Empty when partyCollection is undefined
-  partyName: string;
-  price: number;
-  productId: string;
-  productName: string;
-  purchaseInfo?: {
-    head: boolean;
-    menudencia: boolean;
-  };
-  quantity: number; // In kg
-  totalPrice: number;
-  transactionType: 'Purchase' | 'Sale';
+  account: string;
+  credit:number;
+  debit: number;
+  referenceId: string; // The reference sale/purchase document that contains further details of the transaction
+  type: string; // Whether the entry describes a sale or puchase
+                // This also determines what Firestore collection referenceId points to
 }
 
 export interface LedgerEntryData extends LedgerEntry {
