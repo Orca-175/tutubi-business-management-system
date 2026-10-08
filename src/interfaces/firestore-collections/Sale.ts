@@ -1,6 +1,6 @@
 export interface Sale {
+  createdAt: string;
   customer: 'Walk-in' | string;
-  date: string;
   price: number;
   product: string;
   productId: string;

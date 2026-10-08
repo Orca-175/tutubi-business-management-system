@@ -12,3 +12,7 @@ export {
   addLedgerFilterFieldOptions,
 } from './addToFilterFieldOptions';
 
+export {
+  recordTransactionToLedger
+} from './recordTransactionToLedger';
+

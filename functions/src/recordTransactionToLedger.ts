@@ -2,24 +2,24 @@ import { HttpsError, onCall } from "firebase-functions/https";
 import { db } from ".";
 import { Purchase } from "./shared/interfaces/firestore-collections/Purchase";
 import { Sale } from "./shared/interfaces/firestore-collections/Sale";
+import { LedgerEntry } from "./shared/interfaces/firestore-collections/LedgerEntry";
 
 interface Arguments {
   credit: {
     account: string;
-    value: number;
+    value?: number;
   },
   debit: {
     account: string;
-    value: number;
+    value?: number;
   },
-  referenceId: string;
   purchase?: Purchase;
   sale?: Sale;
 }
 
 // Add sale/purchase details of a transaction to their respective collections
 // and then record the transaction into the ledger
-export const recordLedgerEntries = onCall<Arguments>(async request => {
+export const recordTransactionToLedger = onCall<Arguments>(async request => {
   const {
     credit,
     debit,
@@ -36,36 +36,46 @@ export const recordLedgerEntries = onCall<Arguments>(async request => {
 
   const [collection, referenceId] = purchase ? (
     [
+      'purchases',
       (await db
         .collection('purchases')
         .add(purchase)).id,
-      'purchases',
     ]
   ) : (
     [
-      (await db
-      .collection('purchases')
-      .add(sale!)).id,
       'sales',
+      (await db
+      .collection('sales')
+      .add(sale!)).id,
     ]
   );
 
-  await db
-    .collection('ledger')
-    .add({
-      account: debit.account,
-      debit: debit.value,
-      collection: collection,
-      referenceId: referenceId,
-    })
+  const debitEntry: LedgerEntry = {
+    account: debit.account,
+    collection: collection,
+    createdAt: new Date().toISOString(),
+    debit: debit.value,
+    referenceId: referenceId,
+  };
 
   await db
     .collection('ledger')
     .add({
-      account: credit.account,
-      debit: credit.value,
-      collection: collection,
-      referenceId: referenceId,
-    })
+      ...debitEntry,
+    });
+
+  const creditEntry: LedgerEntry = {
+    account: credit.account,
+    collection: collection,
+    createdAt: new Date().toISOString(),
+    credit: credit.value,
+    referenceId: referenceId,
+  };
+
+  await db
+    .collection('ledger')
+    .add({
+      ...creditEntry,
+    });
 });
 
