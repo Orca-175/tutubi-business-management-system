@@ -5,6 +5,7 @@ export interface LedgerEntry {
   credit?:number;
   debit?: number;
   referenceId: string; // The reference sale/purchase document that contains further details of the transaction
+  type: 'Purchase' | 'Sale';
 }
 
 export interface LedgerEntryData extends LedgerEntry {

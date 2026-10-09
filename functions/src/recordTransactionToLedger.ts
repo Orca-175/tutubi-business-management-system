@@ -56,6 +56,7 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     createdAt: new Date().toISOString(),
     debit: debit.value,
     referenceId: referenceId,
+    type: collection == 'purchases' ? 'Purchase' : 'Sale',
   };
 
   await db
@@ -70,6 +71,7 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     createdAt: new Date().toISOString(),
     credit: credit.value,
     referenceId: referenceId,
+    type: collection == 'purchases' ? 'Purchase' : 'Sale',
   };
 
   await db

@@ -3,6 +3,12 @@ import { db } from ".";
 import { FilterFieldOptions } from "./shared/interfaces/firestore-collections/FilterFieldOptions";
 import { onDocumentCreated } from "firebase-functions/firestore";
 
+export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to ledger document of filterFieldOptions if they are not already there
+  await addToFilterFieldOptions('ledger', doc);
+});
 
 export async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
   if (doc) {
@@ -47,11 +53,4 @@ export async function addToFilterFieldOptions(collection: string, doc: QueryDocu
       .set(fieldOptionsData);
   }
 }
-
-export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
-  const doc = event.data;
-
-  // Add current document's field values to ledger document of filterFieldOptions if they are not already there
-  await addToFilterFieldOptions('ledger', doc);
-});
 
