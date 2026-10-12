@@ -1,0 +1,9 @@
+@use '../../styles/mixins.scss';
+
+.applyFiltersButton {
+    @include mixins.button-filled;
+    align-items: center;
+    display: flex;
+    gap: .5rem;
+}
+

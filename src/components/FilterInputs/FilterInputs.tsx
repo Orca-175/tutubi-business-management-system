@@ -36,7 +36,7 @@ export function FilterSelectInput({
           const label = option[0];
           const value = option[1];
 
-          return <option value={value}>{label}</option>;
+          return <option key={label + value} value={value}>{label}</option>;
         })}
       </select>
     </div>
