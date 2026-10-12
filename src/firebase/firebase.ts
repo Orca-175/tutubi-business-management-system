@@ -15,14 +15,17 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
+const host = 'localhost';
+
 export const auth = getAuth(app);
-connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+connectAuthEmulator(auth, `http://${host}:9099`, { disableWarnings: true });
 
 export const db = getFirestore(app);
-connectFirestoreEmulator(db, 'localhost', 8080);
+connectFirestoreEmulator(db, host, 8080);
 
 export const functions = getFunctions(app);
-connectFunctionsEmulator(functions, 'localhost', 5001);
+connectFunctionsEmulator(functions, host, 5001);
 
 export const storage = getStorage(app);
-connectStorageEmulator(storage, 'localhost', 9199);
+connectStorageEmulator(storage, host, 9199);
+
