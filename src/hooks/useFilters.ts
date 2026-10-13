@@ -1,4 +1,4 @@
-import { type QueryConstraint, where } from 'firebase/firestore';
+import { type QueryFilterConstraint, where } from 'firebase/firestore';
 import { useState } from 'react';
 
 import type { FilterFieldValues } from '../interfaces/FilterFieldValues';
@@ -10,7 +10,7 @@ export function useFilters() {
 
   // Object that stores all the current values of each text or dropdown filter input
   const [filterFieldValues, setFilterFieldValues] = useState<FilterFieldValues>({});
-  const [queryConstraints, setQueryConstraints] = useState<QueryConstraint[]>([]);
+  const [queryConstraints, setQueryConstraints] = useState<QueryFilterConstraint[]>([]);
 
   function applyFilters() {
     const newQueryConstraints = Object.entries(filterFieldValues).flatMap(([field, value]) => {

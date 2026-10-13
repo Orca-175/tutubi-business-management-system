@@ -1,4 +1,4 @@
-import { QueryConstraint, where } from 'firebase/firestore';
+import { or, type QueryFilterConstraint, where } from 'firebase/firestore';
 import { useState } from 'react';
 
 import type { FilterRangeFieldValues } from '../interfaces/FIlterRangeFieldValues';
@@ -6,7 +6,7 @@ import type { FilterRangeFieldValues } from '../interfaces/FIlterRangeFieldValue
 // Facillitates range filters on numbers and dates
 export function useRangeFilters() {
   const [filterRangeFieldValues, setFilterRangeFieldValues] = useState<FilterRangeFieldValues>({});
-  const [rangeQueryConstraints, setRangeQueryConstraints] = useState<QueryConstraint[]>([]);
+  const [rangeQueryConstraints, setRangeQueryConstraints] = useState<QueryFilterConstraint[]>([]);
 
   function applyRangeFilters() {
     const newQueryConstraints = Object.entries(filterRangeFieldValues).flatMap(([field, valueArray]) => {
@@ -32,8 +32,20 @@ export function useRangeFilters() {
       const [min, max] = typedValues;
 
       const finalConstraintPair = [];
-      finalConstraintPair.push(min ? where(field, '>=', min) : []);
-      finalConstraintPair.push(max ? where(field, '<=', max) : []);
+
+      if (field === 'debit' || field === 'credit') {
+        finalConstraintPair.push(min ? or(
+            where('debit', '>=', min),
+            where('credit', '>=', min),
+        ) : []);
+        finalConstraintPair.push(max ? or(
+            where('debit', '<=', max),
+            where('credit', '<=', max),
+        ) : []);
+      } else {
+        finalConstraintPair.push(min ? where(field, '>=', min) : []);
+        finalConstraintPair.push(max ? where(field, '<=', max) : []);
+      }
 
       return finalConstraintPair.flat();
     });
