@@ -10,6 +10,8 @@ export const db = getFirestore();
 
 export {
   addLedgerFilterFieldOptions,
+  addPurchaseFilterFieldOptions,
+  addSalesFilterFieldOptions,
 } from './addToFilterFieldOptions';
 
 export {

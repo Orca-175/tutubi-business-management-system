@@ -6,6 +6,7 @@
     border-style: normal;
     border-radius: variables.$border-radius-small;
     height: 1.75rem;
+    text-overflow: ellipsis;
 }
 
 a {

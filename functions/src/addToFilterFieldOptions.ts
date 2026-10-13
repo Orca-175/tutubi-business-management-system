@@ -10,6 +10,20 @@ export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntr
   await addToFilterFieldOptions('ledger', doc);
 });
 
+export const addPurchaseFilterFieldOptions = onDocumentCreated('purchases/{purchaseId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('purchases', doc);
+});
+
+export const addSalesFilterFieldOptions = onDocumentCreated('sales/{saleId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('sales', doc);
+});
+
 export async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
   if (doc) {
     // Getting specific collection document from filterFieldOptions collection
@@ -32,7 +46,9 @@ export async function addToFilterFieldOptions(collection: string, doc: QueryDocu
       for (const [key, value] of entries) {
         if (value && typeof value === 'object') {
           addFieldOptions(Object.entries(value));
-        } else if (Number.isNaN(Number(value)) && isNaN(new Date(value).getTime())) {
+
+          // If value is not a number and not a date
+        } else if (typeof value === 'boolean' || Number.isNaN(Number(value)) && isNaN(new Date(value).getTime())) {
           if (fieldOptionsData[key]) {
             if (!fieldOptionsData[key].some(someValue => someValue == value)) {
               fieldOptionsData[key].push(value);

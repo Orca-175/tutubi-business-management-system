@@ -31,6 +31,17 @@
     }
 }
 
+@mixin button-heading-tab($color: colors.$primary-text) {
+    all: unset;
+    color: color.scale($color, $alpha: -40%);
+    user-select: none;
+
+    &:hover {
+        color: $color;
+        cursor: pointer;
+    }
+}
+
 @mixin card() {
     @include box-shadow;
     border-radius: variables.$border-radius-small;

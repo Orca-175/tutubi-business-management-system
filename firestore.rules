@@ -2,6 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /filterFieldOptions/{docId} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
     match /ledger/{ledgerEntryId} {
       allow read, write: if request.auth.token.admin == true;
     }
@@ -10,7 +14,15 @@ service cloud.firestore {
       allow read, write: if request.auth.token.admin == true;
     }
 
+    match /purchases/{purchaseId} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
     match /suppliers/{supplierId} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
+    match /sales/{saleId} {
       allow read, write: if request.auth.token.admin == true;
     }
   }

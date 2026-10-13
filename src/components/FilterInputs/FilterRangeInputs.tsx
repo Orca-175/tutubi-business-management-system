@@ -1,3 +1,5 @@
+import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
+
 import type { FilterRangeFieldValues } from '../../interfaces/FIlterRangeFieldValues';
 
 import styles from './FilterInputs.module.scss';
@@ -18,6 +20,11 @@ export function FilterDateRangeInput({
   return (
     <div className={styles.rangeInput}>
       <div>{label}</div>
+
+      <div className={styles.rangeInputIcons}>
+        <BiArrowToLeft />
+        <BiArrowToRight />
+      </div>
 
       <div className={styles.filterInputs}>
         <div className={styles.filterInput}>
@@ -43,6 +50,7 @@ export function FilterDateRangeInput({
 
               setFilterRangeFieldValues(tempRangeFieldValues);
             }}
+            placeholder="start"
             type="date"
           />
         </div>
@@ -69,6 +77,7 @@ export function FilterDateRangeInput({
 
               setFilterRangeFieldValues(tempRangeFieldValues);
             }}
+            placeholder="start"
             type="date"
           />
         </div>
@@ -93,6 +102,11 @@ export function FilterNumberRangeInput({
   return (
     <div className={styles.rangeInput}>
       <div>{label}</div>
+
+      <div className={styles.rangeInputIcons}>
+        <BiArrowToLeft />
+        <BiArrowToRight />
+      </div>
 
       <div className={styles.filterInputs}>
         <div className={styles.filterInput}>
