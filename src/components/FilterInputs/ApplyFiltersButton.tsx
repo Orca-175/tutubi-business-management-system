@@ -3,19 +3,14 @@ import { BiSolidFilterAlt } from 'react-icons/bi';
 import styles from './ApplyFiltersButton.module.scss';
 
 export function ApplyFiltersButton({
-  applyFilters,
-  applyRangeFilters,
+  onClick,
 }: {
-    applyFilters: () => void;
-    applyRangeFilters: () => void;
+    onClick: () => void;
 }) {
   return (
     <button
       className={styles.applyFiltersButton}
-      onClick={() => {
-        applyFilters();
-        applyRangeFilters();
-      }}
+      onClick={() => onClick()}
     >
       <BiSolidFilterAlt />
       Apply Filters

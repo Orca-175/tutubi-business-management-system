@@ -14,9 +14,11 @@ export function FilterSelectInput({
   filterFieldValues: FilterFieldValues;
   id: string;
   label: string;
-  options: FilterFieldValues;
+  options: (boolean | number | string)[];
   setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
+  const stringOptions = options.map(option => String(option));
+
   return (
     <div className={styles.filterInput}>
       <label htmlFor={id}>{label}:</label>
@@ -32,11 +34,19 @@ export function FilterSelectInput({
         value={filterFieldValues[field] || ''}
       >
         <option value="">All</option>
-        {Object.entries(options).map(option => {
-          const label = option[0];
-          const value = option[1];
-
-          return <option key={label + value} value={value}>{label}</option>;
+        {stringOptions.map(option => {
+          return <option
+            key={field + option}
+            value={option}
+          >
+            {option === 'true' ? (
+              'True'
+            ) : option === 'false' ? (
+              'False'
+            ) : (
+              option
+            )}
+          </option>;
         })}
       </select>
     </div>
@@ -74,4 +84,3 @@ export function FilterTextInput({
     </div>
   );
 }
-

@@ -1,20 +1,26 @@
+@use '../../styles/mixins.scss';
 @use '../../styles/variables.scss';
+
+.filterInputs {
+    display: flex;
+    gap: .5rem;
+}
 
 .filterInput {
     align-items: start;
     display: flex;
     flex-direction: column;
 
-    select {
-        width: 10rem;
-    }
-
-    input {
-        width: 10rem;
+    select, input {
+        width: 8.5rem;
     }
 }
 
 .rangeInput {
-    border-radius: variables.$border-radius-small;
+    @include mixins.card;
+}
+
+.rangeLabel {
+    display: none;
 }
 
