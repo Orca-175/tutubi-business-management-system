@@ -2,9 +2,10 @@ export interface LedgerEntry {
   account: string;
   collection: string; // The collection where the document of referenceId is stored
   createdAt: string;
-  credit?:number;
-  debit?: number;
-  referenceId: string; // The reference sale/purchase document that contains further details of the transaction
+  credit:number;
+  debit: number;
+  referenceId: string;
+  transactionId: number;
   type: 'Purchase' | 'Sale';
 }
 

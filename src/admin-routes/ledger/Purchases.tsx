@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
@@ -17,7 +18,6 @@ import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { capitalize } from '../../utils/strings';
 import { LedgerTabContext } from './LedgerTabContext';
-import classNames from 'classnames';
 
 export function Purchases() {
   const [purchasesData, setPurchaseData] = useState<PurchaseData[]>([]);
@@ -266,6 +266,7 @@ function PurchasesTable({ highlightFirstRow, purchasesData }: {
     <table className={common.tableAdmin}>
       <thead>
         <tr>
+          <th>Transaction</th>
           <th>Created at</th>
           <th>Source</th>
           <th>Product</th>
@@ -285,6 +286,7 @@ function PurchasesTable({ highlightFirstRow, purchasesData }: {
                 className={classNames((index === 0 && highlightFirstRow) && common.highlightRow)}
                 key={purchaseData.docId}
               >
+                <td>{purchaseData.transactionId}</td>
                 <td>{purchaseData.createdAt}</td>
                 <td>{purchaseData.source}</td>
                 <td>{purchaseData.product}</td>

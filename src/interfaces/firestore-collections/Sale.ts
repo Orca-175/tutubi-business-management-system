@@ -6,6 +6,7 @@ export interface Sale {
   productId: string;
   quantity: number;
   total: number;
+  transactionId: number;
 }
 
 export interface SaleData extends Sale {

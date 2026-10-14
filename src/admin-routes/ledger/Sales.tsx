@@ -1,8 +1,12 @@
+import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 
 import type { SaleData } from '../../interfaces/firestore-collections/Sale';
 
+import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
+import { FilterSelectInput, FilterTextInput } from '../../components/FilterInputs/FilterInputs';
+import { FilterDateRangeInput, FilterNumberRangeInput } from '../../components/FilterInputs/FilterRangeInputs';
 import { PaginationButtons } from '../../components/PaginationButtons/PaginationButtons';
 import { sales } from '../../constants/firebaseCollectionStrings';
 import { saleConverter } from '../../firebase/converters/collectionConverters';
@@ -11,11 +15,7 @@ import { useFilters } from '../../hooks/useFilters';
 import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
-import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { LedgerTabContext } from './LedgerTabContext';
-import { FilterSelectInput, FilterTextInput } from '../../components/FilterInputs/FilterInputs';
-import { FilterDateRangeInput, FilterNumberRangeInput } from '../../components/FilterInputs/FilterRangeInputs';
-import classNames from 'classnames';
 
 export function Sales() {
   const [salesData, setSalesData] = useState<SaleData[]>([]);
@@ -255,10 +255,11 @@ function SalesTable({ highlightFirstRow, salesData }: {
   highlightFirstRow: boolean;
   salesData: SaleData[];
 }) {
-   return (
+  return (
     <table className={common.tableAdmin}>
       <thead>
         <tr>
+          <th>Transaction</th>
           <th>Created at</th>
           <th>Customer</th>
           <th>Product</th>
@@ -276,6 +277,7 @@ function SalesTable({ highlightFirstRow, salesData }: {
               }
               key={saleData.docId}
             >
+              <td>{saleData.transactionId}</td>
               <td>{saleData.createdAt}</td>
               <td>{saleData.customer}</td>
               <td>{saleData.product}</td>
@@ -287,6 +289,6 @@ function SalesTable({ highlightFirstRow, salesData }: {
         })}
       </tbody>
     </table>
-   );
+  );
 }
 

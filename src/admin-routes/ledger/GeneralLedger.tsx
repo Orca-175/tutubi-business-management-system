@@ -123,7 +123,7 @@ export function GeneralLedger() {
       setFilterFieldOptions,
       rangeQueryConstraints,
   ]);
- 
+
   return (
     <>
       <div className={common.filters}>
@@ -217,6 +217,7 @@ function LedgerTable({ ledgerData }: {
     <table className={common.tableAdmin}>
       <thead>
         <tr>
+          <th>Transaction</th>
           <th>Created at</th>
           <th>Account</th>
           <th>Debit</th>
@@ -226,13 +227,19 @@ function LedgerTable({ ledgerData }: {
         </tr>
       </thead>
       <tbody>
-        {ledgerData.map((ledgerEntry) => {
+        {ledgerData.map((ledgerEntry, index) => {
+          console.log('index: ', index);
+          const transactionId = index % 2 === 0 ? ledgerEntry.transactionId : '';
+          const debit = ledgerEntry.debit === 0 ? '' : ledgerEntry.debit;
+          const credit = ledgerEntry.credit === 0 ? '' : ledgerEntry.credit;
+
           return (
             <tr key={ledgerEntry.docId}>
+              <td>{transactionId}</td>
               <td>{ledgerEntry.createdAt}</td>
               <td>{ledgerEntry.account}</td>
-              <td>{ledgerEntry.debit}</td>
-              <td>{ledgerEntry.credit}</td>
+              <td>{debit}</td>
+              <td>{credit}</td>
               <td>{ledgerEntry.type}</td>
               <td className={common.tableButtonCell}>
                 <button
@@ -253,4 +260,3 @@ function LedgerTable({ ledgerData }: {
     </table>
   );
 }
-

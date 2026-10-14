@@ -4,14 +4,16 @@ import { Purchase } from "./shared/interfaces/firestore-collections/Purchase";
 import { Sale } from "./shared/interfaces/firestore-collections/Sale";
 import { LedgerEntry } from "./shared/interfaces/firestore-collections/LedgerEntry";
 
+// A single call to recordTransactionToLedger will create two ledger entries, for
+// debit and credit
 interface Arguments {
   credit: {
     account: string;
-    value?: number;
+    value: number;
   },
   debit: {
     account: string;
-    value?: number;
+    value: number;
   },
   purchase?: Purchase;
   sale?: Sale;
@@ -34,50 +36,56 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     );
   }
 
-  const [collection, referenceId] = purchase ? (
-    [
-      'purchases',
-      (await db
-        .collection('purchases')
-        .add(purchase)).id,
-    ]
-  ) : (
-    [
-      'sales',
-      (await db
-        .collection('sales')
-        .add(sale!)).id,
-    ]
-  );
+  const collection = purchase ? 'purchases' : 'sales'
 
-  const debitEntry: LedgerEntry = {
-    account: debit.account,
-    collection: collection,
-    createdAt: new Date().toISOString(),
-    debit: debit.value,
-    referenceId: referenceId,
-    type: collection === 'purchases' ? 'Purchase' : 'Sale',
-  };
+  const debitRef = db.collection('ledger').doc();
+  const creditRef = db.collection('ledger').doc();
 
-  await db
-    .collection('ledger')
-    .add({
+  const saleOrPurchaseRef = db.collection(collection).doc();
+  const saleOrPurchase: Purchase | Sale = (purchase ? purchase : sale)!;
+
+  const countRef = db.collection('counts').doc('transactions');
+
+  await db.runTransaction(async (transaction) => {
+    const countSnap = await transaction.get(countRef);
+    const count = countSnap.exists ? countSnap.data()!.count : 1;
+
+    transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, transactionId: count});
+
+    const debitEntry: LedgerEntry = {
+      account: debit.account,
+      collection: collection,
+      createdAt: new Date().toISOString(),
+      debit: debit.value,
+      credit: 0,
+      referenceId: saleOrPurchaseRef.id,
+      transactionId: count,
+      type: collection === 'purchases' ? 'Purchase' : 'Sale',
+    };
+
+    const creditEntry: LedgerEntry = {
+      account: credit.account,
+      collection: collection,
+      createdAt: new Date().toISOString(),
+      debit: 0,
+      credit: credit.value,
+      referenceId: saleOrPurchaseRef.id,
+      transactionId: count,
+      type: collection === 'purchases' ? 'Purchase' : 'Sale',
+    };
+
+    transaction.create(debitRef, {
       ...debitEntry,
     });
 
-  const creditEntry: LedgerEntry = {
-    account: credit.account,
-    collection: collection,
-    createdAt: new Date().toISOString(),
-    credit: credit.value,
-    referenceId: referenceId,
-    type: collection === 'purchases' ? 'Purchase' : 'Sale',
-  };
-
-  await db
-    .collection('ledger')
-    .add({
+    transaction.create(creditRef, {
       ...creditEntry,
     });
+
+    if (count === 1) {
+      transaction.create(countRef, { count: 1 });
+    }
+    transaction.update(countRef, { count: count + 1 })
+  });
 });
 

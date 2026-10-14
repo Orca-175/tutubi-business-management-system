@@ -2,6 +2,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /counts/{countId} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
     match /filterFieldOptions/{docId} {
       allow read, write: if request.auth.token.admin == true;
     }

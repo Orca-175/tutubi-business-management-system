@@ -9,8 +9,9 @@ export interface Purchase {
   };
   quantity: number;
   source: string;
-  supplierId?: string; // If source is a supplier, supplierId should exist
+  supplierId: string; // If source is a supplier, supplierId should exist
   total: number;
+  transactionId: number;
 }
 
 export interface PurchaseData extends Purchase {
