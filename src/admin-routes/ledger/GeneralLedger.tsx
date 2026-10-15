@@ -1,8 +1,8 @@
+import type { LedgerEntryData } from 'shared/interfaces/firestore-collections';
+
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import {  BiChevronRight } from 'react-icons/bi';
-
-import type { LedgerEntryData } from '../../interfaces/firestore-collections/LedgerEntry';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput } from '../../components/FilterInputs/FilterInputs';

@@ -1,9 +1,10 @@
+
+import type { PurchaseData } from 'shared/interfaces/firestore-collections';
+
 import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
 import { Fragment, useContext, useEffect, useState } from 'react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-
-import type { PurchaseData } from '../../interfaces/firestore-collections/Purchase';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput } from '../../components/FilterInputs/FilterInputs';

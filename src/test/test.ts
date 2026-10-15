@@ -2,9 +2,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 
-import type { Purchase } from '../interfaces/firestore-collections/Purchase';
-import type { Sale } from '../interfaces/firestore-collections/Sale';
-
 import { productConverter, supplierConverter } from '../firebase/converters/collectionConverters';
 import { auth, db, functions } from '../firebase/firebase';
 

@@ -1,10 +1,5 @@
 import type { FirestoreDataConverter } from 'firebase/firestore';
-
-import type { LedgerEntry } from '../../interfaces/firestore-collections/LedgerEntry';
-import type { Product } from '../../interfaces/firestore-collections/Product';
-import type { Purchase } from '../../interfaces/firestore-collections/Purchase';
-import type { Sale } from '../../interfaces/firestore-collections/Sale';
-import type { Supplier } from '../../interfaces/firestore-collections/Supplier';
+import type { LedgerEntry, Product, Purchase, Sale, Supplier } from 'shared/interfaces/firestore-collections';
 
 export const ledgerConverter: FirestoreDataConverter<LedgerEntry> = {
   fromFirestore(snapshot) {
@@ -50,3 +45,4 @@ export const supplierConverter: FirestoreDataConverter<Supplier> = {
     return supplier;
   },
 };
+

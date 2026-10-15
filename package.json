@@ -16,7 +16,8 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-icons": "^5.7.0",
-    "react-router": "^8.4.0"
+    "react-router": "^8.4.0",
+    "shared": "file:functions/shared"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

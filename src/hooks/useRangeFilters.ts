@@ -1,7 +1,7 @@
 import { or, type QueryFilterConstraint, where } from 'firebase/firestore';
 import { useState } from 'react';
 
-import type { FilterRangeFieldValues } from '../interfaces/FIlterRangeFieldValues';
+import type { FilterRangeFieldValues } from '../interfaces/FilterRangeFieldValues';
 
 // Facillitates range filters on numbers and dates
 export function useRangeFilters() {

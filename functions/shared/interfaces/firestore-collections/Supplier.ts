@@ -4,3 +4,8 @@ export interface Supplier {
   createdAt: string;
   ownerName: string;
 };
+
+export interface SupplierData extends Supplier {
+  docId: string;
+}
+

@@ -1,6 +1,6 @@
 import { BiArrowToLeft, BiArrowToRight } from 'react-icons/bi';
 
-import type { FilterRangeFieldValues } from '../../interfaces/FIlterRangeFieldValues';
+import type { FilterRangeFieldValues } from '../../interfaces/FilterRangeFieldValues';
 
 import styles from './FilterInputs.module.scss';
 

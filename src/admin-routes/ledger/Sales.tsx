@@ -1,8 +1,8 @@
+import type { SaleData } from 'shared/interfaces/firestore-collections';
+
 import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query, startAt } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
-
-import type { SaleData } from '../../interfaces/firestore-collections/Sale';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput, FilterTextInput } from '../../components/FilterInputs/FilterInputs';

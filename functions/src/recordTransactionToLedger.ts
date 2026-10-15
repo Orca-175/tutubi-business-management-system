@@ -1,8 +1,6 @@
 import { HttpsError, onCall } from "firebase-functions/https";
 import { db } from ".";
-import { Purchase } from "./shared/interfaces/firestore-collections/Purchase";
-import { Sale } from "./shared/interfaces/firestore-collections/Sale";
-import { LedgerEntry } from "./shared/interfaces/firestore-collections/LedgerEntry";
+import { Purchase, Sale, LedgerEntry } from "shared/interfaces/firestore-collections";
 
 // A single call to recordTransactionToLedger will create two ledger entries, for
 // debit and credit

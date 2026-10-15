@@ -1,7 +1,7 @@
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 import { db } from ".";
-import { FilterFieldOptions } from "./shared/interfaces/firestore-collections/FilterFieldOptions";
 import { onDocumentCreated } from "firebase-functions/firestore";
+import { FilterFieldOptions } from "shared/interfaces/firestore-collections";
 
 export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
   const doc = event.data;
