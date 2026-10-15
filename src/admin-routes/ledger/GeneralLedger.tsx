@@ -16,6 +16,7 @@ import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { LedgerTabContext } from './LedgerTabContext';
+import classNames from 'classnames';
 
 
 export function GeneralLedger() {
@@ -55,12 +56,19 @@ export function GeneralLedger() {
   } = useRangeFilters();
 
   useEffect(() => {
+    const orderByEntryType = orderByString === 'createdAt' ? (
+      orderBy('entryType', orderByDirection)
+    ) : (
+      null
+    );
+
     async function getInitialLedgerEntries() {
       const docs = (await getDocs(query(
         collection(db, ledger)
           .withConverter(ledgerConverter),
         limit(itemsPerPage + 1),
         orderBy(orderByString, orderByDirection),
+        orderByEntryType,
       ))).docs;
       const nextPageExists = docs.length > itemsPerPage;
 
@@ -94,6 +102,7 @@ export function GeneralLedger() {
         ),
         limit(itemsPerPage + 1),
         orderBy(orderByString, orderByDirection),
+        orderByEntryType,
       ))).docs;
       const nextPageExists = docs.length > itemsPerPage;
 
@@ -114,7 +123,6 @@ export function GeneralLedger() {
       refreshLedgerEntries();
     }
   }, [
-      filterFieldOptions,
       initPagination,
       isLoading,
       orderByDirection,
@@ -144,7 +152,7 @@ export function GeneralLedger() {
                   filterFieldValues={filterFieldValues}
                   id="type"
                   label="Type"
-                  options={filterFieldOptions.type}
+                  options={filterFieldOptions.transactionType}
                   setFilterFieldValues={setFilterFieldValues}
                 />
               </>
@@ -217,7 +225,7 @@ function LedgerTable({ ledgerData }: {
     <table className={common.tableAdmin}>
       <thead>
         <tr>
-          <th>Transaction</th>
+          <th>Transaction no.</th>
           <th>Created at</th>
           <th>Account</th>
           <th>Debit</th>
@@ -229,23 +237,24 @@ function LedgerTable({ ledgerData }: {
       <tbody>
         {ledgerData.map((ledgerEntry, index) => {
           console.log('index: ', index);
-          const transactionId = index % 2 === 0 ? ledgerEntry.transactionId : '';
+          const even = index % 2 === 0;
           const debit = ledgerEntry.debit === 0 ? '' : ledgerEntry.debit;
           const credit = ledgerEntry.credit === 0 ? '' : ledgerEntry.credit;
 
           return (
             <tr key={ledgerEntry.docId}>
-              <td>{transactionId}</td>
+              <td>{even && ledgerEntry.transactionId}</td>
               <td>{ledgerEntry.createdAt}</td>
               <td>{ledgerEntry.account}</td>
               <td>{debit}</td>
               <td>{credit}</td>
-              <td>{ledgerEntry.type}</td>
+              <td>{ledgerEntry.transactionType}</td>
               <td className={common.tableButtonCell}>
                 <button
+                  className={classNames(!even && common.tableButtonHidden)}
                   onClick={() => {
                     // Change tab
-                    setTab(`${ledgerEntry.type}s`);
+                    setTab(`${ledgerEntry.transactionType}s`);
                     // Pass referenceId to next tab to show on that page
                     setTabCursor(ledgerEntry.referenceId);
                   }}

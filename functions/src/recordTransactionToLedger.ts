@@ -51,25 +51,27 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, transactionId: count});
 
     const debitEntry: LedgerEntry = {
-      account: debit.account,
-      collection: collection,
-      createdAt: new Date().toISOString(),
-      debit: debit.value,
-      credit: 0,
-      referenceId: saleOrPurchaseRef.id,
-      transactionId: count,
-      type: collection === 'purchases' ? 'Purchase' : 'Sale',
+        account: debit.account,
+        collection: collection,
+        createdAt: new Date().toISOString(),
+        credit: 0,
+        debit: debit.value,
+        entryType: 0,
+        referenceId: saleOrPurchaseRef.id,
+        transactionId: count,
+        transactionType: collection === 'purchases' ? 'Purchase' : 'Sale',
     };
 
     const creditEntry: LedgerEntry = {
       account: credit.account,
       collection: collection,
       createdAt: new Date().toISOString(),
-      debit: 0,
       credit: credit.value,
+      debit: 0,
+      entryType: 1,
       referenceId: saleOrPurchaseRef.id,
       transactionId: count,
-      type: collection === 'purchases' ? 'Purchase' : 'Sale',
+      transactionType: collection === 'purchases' ? 'Purchase' : 'Sale',
     };
 
     transaction.create(debitRef, {

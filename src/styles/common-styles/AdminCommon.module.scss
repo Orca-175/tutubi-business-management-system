@@ -92,6 +92,10 @@
         @include mixins.button-ghost;
     }
 
+    .tableButtonHidden {
+        visibility: hidden;
+    }
+
     svg {
         height: 1.25rem;
         width: 1.25rem;
