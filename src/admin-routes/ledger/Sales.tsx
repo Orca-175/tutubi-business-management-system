@@ -53,7 +53,7 @@ export function Sales() {
     setFilterRangeFieldValues,
   } = useRangeFilters();
 
-  const { tabCursor } = useContext(LedgerTabContext);
+  const { setTabCursor, tabCursor } = useContext(LedgerTabContext);
 
   useEffect(() => {
     async function getInitialSalesData() {
@@ -98,6 +98,8 @@ export function Sales() {
         return { docId: doc.id, ...doc.data() };
       });
 
+      console.log('getSalesDataAtTabCursor: ', data);
+
       initPagination(docs[0], docs.at(-1)!, nextPageExists);
       setSalesData(data);
       setIsLoading(false);
@@ -140,7 +142,7 @@ export function Sales() {
         getInitialSalesData();
       }
       getFilterFieldOptions();
-    } else {
+    } else if (tabCursor === '') {
       refreshSalesData();
     }
   }, [
@@ -214,6 +216,7 @@ export function Sales() {
               onClick={() => {
                 applyFilters();
                 applyRangeFilters();
+                setTabCursor('');
               }}
             />
           </div>
@@ -228,8 +231,8 @@ export function Sales() {
             'Data not found.'
           ) : (
             <SalesTable
-                highlightFirstRow={tabCursor !== ''}
               salesData={salesData}
+              tabCursor={tabCursor}
             />
           )}
         </div>
@@ -251,9 +254,9 @@ export function Sales() {
   );
 }
 
-function SalesTable({ highlightFirstRow, salesData }: {
-  highlightFirstRow: boolean;
+function SalesTable({ salesData, tabCursor }: {
   salesData: SaleData[];
+  tabCursor: string;
 }) {
   return (
     <table className={common.tableAdmin}>
@@ -269,11 +272,11 @@ function SalesTable({ highlightFirstRow, salesData }: {
         </tr>
       </thead>
       <tbody>
-        {salesData.map((saleData, index) => {
+        {salesData.map(saleData => {
           return (
             <tr
               className={
-                classNames((index === 0 && highlightFirstRow) && common.highlightRow)
+                classNames(saleData.docId === tabCursor  && common.highlightRow)
               }
               key={saleData.docId}
             >

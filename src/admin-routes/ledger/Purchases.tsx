@@ -56,7 +56,7 @@ export function Purchases() {
     setFilterRangeFieldValues,
   } = useRangeFilters();
 
-  const { tabCursor } = useContext(LedgerTabContext);
+  const { setTabCursor, tabCursor } = useContext(LedgerTabContext);
 
   useEffect(() => {
     async function getInitialPurchaseData() {
@@ -219,6 +219,7 @@ export function Purchases() {
                 onClick={() => {
                   applyFilters();
                   applyRangeFilters();
+                  setTabCursor('');
                 }}
               />
             </div>
@@ -234,8 +235,8 @@ export function Purchases() {
             'Data not found.'
           ) : (
             <PurchasesTable
-              highlightFirstRow={tabCursor !== ''}
               purchasesData={purchasesData}
+              tabCursor={tabCursor}
             />
           )}
         </div>
@@ -257,9 +258,9 @@ export function Purchases() {
   );
 }
 
-function PurchasesTable({ highlightFirstRow, purchasesData }: {
-  highlightFirstRow: boolean;
+function PurchasesTable({ purchasesData, tabCursor }: {
   purchasesData: PurchaseData[];
+  tabCursor: string;
 }) {
   const [expanded, setExpanded] = useState<string[]>([]);
 
@@ -278,13 +279,13 @@ function PurchasesTable({ highlightFirstRow, purchasesData }: {
         </tr>
       </thead>
       <tbody>
-        {purchasesData.map((purchaseData, index) => {
+        {purchasesData.map(purchaseData => {
           const purchaseInfo = purchaseData.purchaseInfo;
 
           return (
             <Fragment key={purchaseData.docId}>
               <tr
-                className={classNames((index === 0 && highlightFirstRow) && common.highlightRow)}
+                className={classNames(purchaseData.docId === tabCursor && common.highlightRow)}
                 key={purchaseData.docId}
               >
                 <td>{purchaseData.transactionId}</td>

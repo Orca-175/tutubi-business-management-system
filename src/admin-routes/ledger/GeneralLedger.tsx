@@ -1,5 +1,6 @@
 import type { LedgerEntryData } from 'shared/interfaces/firestore-collections';
 
+import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import {  BiChevronRight } from 'react-icons/bi';
@@ -16,7 +17,6 @@ import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { LedgerTabContext } from './LedgerTabContext';
-import classNames from 'classnames';
 
 
 export function GeneralLedger() {
@@ -236,7 +236,6 @@ function LedgerTable({ ledgerData }: {
       </thead>
       <tbody>
         {ledgerData.map((ledgerEntry, index) => {
-          console.log('index: ', index);
           const even = index % 2 === 0;
           const debit = ledgerEntry.debit === 0 ? '' : ledgerEntry.debit;
           const credit = ledgerEntry.credit === 0 ? '' : ledgerEntry.credit;
