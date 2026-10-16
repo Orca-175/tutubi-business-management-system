@@ -2,8 +2,8 @@ import type { LedgerEntryData } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
-import { useContext, useEffect, useState } from 'react';
-import {  BiChevronRight } from 'react-icons/bi';
+import { type RefObject, useContext, useEffect, useRef, useState } from 'react';
+import {  BiChevronRight, BiPlus } from 'react-icons/bi';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput } from '../../components/FilterInputs/FilterInputs';
@@ -16,6 +16,7 @@ import { useFilters } from '../../hooks/useFilters';
 import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
+import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 import { LedgerTabContext } from './LedgerTabContext';
 
 
@@ -54,6 +55,8 @@ export function GeneralLedger() {
     rangeQueryConstraints,
     setFilterRangeFieldValues,
   } = useRangeFilters();
+
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const orderByEntryType = orderByString === 'createdAt' ? (
@@ -134,6 +137,7 @@ export function GeneralLedger() {
 
   return (
     <>
+      {/* Filters */}
       <div className={common.filters}>
         <div className={common.filterInputs}>
           <div className={common.normalInputs}>
@@ -186,18 +190,29 @@ export function GeneralLedger() {
         </div>
       </div>
 
+      {/* Main content */}
       <div className={common.card}>
-        <div className={common.tableContainer}>
-          {isLoading ? (
-            'Loading...'
-          ) : ledgerData.length === 0 ? (
-            'Data not found.'
-          ) : (
-            <LedgerTable
-              ledgerData={ledgerData}
-            />
-          )}
-        </div>
+        {isLoading ? (
+          'Loading...'
+        ) : ledgerData.length === 0 ? (
+          'Data not found.'
+        ) : (
+          <>
+            <div className={common.newButtonContainer}>
+              <button
+                className={common.newButton}
+                onClick={() => dialogRef.current.showModal()}
+              >
+                <BiPlus /> New
+              </button>
+            </div>
+            <div className={common.tableContainer}>
+              <LedgerTable
+                ledgerData={ledgerData}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       <PaginationButtons
@@ -211,6 +226,10 @@ export function GeneralLedger() {
         orderByString={orderByString}
         pageStack={pageStack}
         prevPageExists={prevPageExists}
+      />
+
+      <ModalWindow
+        ledgerFormRef={dialogRef}
       />
     </>
   );
@@ -268,3 +287,91 @@ function LedgerTable({ ledgerData }: {
     </table>
   );
 }
+
+function ModalWindow({ledgerFormRef}: { ledgerFormRef: RefObject<HTMLDialogElement>}) {
+  return (
+    <>
+      <dialog
+        className={adminModals.modal}
+        ref={ledgerFormRef}
+      >
+        <div className={adminModals.content}>
+          <div className={adminModals.heading}>
+            Add ledger entry
+          </div>
+
+          <hr />
+
+          <div className={adminModals.sectionRow}>
+            <div>
+              <div className={adminModals.subHeading}>
+                Debit
+              </div>
+
+              <div className={adminModals.inputs}>
+                <div className={adminModals.input}>
+                  <label htmlFor="enterDebitAccount">Account</label>
+                  <select>
+                    <option value="">Select</option>
+                  </select>
+                </div>
+                <div className={adminModals.input}>
+                  <label htmlFor="enterDebitValue">Value</label>
+                  <input
+                    type="number"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div className={adminModals.subHeading}>
+                Credit
+              </div>
+
+              <div className={adminModals.inputs}>
+                <div className={adminModals.input}>
+                  <label htmlFor="enterCreditAccount">Account</label>
+                  <select>
+                    <option value="">Select</option>
+                  </select>
+                </div>
+                <div className={adminModals.input}>
+                  <label htmlFor="enterCreditValue">Value</label>
+                  <input
+                    type="number"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div className={adminModals.input}>
+            <label htmlFor="enterType">Transaction type</label>
+            <select>
+              <option value="">Select</option>
+            </select>
+          </div>
+        </div>
+
+        <div className={adminModals.buttons}>
+          <button
+            className={adminModals.closeButton}
+            onClick={() => ledgerFormRef.current.close()}
+          >
+            Close
+          </button>
+
+          <button
+            className={adminModals.confirmButton}
+          >
+            Next
+          </button>
+        </div>
+      </dialog>
+    </>
+  );
+}
+

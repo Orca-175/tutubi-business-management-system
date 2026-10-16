@@ -9,6 +9,7 @@
     border-radius: variables.$border-radius-small;
     color: $color;
     padding: .25em 1em;
+    text-align: center;
     user-select: none;
 
     &:hover {
@@ -23,6 +24,23 @@
     border-radius: variables.$border-radius-small;
     color: $color;
     padding: .25em 1em;
+    text-align: center;
+    user-select: none;
+
+    &:hover {
+        background-color: color.scale(colors.$button-ghost-hover, $alpha: variables.$hover-color-alpha);
+        cursor: pointer;
+    }
+}
+
+@mixin button-outlined($color: colors.$primary-text) {
+    all: unset;
+    background-color: transparent;
+    border: 1px solid $color;
+    border-radius: variables.$border-radius-small;
+    color: $color;
+    padding: .25em 1em;
+    text-align: center;
     user-select: none;
 
     &:hover {
@@ -49,5 +67,5 @@
 }
 
 @mixin box-shadow($color: colors.$shadow) {
-    box-shadow: 0 2px 2px 2px color.scale($color, $alpha: variables.$shadow-color-alpha);
+    box-shadow: 0 2px 2px 3px color.scale($color, $alpha: variables.$shadow-color-alpha);
 }
