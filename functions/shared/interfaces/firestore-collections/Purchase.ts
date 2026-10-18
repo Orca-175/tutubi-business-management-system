@@ -1,5 +1,6 @@
+// TODO: Add further source/supplier information
 export interface Purchase {
-  createdAt: string;
+  createdAt: string; // Set in onCreate cloud function
   price: number;
   product: string;
   productId: string;

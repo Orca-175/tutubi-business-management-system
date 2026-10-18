@@ -1,0 +1,116 @@
+@use 'sass:color';
+
+@use '../colors.scss';
+@use '../mixins.scss';
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.closeButton {
+    @include mixins.button-outlined;
+    align-self: start;
+}
+
+.content {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    > hr {
+        align-self: stretch;
+    }
+}
+
+.confirmButton {
+    @include mixins.button-filled;
+}
+
+.disabledButton {
+    @include mixins.button-filled(colors.$button-disabled);
+
+    &:hover {
+        cursor: default;
+    }
+}
+
+.formSummary {
+    align-self: stretch;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.formMessage {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.formMessageError {
+    color: colors.$danger;
+}
+
+.formMessageSuccess {
+    color: colors.$success;
+}
+
+.heading {
+    font-size: 1.5rem;
+}
+
+.input {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+
+    > select, input[type="text"], input[type="number"] {
+        width: 8rem;
+    }
+}
+
+.inputCheckbox {
+    display: flex;
+    justify-content: space-between;
+
+    > input {
+        height: 1.25rem;
+        width: auto;
+    }
+}
+
+.inputsSection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.inputsStretched {
+    align-self: stretch;
+}
+
+.inputsLedgerEntry {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal {
+    @include mixins.card;
+    border: none;
+
+    &::backdrop {
+        background-color: color.scale(colors.$modal-background, $alpha: -70%);
+    }
+}
+
+.sectionRow {
+    display: flex;
+    gap: 3rem;
+}
+
+.subHeading {
+    font-size: 1.17rem;
+}
+

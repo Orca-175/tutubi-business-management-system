@@ -40,15 +40,17 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
   const creditRef = db.collection('ledger').doc();
 
   const saleOrPurchaseRef = db.collection(collection).doc();
-  const saleOrPurchase: Purchase | Sale = (purchase ? purchase : sale)!;
 
   const countRef = db.collection('counts').doc('transactions');
+
+  const saleOrPurchase: Purchase | Sale = (purchase ? purchase : sale)!;
+
 
   await db.runTransaction(async (transaction) => {
     const countSnap = await transaction.get(countRef);
     const count = countSnap.exists ? countSnap.data()!.count : 1;
 
-    transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, transactionId: count});
+    transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, createdAt: new Date().toISOString(),transactionId: count});
 
     const debitEntry: LedgerEntry = {
         account: debit.account,

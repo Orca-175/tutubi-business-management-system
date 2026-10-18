@@ -1,5 +1,6 @@
 // Color tokens
 $green-300: #8dff8d;
+$green-500: #27ab27;
 
 $neutral-0: #ffffff;
 $neutral-500: #888888;
@@ -26,6 +27,7 @@ $primary-text: $neutral-900;
 $secondary-text: $neutral-0;
 
 $button-ghost-hover: $neutral-1000;
+$button-disabled: $neutral-500;
 
 $border: $neutral-500;
 
@@ -35,6 +37,8 @@ $input-background: $neutral-0;
 
 $highlighted-table-row: $purple-50;
 
-$success: $green-300;
+$modal-background: $neutral-1000;
+
+$success: $green-500;
 $danger: $red-300;
 $warning: $yellow-500;

@@ -29,7 +29,7 @@ html {
         'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-input {
+input[type="text"], input[type="number"] {
     @include input;
 }
 

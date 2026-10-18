@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
 
-    hr {
+    > hr {
         margin-bottom: 2rem;
     }
 }
@@ -51,6 +51,20 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
     }
+}
+
+.newButton {
+    @include mixins.button-outlined($color: colors.$primary);
+    align-items: center;
+    display: flex;
+    gap: .5rem;
+}
+
+.newButtonContainer {
+    align-items: end;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 }
 
 .subtableContainer {
