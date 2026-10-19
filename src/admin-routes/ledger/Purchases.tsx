@@ -108,6 +108,10 @@ export function Purchases() {
 
     async function getFilterFieldOptions() {
       const document = await getDoc(doc(db, 'filterFieldOptions', 'purchases'));
+      if (!document.exists()) {
+        return;
+      }
+
       const data = document.data();
 
       setFilterFieldOptions(data);

@@ -90,6 +90,10 @@ export function GeneralLedger() {
 
     async function getFilterFieldOptions() {
       const document = await getDoc(doc(db, 'filterFieldOptions', 'ledger'));
+      if (!document.exists()) {
+        return;
+      }
+
       const data = document.data();
 
       setFilterFieldOptions(data);
