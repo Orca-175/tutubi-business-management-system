@@ -1,44 +1,42 @@
+import classNames from 'classnames';
+import { useState } from 'react';
+
 import common from '../../styles/common-styles/AdminCommon.module.scss';
+import { Products } from './Products';
 
 export function Inventory() {
+  const [tab, setTab] = useState('Stock');
+
   return (
     <div className={common.root}>
-      <h2>View Inventory</h2>
-      <hr />
-      <div className={common.card}>
-        <div className={common.tableContainer}>
-          <table className={common.tableAdmin}>
-            <thead>
-              <tr>
-                <th>Field</th>
-                <th>Field</th>
-                <th>Field</th>
-                <th>Field</th>
-                <th>Field</th>
-                <th>Field</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-              </tr>
-              <tr>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-                <td>Value</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div className={common.tabButtons}>
+        <button
+          className={classNames(tab == 'Stock' && common.tabButtonActive)}
+          onClick={() => {
+            setTab('Stock');
+          }}
+        >
+          Stock
+        </button>
+        <button
+          className={classNames(tab == 'Products' && common.tabButtonActive)}
+          onClick={() => {
+            setTab('Products');
+          }}
+        >
+          Products
+        </button>
       </div>
+
+      <hr />
+
+      {tab === 'Stock' ? (
+        // TODO: Show Stock component
+        <div>This is the Stock tab</div>
+      ) : (
+        <Products />
+      )}
     </div>
   );
 }
+

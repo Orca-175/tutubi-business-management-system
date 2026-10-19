@@ -25,7 +25,7 @@ export function usePagination<T>(
   const [pageStack, setPageStack] = useState<QueryDocumentSnapshot<T>[]>([]);
   const [currentStartDoc, setCurrentStartDoc] = useState<QueryDocumentSnapshot<T>>();
   const [currentEndDoc, setCurrentEndDoc] = useState<QueryDocumentSnapshot<T>>();
-  const [nextPageExists, setNextPageExists] = useState(true);
+  const [nextPageExists, setNextPageExists] = useState(false);
 
   const prevPageExists = currentStartDoc?.id !== pageStack[0]?.id;
 

@@ -1,11 +1,12 @@
+import type { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
+
 import { type QueryFilterConstraint, where } from 'firebase/firestore';
 import { useState } from 'react';
 
 import type { FilterFieldValues } from '../interfaces/FilterFieldValues';
-import type { FilterFieldOptions } from '../interfaces/firestore-collections/FilterFieldOptions';
 
 export function useFilters() {
-  // Object that stores all the available options for each filter field
+  // Object that stores all the available options for each dropdown
   const [filterFieldOptions, setFilterFieldOptions] = useState<FilterFieldOptions>({});
 
   // Object that stores all the current values of each text or dropdown filter input

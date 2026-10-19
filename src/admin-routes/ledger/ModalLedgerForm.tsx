@@ -4,13 +4,10 @@ import classNames from 'classnames';
 import { httpsCallable } from 'firebase/functions';
 import { type Dispatch, type RefObject, type SetStateAction, useRef, useState } from 'react';
 
+import type { FormMessage } from '../../interfaces/FormMessage';
+
 import { functions } from '../../firebase/firebase';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
-
-interface FormMessage {
-  message: string; 
-  type: '' | 'error' | 'success';
-}
 
 export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTMLDialogElement>}) {
   const [transactionType, setTransactionType] = useState('');
@@ -52,8 +49,6 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
     <form
       onSubmit={(event) => {
         event.preventDefault();
-
-        // TODO: Check for any missing fields
 
         const recordTransactionToLedger = httpsCallable(functions, 'recordTransactionToLedger');
 
@@ -232,6 +227,7 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
 
       <ModalPurchaseForm
         addPurchaseDialogRef={addPurchaseDialogRef}
+        formMessage={formMessage}
         ledgerFormRef={ledgerFormRef}
         purchase={purchase}
         setPurchase={setPurchase}
@@ -251,11 +247,13 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
 
 function ModalPurchaseForm({
   addPurchaseDialogRef,
+  formMessage,
   ledgerFormRef,
   purchase,
   setPurchase,
 }: {
   addPurchaseDialogRef: RefObject<HTMLDialogElement>;
+  formMessage: FormMessage;
   ledgerFormRef: RefObject<HTMLDialogElement>;
   purchase: Purchase,
   setPurchase: Dispatch<SetStateAction<Purchase>>;
@@ -344,6 +342,19 @@ function ModalPurchaseForm({
           <div>PHP {purchase.price * purchase.quantity}</div> 
         </div>
       </div>
+
+      {formMessage.message !== '' &&
+        <div className={classNames(
+          adminModals.formMessage,
+          formMessage.type === 'error' ? (
+            adminModals.formMessageError
+          ) : formMessage.type === 'success' && (
+            adminModals.formMessageSuccess
+          ),
+        )}>
+          {formMessage.message}
+        </div>
+      }
 
       {/* Purchase form buttons */}
       <div className={adminModals.buttons}>

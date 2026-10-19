@@ -25,39 +25,40 @@ const bob = {
   ownerName: 'Bob',
 };
 
-// Products
+// Products from suppliers
 const pig = {
-  createdAt: new Date().toISOString(),
   name: 'Pig',
   price: 79,
 };
 const beef = {
-  createdAt: new Date().toISOString(),
   name: 'Beef',
   price: 75,
 };
 const chicken = {
-  createdAt: new Date().toISOString(),
   name: 'Chicken',
   price: 72,
 };
 
+// Store products
 const porkBelly = {
   createdAt: new Date().toISOString(),
   name: 'Pork Belly',
   price: 80,
+  shelfLife: 14,
 };
 
 const beefTapa = {
   createdAt: new Date().toISOString(),
   name: 'Beef Tapa',
   price: 90,
+  shelfLife: 14,
 };
 
 const chickenBreast = {
   createdAt: new Date().toISOString(),
   name: 'Chicken Breast',
   price: 70,
+  shelfLife: 14,
 };
 
 async function addProducts() {
@@ -65,21 +66,6 @@ async function addProducts() {
 
   // Adding products to database
   return [
-    (await addDoc(
-      collection(db, 'products')
-        .withConverter(productConverter),
-      pig,
-    )).id,
-    (await addDoc(
-      collection(db, 'products')
-        .withConverter(productConverter),
-      beef,
-    )).id,
-    (await addDoc(
-      collection(db, 'products')
-        .withConverter(productConverter),
-      chicken,
-    )).id,
     (await addDoc(
       collection(db, 'products')
         .withConverter(productConverter),

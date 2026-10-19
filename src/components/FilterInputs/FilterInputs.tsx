@@ -7,7 +7,7 @@ export function FilterSelectInput({
   filterFieldValues,
   id,
   label,
-  options,
+  options, // filterFieldOptions from useFilters hook
   setFilterFieldValues,
 }: {
   field: string;
