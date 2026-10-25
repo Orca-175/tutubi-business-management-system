@@ -1,12 +1,15 @@
-import type { Purchase, Sale } from 'shared/interfaces/firestore-collections';
+import type { ProductData, Purchase, Sale } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
-import { type Dispatch, type RefObject, type SetStateAction, useRef, useState } from 'react';
+import { type Dispatch, type RefObject, type SetStateAction, useEffect, useRef, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 
-import { functions } from '../../firebase/firebase';
+import { products } from '../../constants/firebaseCollectionStrings';
+import { productConverter } from '../../firebase/converters/collectionConverters';
+import { db, functions } from '../../firebase/firebase';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
 export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTMLDialogElement>}) {
@@ -142,13 +145,17 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
               </div>
 
               <div className={adminModals.inputsLedgerEntry}>
-                <div className={adminModals.input}>
-                  <label htmlFor="enterDebitAccount">Account</label>
+                <label className={adminModals.input}>
+                  Account
                   <input
-                    onChange={(event) => setDebitAccount(event.target.value)}
+                    onChange={(event) => {
+                      const value = event.target.value;
+
+                      setDebitAccount(value);
+                    }}
                     type="text"
                   />
-                </div>
+                </label>
               </div>
             </div>
 
@@ -158,21 +165,25 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
               </div>
 
               <div className={adminModals.inputsLedgerEntry}>
-                <div className={adminModals.input}>
-                  <label htmlFor="enterCreditAccount">Account</label>
+                <label className={adminModals.input}>
+                  Account
                   <input
-                    onChange={(event) => setCreditAccount(event.target.value)}
+                    onChange={(event) => {
+                      const value = event.target.value;
+
+                      setCreditAccount(value);
+                    }}
                     type="text"
                   />
-                </div>
+                </label>
               </div>
             </div>
           </div>
 
           <hr />
 
-          <div className={adminModals.input}>
-            <label htmlFor="enterType">Transaction type</label>
+          <label className={adminModals.input}>
+            Transaction type
             <select
               onChange={(event) => {
                 const value = event.target.value;
@@ -185,7 +196,7 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
               <option value="Purchase">Purchase</option>
               <option value="Sale">Sale</option>
             </select>
-          </div>
+          </label>
         </div>
 
         {/* Ledger form buttons */}
@@ -277,7 +288,7 @@ function ModalPurchaseForm({
 
         <hr />
 
-        {/* Check if source is from an internal supplier */}
+        {/* Tick if source is from an internal supplier */}
         {/* <div className={adminModals.inputsStretched}> */}
         {/*   <label className={adminModals.inputCheckbox}> */}
         {/*     From supplier */}
@@ -394,12 +405,29 @@ function ModalSaleForm({
   sale: Sale,
   setSale: Dispatch<SetStateAction<Sale>>;
 }) {
+  const [productData, setProductData] = useState<ProductData[]>([]);
+
   const handleChange = <K extends keyof Sale>(field: K, value: Sale[K]) => {
     setSale(prev => ({
       ...prev,
       [field]: value,
     }));
   };
+
+  useEffect(() => {
+    async function getProducts() {
+      const docs = (await getDocs(query(
+        collection(db, products)
+          .withConverter(productConverter),
+        orderBy('name'),
+      ))).docs;
+
+      const data = docs.map(doc => ({ ...doc.data(), docId: doc.id }));
+      setProductData(data);
+    }
+
+    getProducts();
+  }, []);
 
   return (
     <dialog
@@ -415,10 +443,8 @@ function ModalSaleForm({
 
         {/* Sale inputs */}
         <div className={adminModals.inputsSection}>
-          <div className={adminModals.input}>
-            <label htmlFor="enterCustomer">
-              Customer
-            </label>
+          <label className={adminModals.input} htmlFor="enterCustomer">
+            Customer
             <input
               id="enterCustomer"
               onChange={(event) => {
@@ -427,54 +453,50 @@ function ModalSaleForm({
               type="text"
               value={sale.customer}
             />
-          </div>
-          <div className={adminModals.input}>
-            <label htmlFor="enterProduct">
-              Product
-            </label>
-            <input
+          </label>
+          <label className={adminModals.input} htmlFor="enterProduct">
+            Product
+            <select
               id="enterProduct"
               onChange={(event) => {
                 handleChange('product', event.target.value);
               }}
-              type="text"
               value={sale.product}
-            />
-          </div>
-          <div className={adminModals.input}>
-            <label htmlFor="enterPrice">
-              Price
-            </label>
+            >
+              <option disabled value="">Select</option>
+              {productData.map(product => (
+                <option value={product.name}>{product.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className={adminModals.input} htmlFor="enterPrice">
+            Price
             <input
               id="enterPrice"
               onChange={(event) => {
                 const value = Number(event.target.value);
                 handleChange('price', value);
-
                 handleChange('total', value * sale.quantity);
               }}
               placeholder="PHP"
               type="number"
               value={sale.price === 0 ? '' : sale.price}
             />
-          </div>
-          <div className={adminModals.input}>
-            <label htmlFor="enterQuantity">
-              Quantity
-            </label>
+          </label>
+          <label className={adminModals.input} htmlFor="enterQuantity">
+            Quantity
             <input
               id="enterQuantity"
               onChange={(event) => {
                 const value = Number(event.target.value);
                 handleChange('quantity', value);
-
                 handleChange('total', value * sale.price);
               }}
               placeholder="kg"
               type="number"
               value={sale.quantity === 0 ? '' : sale.quantity}
             />
-          </div>
+          </label>
         </div>
 
         <hr />
