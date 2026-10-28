@@ -44,6 +44,7 @@ export function ModalProductsForm({ productFormRef }: { productFormRef: RefObjec
             ...product,
             createdAt: new Date().toISOString(),
           });
+
           setFormMessage({ message: 'Product added successfully!', type: 'success' });
         } catch (error) {
           setFormMessage({ message: error.message, type: 'error' });

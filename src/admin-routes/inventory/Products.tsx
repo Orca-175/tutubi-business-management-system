@@ -1,4 +1,4 @@
-import type { ProductData } from 'shared/interfaces/firestore-collections';
+import type { ProductData } from 'shared/interfaces/firestore-collections/Product';
 
 import { and, collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
@@ -118,7 +118,7 @@ export function Products() {
 
   return(
     <>
-      {/* filterFieldOptions is unset. Remember this adding select filters here */}
+      {/* filterFieldOptions is unset. Remember this if you plan to add select inputs here */}
       <div className={common.filters}>
         <div className={common.filterInputs}>
           <div className={common.normalInputs}>

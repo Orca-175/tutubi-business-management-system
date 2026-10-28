@@ -12,6 +12,7 @@ export {
   addLedgerFilterFieldOptions,
   addPurchaseFilterFieldOptions,
   addSalesFilterFieldOptions,
+  addSupplierFilterFieldOptions,
 } from './addToFilterFieldOptions';
 
 export {

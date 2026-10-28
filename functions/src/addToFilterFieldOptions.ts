@@ -24,6 +24,13 @@ export const addSalesFilterFieldOptions = onDocumentCreated('sales/{saleId}', as
   await addToFilterFieldOptions('sales', doc);
 });
 
+export const addSupplierFilterFieldOptions = onDocumentCreated('suppliers/{supplierId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('suppliers', doc);
+});
+
 export async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
   if (doc) {
     // Getting specific collection document from filterFieldOptions collection

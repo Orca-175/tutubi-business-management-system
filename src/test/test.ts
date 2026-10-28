@@ -7,22 +7,46 @@ import { auth, db, functions } from '../firebase/firebase';
 
 // Suppliers
 const tonton = {
-  address: 'Pasig',
+  address: {
+    barangay: 'Barangka',
+    city: 'Mandaluyong',
+    houseNumber: '123-House No.',
+    region: 'Mars',
+    street: 'Sweet',
+  },
   businessName: 'Tonton Meat Supplier',
   createdAt: new Date().toISOString(),
+  email: 'tonton@email.com',
   ownerName: 'Tonton',
+  phone: '09999999999',
 };
 const christian = {
-  address: 'Mandaluyong',
+  address: {
+    barangay: 'Ibaba',
+    city: 'Pasig',
+    houseNumber: '123-House No.',
+    region: 'Jupiter',
+    street: 'Io',
+  },
   businessName: 'Christian Meat Supplier',
   createdAt: new Date().toISOString(),
+  email: 'christian@email.com',
   ownerName: 'Chirstian',
+  phone: '09999999999',
 };
 const bob = {
-  address: 'Mandaluyong',
+  address: {
+    barangay: 'Itaas',
+    city: 'Manila',
+    houseNumber: '123-House No.',
+    region: 'Earth',
+    street: 'Lua',
+  },
   businessName: 'Bob Meat Supplier',
   createdAt: new Date().toISOString(),
+  email: 'bob@email.com',
   ownerName: 'Bob',
+  phone: '09999999999',
 };
 
 // Products from suppliers
