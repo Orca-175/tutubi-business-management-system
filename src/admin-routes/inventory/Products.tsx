@@ -1,8 +1,8 @@
-import type { ProductData } from 'shared/interfaces/firestore-collections/Product';
+import type { Product, ProductData } from 'shared/interfaces/firestore-collections';
 
 import { and, collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
-import { useEffect, useRef, useState } from 'react';
-import { BiPlus } from 'react-icons/bi';
+import { useEffect, useRef, useState, type RefObject } from 'react';
+import { BiPlus, BiSolidEdit } from 'react-icons/bi';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterTextInput } from '../../components/FilterInputs/FilterInputs';
@@ -16,6 +16,7 @@ import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { ModalProductsForm } from './ModalProductsForm';
+import { EditProductForm } from './EditProductForm';
 
 export function Products() {
   const [productData, setProductData] = useState<ProductData[]>([]);
@@ -202,30 +203,66 @@ export function Products() {
   );
 }
 
-function ProductsTable({ productData }: {
+function ProductsTable({
+  productData,
+}: {
   productData: ProductData[]
 }) {
+  const [originalProduct, setOriginalProduct] = useState<ProductData>();
+
+  const editProductFormRef = useRef<HTMLDialogElement>(null);
+
+  // Show modal edit form when originalProduct changes after being set when the
+  // user clicks the edit button of a product
+  useEffect(() => {
+    if (originalProduct) {
+      editProductFormRef.current.showModal();
+    }
+  }, [originalProduct]);
+
   return(
-    <table className={common.tableAdmin}>
-      <thead>
-        <tr>
-          <th>Product name</th>
-          <th>Price</th>
-          <th>Shelf life</th>
-        </tr>
-      </thead>
-      <tbody>
-        {productData.map(product => {
-          return (
-            <tr>
-              <td>{product.name}</td>
-              <td>{product.price}</td>
-              <td>{product.shelfLife}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <table className={common.tableAdmin}>
+        <thead>
+          <tr>
+            <th>Product name</th>
+            <th>Price</th>
+            <th>Shelf life</th>
+            <th className={common.tableButtonHeading}>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {productData.map(product => {
+            return (
+              <tr key={product.docId}>
+                <td>{product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.shelfLife}</td>
+                <td className={common.tableButtonCell}>
+                  <button
+                    onClick={event => {
+                      event.preventDefault();
+
+                      setOriginalProduct(product);
+                    }}
+                  >
+                    <BiSolidEdit />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {originalProduct &&
+        <EditProductForm
+          editProductFormRef={editProductFormRef}
+          key={originalProduct.docId}
+          originalProduct={originalProduct}
+        />
+      }
+    </>
   );
 }
 
