@@ -18,7 +18,7 @@ export function FilterSelectInput({
   setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
   const stringOptions = options.map(option => String(option)).sort();
-  const finalField = field.split('.').at(-1);
+  const deepestField = field.split('.').at(-1);
 
   return (
     <div className={styles.filterInput}>
@@ -37,7 +37,7 @@ export function FilterSelectInput({
         <option value="">All</option>
         {stringOptions.map(option => {
           return <option
-            key={finalField + option}
+            key={deepestField + option}
             value={option}
           >
             {option === 'true' ? (

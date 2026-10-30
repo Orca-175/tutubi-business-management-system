@@ -1,12 +1,13 @@
 import type { ProductData } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
+import { doc, setDoc } from 'firebase/firestore';
 import { type RefObject, useState } from 'react';
 
-import adminModals from '../../styles/common-styles/AdminModals.module.scss';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase/firebase';
 import type { FormMessage } from '../../interfaces/FormMessage';
+
+import { db } from '../../firebase/firebase';
+import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
 export function EditProductForm({
   editProductFormRef,
