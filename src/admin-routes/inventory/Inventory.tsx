@@ -16,6 +16,7 @@ export function Inventory() {
         {tabs.map(tabName => (
           <button
             className={classNames(tab == tabName && common.tabButtonActive)}
+            key={tabName}
             onClick={() => {
               setTab(tabName);
             }}

@@ -119,25 +119,31 @@ export function TabledPage<T>({
               const deepestField = filter.field.split('.').at(-1);
 
               if (filter.type === 'text') {
-                return <FilterTextInput
-                  field={filter.field}
-                  filterFieldValues={filterFieldValues}
-                  id={deepestField}
-                  label={filter.label}
-                  setFilterFieldValues={setFilterFieldValues}
-                />;
+                return (
+                  <FilterTextInput
+                    field={filter.field}
+                    filterFieldValues={filterFieldValues}
+                    id={deepestField}
+                    key={filter.field + filter.type}
+                    label={filter.label}
+                    setFilterFieldValues={setFilterFieldValues}
+                  />
+                );
               } else if (
                 filter.type === 'select' &&
                 Object.values(filterFieldOptions).length > 0
               ) {
-                return <FilterSelectInput
-                  field={filter.field}
-                  filterFieldValues={filterFieldValues}
-                  id={deepestField}
-                  label={filter.label}
-                  options={filterFieldOptions[deepestField]}
-                  setFilterFieldValues={setFilterFieldValues}
-                />;
+                return (
+                  <FilterSelectInput
+                    field={filter.field}
+                    filterFieldValues={filterFieldValues}
+                    id={deepestField}
+                    key={filter.field + filter.type}
+                    label={filter.label}
+                    options={filterFieldOptions[deepestField]}
+                    setFilterFieldValues={setFilterFieldValues}
+                  />
+                );
               }
             })}
           </div>
@@ -145,21 +151,27 @@ export function TabledPage<T>({
           <div className={adminCommon.rangeInputs}>
             {filters.ranged.map(filter => {
               if (filter.type === 'date') {
-                return <FilterDateRangeInput
-                  field={filter.field}
-                  filterRangeFieldValues={filterRangeFieldValues}
-                  id={filter.field}
-                  label={filter.label}
-                  setFilterRangeFieldValues={setFilterRangeFieldValues}
-                />;
+                return (
+                  <FilterDateRangeInput
+                    field={filter.field}
+                    filterRangeFieldValues={filterRangeFieldValues}
+                    id={filter.field}
+                    key={filter.field + filter.type}
+                    label={filter.label}
+                    setFilterRangeFieldValues={setFilterRangeFieldValues}
+                  />
+                ); 
               } else if (filter.type === 'number') {
-                return <FilterNumberRangeInput
-                  field={filter.field}
-                  filterRangeFieldValues={filterRangeFieldValues}
-                  id={filter.field}
-                  label={filter.label}
-                  setFilterRangeFieldValues={setFilterRangeFieldValues}
-                />;
+                return (
+                  <FilterNumberRangeInput
+                    field={filter.field}
+                    filterRangeFieldValues={filterRangeFieldValues}
+                    id={filter.field}
+                    key={filter.field + filter.type}
+                    label={filter.label}
+                    setFilterRangeFieldValues={setFilterRangeFieldValues}
+                  />
+                );
               }
             })}
           </div>

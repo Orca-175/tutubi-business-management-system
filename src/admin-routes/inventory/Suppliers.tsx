@@ -1,15 +1,17 @@
-import type { SupplierData } from 'shared/interfaces/firestore-collections';
+import type { Supplier, SupplierData } from 'shared/interfaces/firestore-collections';
 
-import { useRef, useState } from 'react';
-import { BiPlus } from 'react-icons/bi';
+import { useEffect, useRef, useState } from 'react';
+import { BiPlus, BiSolidEdit } from 'react-icons/bi';
 
+import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
+import { AddDataForm } from '../../components/InputForms/AddDataForm';
+import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { suppliers } from '../../constants/firebaseCollectionStrings';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
-import { ModalSuppliersForm } from './ModalSuppliersForm';
 
 export function Suppliers() {
   const [supplierData, setSupplierData] = useState<SupplierData[]>([]);
@@ -17,6 +19,60 @@ export function Suppliers() {
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
 
   const supplierFormRef = useRef(null);
+
+  const inputsGroups: InputsGroupsConfig<Supplier> = [
+    [
+      {
+        field: 'businessName',
+        label: 'Business Name',
+        type: 'text',
+      },
+      {
+        field: 'ownerName',
+        label: 'Owner Name',
+        type: 'text',
+      },
+    ],
+    [
+      {
+        field: 'address.houseNumber',
+        label: 'House number',
+        type: 'text',
+      },
+      {
+        field: 'address.street',
+        label: 'Street',
+        type: 'text',
+      },
+      {
+        field: 'address.barangay',
+        label: 'Barangay',
+        type: 'text',
+      },
+      {
+        field: 'address.city',
+        label: 'City',
+        type: 'text',
+      },
+      {
+        field: 'address.region',
+        label: 'Region',
+        type: 'text',
+      },
+    ],
+    [
+      {
+        field: 'email',
+        label: 'Email',
+        type: 'text',
+      },
+      {
+        field: 'phone',
+        label: 'Phone',
+        type: 'text',
+      },
+    ],
+  ];
 
   const filters: FilterConfig = {
     normal: [
@@ -72,59 +128,116 @@ export function Suppliers() {
           </div>
           <div className={common.tableContainer}>
             <SuppliersTable
+              inputsGroups={inputsGroups}
               supplierData={supplierData}
             />
           </div>
         </>
       </TabledPage>
 
-      <ModalSuppliersForm
-        supplierFormRef={supplierFormRef}
+      <AddDataForm<Supplier>
+        collectionString={suppliers}
+        formRef={supplierFormRef}
+        heading={'Add supplier'}
+        initialData={{
+          address: {
+            barangay: '',
+            city: '',
+            houseNumber: '',
+            region: '',
+            street: '',
+          },
+          businessName: '',
+          createdAt: '',
+          email: '',
+          ownerName: '',
+          phone: '',
+        }}
+        inputsGroups={inputsGroups}
       />
     </>
   );
 }
 
-function SuppliersTable({ supplierData }: {supplierData: SupplierData[] }) {
-  return (
-    <table className={common.tableAdmin}>
-      <thead>
-        <tr>
-          <th>Business Name</th>
-          <th>Owner Name</th>
-          <th>Address</th>
-          <th>Email</th>
-          <th>Phone</th>
-        </tr>
-      </thead>
-      <tbody>
-        {supplierData.map(supplier => {
-          const address = supplier.address;
-          const fullAddress = `${address.houseNumber}, ${address.street}, ` +
-            `${address.barangay}, ${address.city}, ${address.region}`;
+function SuppliersTable({ inputsGroups, supplierData }: {
+  inputsGroups: InputsGroupsConfig<Supplier>;
+  supplierData: SupplierData[];
+}) {
+  const [originalSupplierData, setOriginalSupplierData] = useState<SupplierData>();
 
-          return (
-            <tr>
-              <td>
-                {supplier.businessName}
-              </td>
-              <td>
-                {supplier.ownerName}
-              </td>
-              <td>
-                {fullAddress}
-              </td>
-              <td>
-                {supplier.email}
-              </td>
-              <td>
-                {supplier.phone}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+  const editSupplierFormRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (originalSupplierData) {
+      editSupplierFormRef.current.showModal();
+    }
+  }, [originalSupplierData]);
+
+  return (
+    <>
+      <table className={common.tableAdmin}>
+        <thead>
+          <tr>
+            <th>Business Name</th>
+            <th>Owner Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th className={common.tableButtonHeading}>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {supplierData.map(supplier => {
+            const address = supplier.address;
+            const fullAddress = `${address.houseNumber} ${address.street}, ` +
+              `${address.barangay}, ${address.city}, ${address.region}`;
+
+            return (
+              <tr
+                key={supplier.docId}
+              >
+                <td>
+                  {supplier.businessName}
+                </td>
+                <td>
+                  {supplier.ownerName}
+                </td>
+                <td>
+                  {fullAddress}
+                </td>
+                <td>
+                  {supplier.email}
+                </td>
+                <td>
+                  {supplier.phone}
+                </td>
+                <td className={common.tableButtonCell}>
+                  <button
+                    onClick={event => {
+                      event.preventDefault();
+
+                      setOriginalSupplierData(supplier);
+                    }}
+                  >
+                    <BiSolidEdit />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {originalSupplierData &&
+        <EditDataForm<SupplierData>
+          collectionString={suppliers}
+          formRef={editSupplierFormRef}
+          heading={'Edit supplier'}
+          initialData={originalSupplierData}
+          inputsGroups={inputsGroups}
+        />
+      }
+    </>
   );
 }
 
