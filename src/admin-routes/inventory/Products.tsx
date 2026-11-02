@@ -75,7 +75,7 @@ export function Products() {
         setData={setProductData}
       >
         <>
-          <div className={common.newButtonContainer}>
+          <div className={common.tableCardButtons}>
             <button
               className={common.newButton}
               onClick={() => productFormRef.current.showModal()}
@@ -148,6 +148,7 @@ function ProductsTable({
                 <td>{product.shelfLife}</td>
                 <td className={common.tableButtonCell}>
                   <button
+                    className={common.tableButtonNormal}
                     onClick={event => {
                       event.preventDefault();
 

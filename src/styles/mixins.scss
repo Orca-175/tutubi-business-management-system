@@ -60,12 +60,19 @@
     }
 }
 
+@mixin box-shadow($color: colors.$shadow) {
+    box-shadow: 0 2px 2px 3px color.scale($color, $alpha: variables.$shadow-color-alpha);
+}
+
 @mixin card() {
     @include box-shadow;
     border-radius: variables.$border-radius-small;
     padding: 1rem;
 }
 
-@mixin box-shadow($color: colors.$shadow) {
-    box-shadow: 0 2px 2px 3px color.scale($color, $alpha: variables.$shadow-color-alpha);
+@mixin icon-button() {
+    align-items: center;
+    display: flex;
+    gap: .5rem;
 }
+

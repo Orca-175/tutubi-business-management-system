@@ -53,18 +53,19 @@
     }
 }
 
-.newButton {
-    @include mixins.button-outlined($color: colors.$primary);
-    align-items: center;
+.moreContainer {
     display: flex;
-    gap: .5rem;
+    gap: 1rem;
 }
 
-.newButtonContainer {
-    align-items: end;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1rem;
+.revealButton {
+    @include mixins.button-ghost();
+    @include mixins.icon-button;
+
+    svg {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
 }
 
 .subtableContainer {
@@ -102,12 +103,16 @@
     display: flex;
     justify-content: center;
 
-    button {
-        @include mixins.button-ghost;
+    .tableButtonDelete {
+        @include mixins.button-ghost($color: colors.$danger);
     }
 
     .tableButtonHidden {
         visibility: hidden;
+    }
+
+    .tableButtonNormal {
+        @include mixins.button-ghost;
     }
 
     svg {
@@ -118,6 +123,31 @@
 
 .tableButtonHeading {
     text-align: center;
+}
+
+.tableCardButtons {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 1rem;
+
+    &:has(> :nth-child(2)) {
+        justify-content: space-between;
+    }
+
+    .deleteButton {
+        @include mixins.button-outlined($color: colors.$danger);
+        @include mixins.icon-button;
+    }
+
+    .deleteButtonActive {
+        @include mixins.button-filled($background-color: colors.$danger);
+        @include mixins.icon-button;
+    }
+
+    .newButton {
+        @include mixins.button-outlined($color: colors.$primary);
+        @include mixins.icon-button;
+    }
 }
 
 .tableContainer {

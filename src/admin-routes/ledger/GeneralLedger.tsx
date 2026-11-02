@@ -202,7 +202,7 @@ export function GeneralLedger() {
           'Data not found.'
         ) : (
           <>
-            <div className={common.newButtonContainer}>
+            <div className={common.tableCardButtons}>
               <button
                 className={common.newButton}
                 onClick={() => dialogRef.current.showModal()}
@@ -273,7 +273,10 @@ function LedgerTable({ ledgerData }: {
               <td>{ledgerEntry.transactionType}</td>
               <td className={common.tableButtonCell}>
                 <button
-                  className={classNames(!even && common.tableButtonHidden)}
+                  className={classNames(
+                    common.tableButtonNormal,
+                    !even && common.tableButtonHidden,
+                  )}
                   onClick={() => {
                     // Change tab
                     setTab(`${ledgerEntry.transactionType}s`);

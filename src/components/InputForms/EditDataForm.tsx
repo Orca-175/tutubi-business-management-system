@@ -8,6 +8,7 @@ import { db } from '../../firebase/firebase';
 import { DataForm } from './DataForm';
 
 interface Props<T> extends InputFormProps<T> {
+  cleanupDataForDialogs: () => void;
   collectionString: string;
   initialData: Data<T>;
 }

@@ -6,11 +6,20 @@
 .buttons {
     display: flex;
     justify-content: space-between;
-}
 
-.closeButton {
-    @include mixins.button-outlined;
-    align-self: start;
+    .deleteButton {
+        @include mixins.button-filled($background-color: colors.$danger);
+    }
+
+    .closeButton {
+        @include mixins.button-outlined;
+        align-self: start;
+    }
+
+    .confirmButton {
+        @include mixins.button-filled;
+    }
+
 }
 
 .content {
@@ -23,10 +32,6 @@
     > hr {
         align-self: stretch;
     }
-}
-
-.confirmButton {
-    @include mixins.button-filled;
 }
 
 .disabledButton {

@@ -1,11 +1,13 @@
 import type { Supplier, SupplierData } from 'shared/interfaces/firestore-collections';
 
+import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import { BiPlus, BiSolidEdit } from 'react-icons/bi';
+import { BiChevronLeft, BiChevronRight, BiMinus, BiPlus, BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 
 import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
+import { DeleteDataDialog } from '../../components/DeleteDialog/DeleteDataDialog';
 import { AddDataForm } from '../../components/InputForms/AddDataForm';
 import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
@@ -14,9 +16,12 @@ import { supplierConverter } from '../../firebase/converters/collectionConverter
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Suppliers() {
-  const [supplierData, setSupplierData] = useState<SupplierData[]>([]);
+  const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
+  const [isMoreExpanded, setIsMorexpanded] = useState(false);
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+
 
   const supplierFormRef = useRef(null);
 
@@ -111,14 +116,49 @@ export function Suppliers() {
       <TabledPage
         collectionString={suppliers}
         converter={supplierConverter}
-        data={supplierData}
+        data={suppliersData}
         filters={filters}
         orderByDirection={orderByDirection}
         orderByString={orderByString}
-        setData={setSupplierData}
+        setData={setSuppliersData}
       >
         <>
-          <div className={common.newButtonContainer}>
+          <div className={common.tableCardButtons}>
+            <div className={common.moreContainer}>
+              <button
+                className={common.revealButton}
+                onClick={event => {
+                  event.preventDefault();
+
+                    setIsMorexpanded(!isMoreExpanded);
+                }}
+              >
+                {!isMoreExpanded ? (
+                  <>
+                    <BiChevronRight />
+                  </>
+                ) : (
+                  <>
+                    <BiChevronLeft />
+                  </>
+                )}
+              </button>
+              {isMoreExpanded &&
+                <button
+                  className={classNames(
+                    common.deleteButton,
+                    isDeleteMode && common.deleteButtonActive,
+                  )}
+                  onClick={event => {
+                    event.preventDefault();
+
+                    setIsDeleteMode(!isDeleteMode);
+                  }}
+                >
+                  <BiMinus /> Delete
+                </button>
+              }
+            </div>
             <button
               className={common.newButton}
               onClick={() => supplierFormRef.current.showModal()}
@@ -129,7 +169,8 @@ export function Suppliers() {
           <div className={common.tableContainer}>
             <SuppliersTable
               inputsGroups={inputsGroups}
-              supplierData={supplierData}
+              isDeleteMode={isDeleteMode}
+              supplierData={suppliersData}
             />
           </div>
         </>
@@ -159,18 +200,33 @@ export function Suppliers() {
   );
 }
 
-function SuppliersTable({ inputsGroups, supplierData }: {
+function SuppliersTable({
+  inputsGroups,
+  isDeleteMode,
+  supplierData,
+}: {
   inputsGroups: InputsGroupsConfig<Supplier>;
+  isDeleteMode: boolean;
   supplierData: SupplierData[];
 }) {
   const [originalSupplierData, setOriginalSupplierData] = useState<SupplierData>();
+  const [dataToDelete, setDataToDelete] = useState<SupplierData>();
 
   const editSupplierFormRef = useRef<HTMLDialogElement>(null);
+  const deleteSupplierFormRef = useRef<HTMLDialogElement>(null);
+
+  // Clear data used in above dialogs
+  // Call when closing/cancelling dialogs
+  const cleanupDataForDialogs = () => {
+    setOriginalSupplierData(null);
+    setDataToDelete(null);
+  };
 
   useEffect(() => {
     if (originalSupplierData) {
       editSupplierFormRef.current.showModal();
     }
+
   }, [originalSupplierData]);
 
   return (
@@ -183,7 +239,11 @@ function SuppliersTable({ inputsGroups, supplierData }: {
             <th>Address</th>
             <th>Email</th>
             <th>Phone</th>
-            <th className={common.tableButtonHeading}>Edit</th>
+            {isDeleteMode ? (
+              <th className={common.tableButtonHeading}>Delete</th>
+            ) : (
+              <th className={common.tableButtonHeading}>Edit</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -211,25 +271,52 @@ function SuppliersTable({ inputsGroups, supplierData }: {
                 <td>
                   {supplier.phone}
                 </td>
-                <td className={common.tableButtonCell}>
-                  <button
-                    onClick={event => {
-                      event.preventDefault();
+                {isDeleteMode ? (
+                  <td className={common.tableButtonCell}>
+                    <button
+                      className={common.tableButtonDelete}
+                      onClick={async event => {
+                        event.preventDefault();
 
-                      setOriginalSupplierData(supplier);
-                    }}
-                  >
-                    <BiSolidEdit />
-                  </button>
-                </td>
+                        setDataToDelete(supplier);
+                      }}
+                    >
+                      <BiSolidTagX />
+                    </button>
+                  </td>
+                ) : (
+                  <td className={common.tableButtonCell}>
+                    <button
+                      className={common.tableButtonNormal}
+                      onClick={event => {
+                        event.preventDefault();
+
+                        setOriginalSupplierData(supplier);
+                      }}
+                    >
+                      <BiSolidEdit />
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}
         </tbody>
       </table>
 
+      {dataToDelete &&
+        <DeleteDataDialog
+          cleanupDataForDialogs={cleanupDataForDialogs}
+          collectionString={suppliers}
+          docId={dataToDelete.docId}
+          formRef={deleteSupplierFormRef}
+          identifier={dataToDelete.businessName}
+        />
+      }
+
       {originalSupplierData &&
         <EditDataForm<SupplierData>
+          cleanupDataForDialogs={cleanupDataForDialogs}
           collectionString={suppliers}
           formRef={editSupplierFormRef}
           heading={'Edit supplier'}

@@ -7,6 +7,8 @@ import type { Data, InputFormProps } from './DataFormProps';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
 interface Props<T> extends InputFormProps<T> {
+  cleanupDataForDialogs?: () => void; // Clears the data used by the dialog forms of table
+                           // components in tabled pages
   data: Data<T> | T;
   formMessage: FormMessage;
   onSubmit: () => void;
@@ -14,6 +16,7 @@ interface Props<T> extends InputFormProps<T> {
 }
 
 export function DataForm<T>({
+  cleanupDataForDialogs,
   data,
   formMessage,
   formRef,
@@ -41,9 +44,8 @@ export function DataForm<T>({
     const tempData = structuredClone(data);
     const deepestField = field.split('.').at(-1);
 
-
-    const deepestObject = getDeepestObject(tempData, field);
-    deepestObject[deepestField] = value;
+    const deepestObjectInTempData = getDeepestObject(tempData, field);
+    deepestObjectInTempData[deepestField] = value;
 
     setData(tempData);
   };
@@ -162,6 +164,7 @@ export function DataForm<T>({
               event.preventDefault();
 
               formRef.current.close();
+              cleanupDataForDialogs?.();
             }}
           >
             Close
