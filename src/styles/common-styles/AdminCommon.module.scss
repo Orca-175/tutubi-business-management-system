@@ -53,12 +53,7 @@
     }
 }
 
-.moreContainer {
-    display: flex;
-    gap: 1rem;
-}
-
-.revealButton {
+.moreButton {
     @include mixins.button-ghost();
     @include mixins.icon-button;
 
@@ -66,6 +61,11 @@
         height: 1.25rem;
         width: 1.25rem;
     }
+}
+
+.moreContainer {
+    display: flex;
+    gap: 1rem;
 }
 
 .subtableContainer {

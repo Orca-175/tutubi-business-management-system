@@ -60,6 +60,7 @@ export function DataForm<T>({
     >
       <dialog
         className={adminModals.modal}
+        onCancel={() => cleanupDataForDialogs()}
         ref={formRef}
       >
         <div className={adminModals.content}>

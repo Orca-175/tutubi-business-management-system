@@ -1,25 +1,29 @@
 import type { Product, ProductData } from 'shared/interfaces/firestore-collections';
 
-import { useEffect, useRef, useState } from 'react';
-import { BiPlus, BiSolidEdit } from 'react-icons/bi';
+import { useRef, useState } from 'react';
+import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 
+import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
+import { DeleteDataDialog } from '../../components/DeleteDialog/DeleteDataDialog';
 import { AddDataForm } from '../../components/InputForms/AddDataForm';
+import { EditDataForm } from '../../components/InputForms/EditDataForm';
+import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { products } from '../../constants/firebaseCollectionStrings';
 import { productConverter } from '../../firebase/converters/collectionConverters';
+import { useMutableTableData } from '../../hooks/useMutableTableData';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
-import { EditProductForm } from './EditProductForm';
-import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
-import { EditDataForm } from '../../components/InputForms/EditDataForm';
 
 export function Products() {
   const [productData, setProductData] = useState<ProductData[]>([]);
   const [orderByString, setOrderByString] = useState('name');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('asc');
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
 
-  const productFormRef = useRef<HTMLDialogElement>(null);
+  const addFormRef = useRef<HTMLDialogElement>(null);
 
   const inputsGroups: InputsGroupsConfig<Product> = [
     [
@@ -69,24 +73,24 @@ export function Products() {
         collectionString={products}
         converter={productConverter}
         data={productData}
-        filters={filters}
+        filterConfig={filters}
         orderByDirection={orderByDirection}
         orderByString={orderByString}
         setData={setProductData}
       >
         <>
-          <div className={common.tableCardButtons}>
-            <button
-              className={common.newButton}
-              onClick={() => productFormRef.current.showModal()}
-            >
-              <BiPlus /> New
-            </button>
-          </div>
+          <TableCardButtons
+            addFormRef={addFormRef}
+            isDeleteMode={isDeleteMode}
+            isMoreExpanded={isMoreExpanded}
+            setIsDeleteMode={setIsDeleteMode}
+            setIsMoreExpanded={setIsMoreExpanded}
+          />
 
           <div className={common.tableContainer}>
             <ProductsTable
               inputsGroups={inputsGroups}
+              isDeleteMode={isDeleteMode}
               productData={productData}
             />
           </div>
@@ -95,7 +99,7 @@ export function Products() {
 
       <AddDataForm<Product>
         collectionString={products}
-        formRef={productFormRef}
+        formRef={addFormRef}
         heading={'Add product'}
         initialData={{
           createdAt: '',
@@ -111,22 +115,22 @@ export function Products() {
 
 function ProductsTable({
   inputsGroups,
+  isDeleteMode,
   productData,
 }: {
   inputsGroups: InputsGroupsConfig<Product>;
+  isDeleteMode: boolean;
   productData: ProductData[];
 }) {
-  const [originalProductData, setOriginalProductData] = useState<ProductData>();
-
-  const editProductFormRef = useRef<HTMLDialogElement>(null);
-
-  // Show modal edit form when originalProductData changes after being set when the
-  // user clicks the edit button of a product
-  useEffect(() => {
-    if (originalProductData) {
-      editProductFormRef.current.showModal();
-    }
-  }, [originalProductData]);
+  const {
+    cleanupDataForDialogs,
+    dataToDelete,
+    deleteDataFormRef,
+    editDataFormRef,
+    originalData,
+    setDataToDelete,
+    setOriginalData,
+  } = useMutableTableData<ProductData>();
 
   return(
     <>
@@ -136,7 +140,11 @@ function ProductsTable({
             <th>Product name</th>
             <th>Price</th>
             <th>Shelf life</th>
-            <th className={common.tableButtonHeading}>Edit</th>
+            {isDeleteMode ? (
+              <th className={common.tableButtonHeading}>Delete</th>
+            ) : (
+              <th className={common.tableButtonHeading}>Edit</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -146,30 +154,56 @@ function ProductsTable({
                 <td>{product.name}</td>
                 <td>{product.price}</td>
                 <td>{product.shelfLife}</td>
-                <td className={common.tableButtonCell}>
-                  <button
-                    className={common.tableButtonNormal}
-                    onClick={event => {
-                      event.preventDefault();
+                {isDeleteMode ? (
+                  <td className={common.tableButtonCell}>
+                    <button
+                      className={common.tableButtonDelete}
+                      onClick={event => {
+                        event.preventDefault();
 
-                      setOriginalProductData(product);
-                    }}
-                  >
-                    <BiSolidEdit />
-                  </button>
-                </td>
+                        setDataToDelete(product);
+                      }}
+                    >
+                      <BiSolidTagX />
+                    </button>
+                  </td>
+                ) : (
+                  <td className={common.tableButtonCell}>
+                    <button
+                      className={common.tableButtonNormal}
+                      onClick={event => {
+                        event.preventDefault();
+
+                        setOriginalData(product);
+                      }}
+                    >
+                      <BiSolidEdit />
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}
         </tbody>
       </table>
 
-      {originalProductData &&
-        <EditDataForm<ProductData>
+      {dataToDelete &&
+        <DeleteDataDialog
+          cleanupDataForDialogs={cleanupDataForDialogs}
           collectionString={products}
-          formRef={editProductFormRef}
+          docId={dataToDelete.docId}
+          formRef={deleteDataFormRef}
+          identifier={dataToDelete.name}
+        />
+      }
+
+      {originalData &&
+        <EditDataForm<ProductData>
+          cleanupDataForDialogs={cleanupDataForDialogs}
+          collectionString={products}
+          formRef={editDataFormRef}
           heading={'Edit product'}
-          initialData={originalProductData}
+          initialData={originalData}
           inputsGroups={inputsGroups}
         />
       }

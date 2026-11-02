@@ -14,16 +14,18 @@ import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { suppliers } from '../../constants/firebaseCollectionStrings';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
+import { TableCardButtons } from '../../components/TableCardButtons';
+import { useMutableTableData } from '../../hooks/useMutableTableData';
 
 export function Suppliers() {
   const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
-  const [isMoreExpanded, setIsMorexpanded] = useState(false);
+  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
 
 
-  const supplierFormRef = useRef(null);
+  const addFormRef = useRef(null);
 
   const inputsGroups: InputsGroupsConfig<Supplier> = [
     [
@@ -117,55 +119,20 @@ export function Suppliers() {
         collectionString={suppliers}
         converter={supplierConverter}
         data={suppliersData}
-        filters={filters}
+        filterConfig={filters}
         orderByDirection={orderByDirection}
         orderByString={orderByString}
         setData={setSuppliersData}
       >
         <>
-          <div className={common.tableCardButtons}>
-            <div className={common.moreContainer}>
-              <button
-                className={common.revealButton}
-                onClick={event => {
-                  event.preventDefault();
+          <TableCardButtons
+            addFormRef={addFormRef}
+            isDeleteMode={isDeleteMode}
+            isMoreExpanded={isMoreExpanded}
+            setIsDeleteMode={setIsDeleteMode}
+            setIsMoreExpanded={setIsMoreExpanded}
+          />
 
-                    setIsMorexpanded(!isMoreExpanded);
-                }}
-              >
-                {!isMoreExpanded ? (
-                  <>
-                    <BiChevronRight />
-                  </>
-                ) : (
-                  <>
-                    <BiChevronLeft />
-                  </>
-                )}
-              </button>
-              {isMoreExpanded &&
-                <button
-                  className={classNames(
-                    common.deleteButton,
-                    isDeleteMode && common.deleteButtonActive,
-                  )}
-                  onClick={event => {
-                    event.preventDefault();
-
-                    setIsDeleteMode(!isDeleteMode);
-                  }}
-                >
-                  <BiMinus /> Delete
-                </button>
-              }
-            </div>
-            <button
-              className={common.newButton}
-              onClick={() => supplierFormRef.current.showModal()}
-            >
-              <BiPlus /> New
-            </button>
-          </div>
           <div className={common.tableContainer}>
             <SuppliersTable
               inputsGroups={inputsGroups}
@@ -178,7 +145,7 @@ export function Suppliers() {
 
       <AddDataForm<Supplier>
         collectionString={suppliers}
-        formRef={supplierFormRef}
+        formRef={addFormRef}
         heading={'Add supplier'}
         initialData={{
           address: {
@@ -209,25 +176,15 @@ function SuppliersTable({
   isDeleteMode: boolean;
   supplierData: SupplierData[];
 }) {
-  const [originalSupplierData, setOriginalSupplierData] = useState<SupplierData>();
-  const [dataToDelete, setDataToDelete] = useState<SupplierData>();
-
-  const editSupplierFormRef = useRef<HTMLDialogElement>(null);
-  const deleteSupplierFormRef = useRef<HTMLDialogElement>(null);
-
-  // Clear data used in above dialogs
-  // Call when closing/cancelling dialogs
-  const cleanupDataForDialogs = () => {
-    setOriginalSupplierData(null);
-    setDataToDelete(null);
-  };
-
-  useEffect(() => {
-    if (originalSupplierData) {
-      editSupplierFormRef.current.showModal();
-    }
-
-  }, [originalSupplierData]);
+  const {
+    cleanupDataForDialogs,
+    dataToDelete,
+    deleteDataFormRef,
+    editDataFormRef,
+    originalData,
+    setDataToDelete,
+    setOriginalData,
+  } = useMutableTableData<SupplierData>();
 
   return (
     <>
@@ -291,7 +248,7 @@ function SuppliersTable({
                       onClick={event => {
                         event.preventDefault();
 
-                        setOriginalSupplierData(supplier);
+                        setOriginalData(supplier);
                       }}
                     >
                       <BiSolidEdit />
@@ -309,18 +266,18 @@ function SuppliersTable({
           cleanupDataForDialogs={cleanupDataForDialogs}
           collectionString={suppliers}
           docId={dataToDelete.docId}
-          formRef={deleteSupplierFormRef}
+          formRef={deleteDataFormRef}
           identifier={dataToDelete.businessName}
         />
       }
 
-      {originalSupplierData &&
+      {originalData &&
         <EditDataForm<SupplierData>
           cleanupDataForDialogs={cleanupDataForDialogs}
           collectionString={suppliers}
-          formRef={editSupplierFormRef}
+          formRef={editDataFormRef}
           heading={'Edit supplier'}
-          initialData={originalSupplierData}
+          initialData={originalData}
           inputsGroups={inputsGroups}
         />
       }

@@ -21,7 +21,7 @@ interface Props<T> {
   collectionString: string,
   converter: FirestoreDataConverter<T>;
   data: (T & { docId: string })[];
-  filters: FilterConfig;
+  filterConfig: FilterConfig;
   itemsPerPage?: number;
   orderByDirection: 'asc' | 'desc';
   orderByString: string;
@@ -35,7 +35,7 @@ export function TabledPage<T>({
   collectionString,
   converter,
   data,
-  filters,
+  filterConfig,
   itemsPerPage = 20,
   orderByDirection,
   orderByString,
@@ -113,7 +113,7 @@ export function TabledPage<T>({
       <div className={adminCommon.filters}>
         <div className={adminCommon.filterInputs}>
           <div className={adminCommon.normalInputs}>
-            {filters.normal.map(filter => {
+            {filterConfig.normal.map(filter => {
               // When a field is a nested property in a Firestore map, get
               // the name of the deepest property
               const deepestField = filter.field.split('.').at(-1);
@@ -149,7 +149,7 @@ export function TabledPage<T>({
           </div>
 
           <div className={adminCommon.rangeInputs}>
-            {filters.ranged.map(filter => {
+            {filterConfig.ranged.map(filter => {
               if (filter.type === 'date') {
                 return (
                   <FilterDateRangeInput
