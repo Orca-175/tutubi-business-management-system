@@ -14,14 +14,24 @@ import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { products } from '../../constants/firebaseCollectionStrings';
 import { productConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
+import { useTabledPage } from '../../hooks/useTabledPage';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Products() {
-  const [productData, setProductData] = useState<ProductData[]>([]);
-  const [orderByString, setOrderByString] = useState('name');
-  const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('asc');
+  const [productsData, setProductsData] = useState<ProductData[]>([]);
+
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isMoreExpanded, setIsMoreExpanded] = useState(false);
+
+  const itemsPerPage = 20;
+
+  const {
+    filters,
+    orderByDirection,
+    orderByString,
+    pagination,
+    rangeFilters,
+  } = useTabledPage(products, productConverter, 'name', itemsPerPage, setProductsData);
 
   const addFormRef = useRef<HTMLDialogElement>(null);
 
@@ -45,7 +55,7 @@ export function Products() {
     ],
   ];
 
-  const filters: FilterConfig = {
+  const filterConfig: FilterConfig = {
     normal: [
       {
         field: 'name',
@@ -72,11 +82,15 @@ export function Products() {
       <TabledPage
         collectionString={products}
         converter={productConverter}
-        data={productData}
-        filterConfig={filters}
+        data={productsData}
+        filterConfig={filterConfig}
+        filters={filters}
+        itemsPerPage={itemsPerPage}
         orderByDirection={orderByDirection}
         orderByString={orderByString}
-        setData={setProductData}
+        pagination={pagination}
+        rangeFilters={rangeFilters}
+        setData={setProductsData}
       >
         <>
           <TableCardButtons
@@ -91,7 +105,7 @@ export function Products() {
             <ProductsTable
               inputsGroups={inputsGroups}
               isDeleteMode={isDeleteMode}
-              productData={productData}
+              productData={productsData}
             />
           </div>
         </>

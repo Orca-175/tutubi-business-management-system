@@ -18,14 +18,17 @@ import { PaginationButtons } from '../PaginationButtons/PaginationButtons';
 
 interface Props<T> {
   children: ReactElement;
-  collectionString: string,
+  collectionString: string;
   converter: FirestoreDataConverter<T>;
   data: (T & { docId: string })[];
   filterConfig: FilterConfig;
-  itemsPerPage?: number;
+  filters: ReturnType<typeof useFilters>;
+  itemsPerPage: number;
   orderByDirection: 'asc' | 'desc';
   orderByString: string;
-  setData: Dispatch<SetStateAction<(T & { docId: string })[]>>,
+  pagination: ReturnType<typeof usePagination>;
+  rangeFilters: ReturnType<typeof useRangeFilters>;
+  setData: Dispatch<SetStateAction<(T & { docId: string })[]>>;
   // setOrderByDirection
   // setOrderByString
 }
@@ -36,9 +39,12 @@ export function TabledPage<T>({
   converter,
   data,
   filterConfig,
-  itemsPerPage = 20,
+  filters,
+  itemsPerPage,
   orderByDirection,
   orderByString,
+  pagination,
+  rangeFilters,
   setData,
 }: Props<T>) {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +59,7 @@ export function TabledPage<T>({
     nextPageExists,
     pageStack,
     prevPageExists,
-  } = usePagination(setData, collectionString, converter, itemsPerPage);
+  } = pagination;
 
   const {
     applyFilters,
@@ -62,14 +68,14 @@ export function TabledPage<T>({
     queryConstraints,
     setFilterFieldOptions,
     setFilterFieldValues,
-  } = useFilters();
+  } = filters;
 
   const {
     applyRangeFilters,
     filterRangeFieldValues,
     rangeQueryConstraints,
     setFilterRangeFieldValues,
-  } = useRangeFilters();
+  } = rangeFilters;
 
   useEffect(() => {
     if (isLoading) {

@@ -27,6 +27,9 @@ export async function getInitialData<T>(
   ))).docs;
   const nextPageExists = docs.length > itemsPerPage;
 
+  console.log('collectionString: ', collectionString);
+  console.log('orderByString: ', orderByString);
+
   if (nextPageExists) {
     docs.pop();
   }

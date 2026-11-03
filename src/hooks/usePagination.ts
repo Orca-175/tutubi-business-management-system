@@ -12,12 +12,12 @@ import {
   startAfter,
   startAt,
 } from 'firebase/firestore';
-import { useCallback, useState } from 'react';
+import { type Dispatch, type SetStateAction, useCallback, useState } from 'react';
 
 import { db } from '../firebase/firebase';
 
 export function usePagination<T>(
-  setData: (data: (T & { docId: string })[]) => void,
+  setData: Dispatch<SetStateAction<(T & { docId: string })[]>>,
   collectionString: string,
   converter: FirestoreDataConverter<T>,
   itemsPerPage: number,

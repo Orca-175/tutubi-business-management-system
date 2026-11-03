@@ -1,8 +1,7 @@
 import type { Supplier, SupplierData } from 'shared/interfaces/firestore-collections';
 
-import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
-import { BiChevronLeft, BiChevronRight, BiMinus, BiPlus, BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
+import { useRef, useState } from 'react';
+import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 
 import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
@@ -10,22 +9,31 @@ import type { FilterConfig } from '../../interfaces/FilterConfig';
 import { DeleteDataDialog } from '../../components/DeleteDialog/DeleteDataDialog';
 import { AddDataForm } from '../../components/InputForms/AddDataForm';
 import { EditDataForm } from '../../components/InputForms/EditDataForm';
+import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { suppliers } from '../../constants/firebaseCollectionStrings';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
-import common from '../../styles/common-styles/AdminCommon.module.scss';
-import { TableCardButtons } from '../../components/TableCardButtons';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
+import { useTabledPage } from '../../hooks/useTabledPage';
+import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Suppliers() {
   const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
-  const [orderByString, setOrderByString] = useState('createdAt');
-  const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
-  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
+
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
 
+  const itemsPerPage = 20;
 
-  const addFormRef = useRef(null);
+  const {
+    filters,
+    orderByDirection,
+    orderByString,
+    pagination,
+    rangeFilters,
+  } = useTabledPage(suppliers, supplierConverter, 'businessName', itemsPerPage, setSuppliersData);
+
+  const addFormRef = useRef<HTMLDialogElement>(null);
 
   const inputsGroups: InputsGroupsConfig<Supplier> = [
     [
@@ -81,7 +89,7 @@ export function Suppliers() {
     ],
   ];
 
-  const filters: FilterConfig = {
+  const filterConfig: FilterConfig = {
     normal: [
       {
         field: 'businessName',
@@ -119,9 +127,13 @@ export function Suppliers() {
         collectionString={suppliers}
         converter={supplierConverter}
         data={suppliersData}
-        filterConfig={filters}
+        filterConfig={filterConfig}
+        filters={filters}
+        itemsPerPage={itemsPerPage}
         orderByDirection={orderByDirection}
         orderByString={orderByString}
+        pagination={pagination}
+        rangeFilters={rangeFilters}
         setData={setSuppliersData}
       >
         <>
