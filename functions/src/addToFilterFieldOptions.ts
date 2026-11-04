@@ -1,37 +1,10 @@
-import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { db } from ".";
-import { onDocumentCreated } from "firebase-functions/firestore";
-import { FilterFieldOptions } from "shared/interfaces/firestore-collections";
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { onDocumentCreated } from 'firebase-functions/firestore';
+import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
-export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
-  const doc = event.data;
+import { db } from '.';
 
-  // Add current document's field values to ledger document of filterFieldOptions if they are not already there
-  await addToFilterFieldOptions('ledger', doc);
-});
-
-export const addPurchaseFilterFieldOptions = onDocumentCreated('purchases/{purchaseId}', async event => {
-  const doc = event.data;
-
-  // Add current document's field values to purchases
-  await addToFilterFieldOptions('purchases', doc);
-});
-
-export const addSalesFilterFieldOptions = onDocumentCreated('sales/{saleId}', async event => {
-  const doc = event.data;
-
-  // Add current document's field values to purchases
-  await addToFilterFieldOptions('sales', doc);
-});
-
-export const addSupplierFilterFieldOptions = onDocumentCreated('suppliers/{supplierId}', async event => {
-  const doc = event.data;
-
-  // Add current document's field values to purchases
-  await addToFilterFieldOptions('suppliers', doc);
-});
-
-export async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
+async function addToFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot | undefined) {
   if (doc) {
     // Getting specific collection document from filterFieldOptions collection
     const fieldOptionsDoc = await db
@@ -76,4 +49,43 @@ export async function addToFilterFieldOptions(collection: string, doc: QueryDocu
       .set(fieldOptionsData);
   }
 }
+
+
+
+
+
+
+export const addLedgerFilterFieldOptions = onDocumentCreated('ledger/{ledgerEntryId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to ledger document of filterFieldOptions if they are not already there
+  await addToFilterFieldOptions('ledger', doc);
+});
+
+export const addProductFilterFieldOptions = onDocumentCreated('products/{productId}', async event => {
+  const doc = event.data;
+
+  await addToFilterFieldOptions('products', doc!);
+});
+
+export const addPurchaseFilterFieldOptions = onDocumentCreated('purchases/{purchaseId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('purchases', doc);
+});
+
+export const addSalesFilterFieldOptions = onDocumentCreated('sales/{saleId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('sales', doc);
+});
+
+export const addSupplierFilterFieldOptions = onDocumentCreated('suppliers/{supplierId}', async event => {
+  const doc = event.data;
+
+  // Add current document's field values to purchases
+  await addToFilterFieldOptions('suppliers', doc);
+});
 

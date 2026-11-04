@@ -1,6 +1,7 @@
-import { HttpsError, onCall } from "firebase-functions/https";
-import { db } from ".";
-import { Purchase, Sale, LedgerEntry } from "shared/interfaces/firestore-collections";
+import { HttpsError, onCall } from 'firebase-functions/https';
+import { LedgerEntry, Purchase, Sale } from 'shared/interfaces/firestore-collections';
+
+import { db } from '.';
 
 // A single call to recordTransactionToLedger will create two ledger entries, for
 // debit and credit
@@ -34,7 +35,7 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     );
   }
 
-  const collection = purchase ? 'purchases' : 'sales'
+  const collection = purchase ? 'purchases' : 'sales';
 
   const debitRef = db.collection('ledger').doc();
   const creditRef = db.collection('ledger').doc();
@@ -87,7 +88,7 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     if (count === 1) {
       transaction.create(countRef, { count: 1 });
     }
-    transaction.update(countRef, { count: count + 1 })
+    transaction.update(countRef, { count: count + 1 });
   });
 });
 

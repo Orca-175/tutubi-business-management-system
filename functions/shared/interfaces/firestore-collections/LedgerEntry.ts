@@ -7,7 +7,7 @@ export interface LedgerEntry {
   entryType: 0 | 1; // 0 for debit. Used for ensuring that debits can come before credits when fetched
   referenceId: string;
   transactionId: number;
-  transactionType: "Purchase" | 'Sale';
+  transactionType: 'Purchase' | 'Sale';
 }
 
 export interface LedgerEntryData extends LedgerEntry {

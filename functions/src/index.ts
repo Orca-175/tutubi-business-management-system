@@ -10,12 +10,21 @@ export const db = getFirestore();
 
 export {
   addLedgerFilterFieldOptions,
+  addProductFilterFieldOptions,
   addPurchaseFilterFieldOptions,
   addSalesFilterFieldOptions,
   addSupplierFilterFieldOptions,
 } from './addToFilterFieldOptions';
 
 export {
-  recordTransactionToLedger
+  deleteLedgerFilterFieldOptions,
+  deleteProductFilterFieldOptions,
+  deletePurchaseFilterFieldOptions,
+  deleteSaleFilterFieldOptions,
+  deleteSupplierFilterFieldOptions,
+} from './deleteFromFilterFieldOptions';
+
+export {
+  recordTransactionToLedger,
 } from './recordTransactionToLedger';
 
