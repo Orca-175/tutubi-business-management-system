@@ -1,15 +1,13 @@
 import type { FirestoreDataConverter } from 'firebase/firestore';
 
-import { type Dispatch, type ReactElement, type SetStateAction, useEffect, useState } from 'react';
+import { type Dispatch, type ReactElement, type SetStateAction, useContext, useEffect, useState } from 'react';
 
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
+import { TabledPageContext } from '../../context/TabledPageContext';
 import { getFilterFieldOptions } from '../../firebase/queries/getFilterFieldOptions';
 import { getInitialData } from '../../firebase/queries/getInitialData';
 import { refreshData } from '../../firebase/queries/refreshData';
-import { useFilters } from '../../hooks/useFilters';
-import { usePagination } from '../../hooks/usePagination';
-import { useRangeFilters } from '../../hooks/useRangeFilters';
 import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
 import { ApplyFiltersButton } from '../FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput, FilterTextInput } from '../FilterInputs/FilterInputs';
@@ -22,12 +20,6 @@ interface Props<T> {
   converter: FirestoreDataConverter<T>;
   data: (T & { docId: string })[];
   filterConfig: FilterConfig;
-  filters: ReturnType<typeof useFilters>;
-  itemsPerPage: number;
-  orderByDirection: 'asc' | 'desc';
-  orderByString: string;
-  pagination: ReturnType<typeof usePagination>;
-  rangeFilters: ReturnType<typeof useRangeFilters>;
   setData: Dispatch<SetStateAction<(T & { docId: string })[]>>;
   // setOrderByDirection
   // setOrderByString
@@ -39,15 +31,18 @@ export function TabledPage<T>({
   converter,
   data,
   filterConfig,
-  filters,
-  itemsPerPage,
-  orderByDirection,
-  orderByString,
-  pagination,
-  rangeFilters,
   setData,
 }: Props<T>) {
   const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    filters,
+    itemsPerPage,
+    orderByDirection,
+    orderByField,
+    pagination,
+    rangeFilters,
+  } = useContext(TabledPageContext);
 
   const {
     currentStartDocId,
@@ -83,7 +78,7 @@ export function TabledPage<T>({
         collectionString,
         converter,
         itemsPerPage,
-        orderByString,
+        orderByField,
         setData,
         setIsLoading,
         initPagination,
@@ -96,7 +91,7 @@ export function TabledPage<T>({
         converter,
         [...queryConstraints, ...rangeQueryConstraints],
         itemsPerPage,
-        orderByString,
+        orderByField,
         setData,
         initPagination,
       );
@@ -107,7 +102,7 @@ export function TabledPage<T>({
     initPagination,
     isLoading,
     itemsPerPage,
-    orderByString,
+    orderByField,
     queryConstraints,
     rangeQueryConstraints,
     setData,
@@ -211,7 +206,7 @@ export function TabledPage<T>({
         handlePrevBtnClick={handlePrevBtnClick}
         nextPageExists={nextPageExists}
         orderByDirection={orderByDirection}
-        orderByString={orderByString}
+        orderByString={orderByField}
         pageStack={pageStack}
         prevPageExists={prevPageExists}
       />

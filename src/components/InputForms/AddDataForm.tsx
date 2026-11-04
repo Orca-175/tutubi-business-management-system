@@ -1,9 +1,10 @@
 import { addDoc, collection } from 'firebase/firestore';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 import type { InputFormProps } from './DataFormProps';
 
+import { TabledPageContext } from '../../context/TabledPageContext';
 import { db } from '../../firebase/firebase';
 import { DataForm } from './DataForm';
 
@@ -17,6 +18,8 @@ export function AddDataForm<T>(props: Props<T>) {
 
   const [data, setData] = useState<T>(initialData);
   const [formMessage, setFormMessage] = useState<FormMessage>({ message: '', type: '' });
+
+  const { refreshPage } = useContext(TabledPageContext);
 
   return (
     <DataForm
@@ -38,6 +41,7 @@ export function AddDataForm<T>(props: Props<T>) {
             createdAt: new Date().toISOString(),
           });
           setFormMessage({ message: 'Data added successfully!', type: 'success' });
+          refreshPage();
         } catch (error) {
           setFormMessage({ message: error.message, type: 'error' });
         }

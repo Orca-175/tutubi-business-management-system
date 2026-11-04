@@ -1,10 +1,11 @@
 import classNames from 'classnames';
-import { type Dispatch, Fragment, type SetStateAction } from 'react';
+import { type Dispatch, Fragment, type SetStateAction, useContext } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 import type { Data, InputFormProps } from './DataFormProps';
 
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
+import { TabledPageContext } from '../../context/TabledPageContext';
 
 interface Props<T> extends InputFormProps<T> {
   cleanupDataForDialogs?: () => void; // Clears the data used by the dialog forms of table
@@ -97,6 +98,8 @@ export function DataForm<T>({
                     };
 
                     if (input.type === 'number' || input.type === 'text') {
+                      const value = getDeepestObject(data, input.field)[finalField];
+
                       return (
                         <label
                           className={adminModals.input}
@@ -107,7 +110,7 @@ export function DataForm<T>({
                               handleChangeCatchall(event.target.value, input.type);
                             }}
                             type={input.type}
-                            value={getDeepestObject(data, input.field)[finalField]}
+                            value={value === 0 ? '' : value}
                           />
                         </label>
                       );

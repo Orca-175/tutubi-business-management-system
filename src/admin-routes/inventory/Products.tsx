@@ -12,6 +12,7 @@ import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { products } from '../../constants/firebaseCollectionStrings';
+import { TabledPageContext } from '../../context/TabledPageContext';
 import { productConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
 import { useTabledPage } from '../../hooks/useTabledPage';
@@ -23,15 +24,7 @@ export function Products() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isMoreExpanded, setIsMoreExpanded] = useState(false);
 
-  const itemsPerPage = 20;
-
-  const {
-    filters,
-    orderByDirection,
-    orderByString,
-    pagination,
-    rangeFilters,
-  } = useTabledPage(products, productConverter, 'name', itemsPerPage, setProductsData);
+  const tabledPage = useTabledPage(products, productConverter, 'name', setProductsData);
 
   const addFormRef = useRef<HTMLDialogElement>(null);
 
@@ -78,18 +71,12 @@ export function Products() {
   };
 
   return(
-    <>
+    <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
         collectionString={products}
         converter={productConverter}
         data={productsData}
         filterConfig={filterConfig}
-        filters={filters}
-        itemsPerPage={itemsPerPage}
-        orderByDirection={orderByDirection}
-        orderByString={orderByString}
-        pagination={pagination}
-        rangeFilters={rangeFilters}
         setData={setProductsData}
       >
         <>
@@ -123,7 +110,7 @@ export function Products() {
         }}
         inputsGroups={inputsGroups}
       />
-    </>
+    </TabledPageContext>
   );
 }
 

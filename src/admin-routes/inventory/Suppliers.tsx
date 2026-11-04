@@ -12,6 +12,7 @@ import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
 import { suppliers } from '../../constants/firebaseCollectionStrings';
+import { TabledPageContext } from '../../context/TabledPageContext';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
 import { useTabledPage } from '../../hooks/useTabledPage';
@@ -20,20 +21,11 @@ import common from '../../styles/common-styles/AdminCommon.module.scss';
 export function Suppliers() {
   const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
 
+  const addFormRef = useRef<HTMLDialogElement>(null);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isMoreExpanded, setIsMoreExpanded] = useState(false);
 
-  const itemsPerPage = 20;
-
-  const {
-    filters,
-    orderByDirection,
-    orderByString,
-    pagination,
-    rangeFilters,
-  } = useTabledPage(suppliers, supplierConverter, 'businessName', itemsPerPage, setSuppliersData);
-
-  const addFormRef = useRef<HTMLDialogElement>(null);
+  const tabledPage = useTabledPage(suppliers, supplierConverter, 'businessName', setSuppliersData);
 
   const inputsGroups: InputsGroupsConfig<Supplier> = [
     [
@@ -122,18 +114,12 @@ export function Suppliers() {
   };
 
   return (
-    <>
+    <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
         collectionString={suppliers}
         converter={supplierConverter}
         data={suppliersData}
         filterConfig={filterConfig}
-        filters={filters}
-        itemsPerPage={itemsPerPage}
-        orderByDirection={orderByDirection}
-        orderByString={orderByString}
-        pagination={pagination}
-        rangeFilters={rangeFilters}
         setData={setSuppliersData}
       >
         <>
@@ -175,7 +161,7 @@ export function Suppliers() {
         }}
         inputsGroups={inputsGroups}
       />
-    </>
+    </TabledPageContext>
   );
 }
 

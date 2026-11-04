@@ -2,6 +2,8 @@ import type { FirestoreDataConverter } from 'firebase/firestore';
 
 import { type Dispatch, type SetStateAction, useState } from 'react';
 
+import { getFilterFieldOptions } from '../firebase/queries/getFilterFieldOptions';
+import { refreshData } from '../firebase/queries/refreshData';
 import { useFilters } from './useFilters';
 import { usePagination } from './usePagination';
 import { useRangeFilters } from './useRangeFilters';
@@ -11,25 +13,42 @@ import { useRangeFilters } from './useRangeFilters';
 export function useTabledPage<T>(
   collectionString: string,
   converter: FirestoreDataConverter<T>,
-  initialOrderByString: string,
-  itemsPerPage: number,
+  initialOrderByField: string,
   setData: Dispatch<SetStateAction<(T & { docId: string })[]>>,
+  itemsPerPage: number = 20,
 ) {
-  const [orderByString, setOrderByString] = useState(initialOrderByString);
+  const [orderByField, setOrderByField] = useState(initialOrderByField);
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('asc');
 
   const filters = useFilters();
   const rangeFilters = useRangeFilters();
+
   const pagination = usePagination(setData, collectionString, converter, itemsPerPage);
+
+  const refreshPage = async () => {
+    await refreshData(
+      collectionString,
+      converter,
+      [...filters.queryConstraints, ...rangeFilters.rangeQueryConstraints],
+      itemsPerPage,
+      orderByField,
+      setData,
+      pagination.initPagination,
+    );
+
+    getFilterFieldOptions(collectionString, filters.setFilterFieldOptions);
+  };
 
   return {
     filters: filters,
+    itemsPerPage: itemsPerPage,
     orderByDirection: orderByDirection,
-    orderByString: orderByString,
+    orderByField: orderByField,
     pagination: pagination,
     rangeFilters: rangeFilters,
+    refreshPage: refreshPage,
     setOrderByDirection: setOrderByDirection,
-    setOrderByString: setOrderByString,
+    setOrderByField: setOrderByField,
   };
 }
 

@@ -1,8 +1,9 @@
 import { deleteDoc, doc } from 'firebase/firestore';
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useContext, useEffect, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 
+import { TabledPageContext } from '../../context/TabledPageContext';
 import { db } from '../../firebase/firebase';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
@@ -24,6 +25,8 @@ export function DeleteDataDialog({
 }: Props) {
   const [formMessage, setFormMessage] = useState<FormMessage>({ message: '', type: ''});
 
+  const { refreshPage } = useContext(TabledPageContext);
+
   useEffect(() => {
     formRef.current.showModal();
   }, [formRef]);
@@ -36,6 +39,7 @@ export function DeleteDataDialog({
         try {
           await deleteDoc(doc(db, collectionString, docId));
           setFormMessage({ message: `"${identifier}" has been deleted!`, type: 'success'});
+          refreshPage();
         } catch (error) {
           setFormMessage({ message: error.message, type: 'error' });
         }
