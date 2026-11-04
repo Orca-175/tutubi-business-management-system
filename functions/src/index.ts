@@ -25,6 +25,10 @@ export {
 } from './deleteFromFilterFieldOptions';
 
 export {
+  editSuppliersFilterFieldOptions,
+} from './editFilterFieldOptions';
+
+export {
   recordTransactionToLedger,
 } from './recordTransactionToLedger';
 

@@ -3,6 +3,7 @@ import { onDocumentDeleted } from 'firebase-functions/firestore';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
+import { flattenData } from './flattenData';
 
 async function deleteFromFilterFieldOptions(collection: string, doc: QueryDocumentSnapshot) {
   const fieldOptionsDoc = await db
@@ -14,24 +15,10 @@ async function deleteFromFilterFieldOptions(collection: string, doc: QueryDocume
   const docData = doc.data();
 
   // Flatten deleted data
-  const flattenData = (obj: { [field: string]: boolean | number | string }) => {
-    const flattened: typeof obj = {};
-
-    for (const key in obj) {
-      const value = obj[key];
-
-      if (typeof value === 'object') {
-        Object.assign(flattened, flattenData(value));
-      } else {
-        flattened[key] = value;
-      }
-    }
-
-    return flattened;
-  };
+  const flattenedData = flattenData(docData);
 
   // Delete values of fields in deleted data from filterFieldOptions document
-  for (const [key, value] of Object.entries(flattenData(docData))) {
+  for (const [key, value] of Object.entries(flattenedData)) {
     if (!fieldOptionsData[key]) {
       continue;
     }
