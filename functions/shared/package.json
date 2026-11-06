@@ -6,7 +6,8 @@
   "author": "",
   "type": "commonjs",
   "exports": {
-    "./interfaces/firestore-collections": "./firestore-collections.ts"
+    "./interfaces/firestore-collections": "./firestore-collections.ts",
+    "./interfaces/firestore-collection-strings": "./firestore-collection-strings.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
