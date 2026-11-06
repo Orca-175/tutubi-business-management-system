@@ -1,7 +1,9 @@
+
 import type { Supplier, SupplierData } from 'shared/interfaces/firestore-collections';
 
-import { useRef, useState } from 'react';
+import {  useState } from 'react';
 import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
@@ -11,21 +13,25 @@ import { AddDataForm } from '../../components/InputForms/AddDataForm';
 import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
-import { suppliers } from '../../constants/firebaseCollectionStrings';
 import { TabledPageContext } from '../../context/TabledPageContext';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
+import { useTableCardButtons } from '../../hooks/useTableCardButtons';
 import { useTabledPage } from '../../hooks/useTabledPage';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Suppliers() {
   const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
 
-  const addFormRef = useRef<HTMLDialogElement>(null);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
+  const {
+    addFormRef,
+    isDeleteMode,
+    isMoreExpanded,
+    setIsDeleteMode,
+    setIsMoreExpanded,
+  } = useTableCardButtons();
 
-  const tabledPage = useTabledPage(suppliers, supplierConverter, 'businessName', setSuppliersData);
+  const tabledPage = useTabledPage(collections.suppliers, supplierConverter, 'businessName', setSuppliersData);
 
   const inputsGroups: InputsGroupsConfig<Supplier> = [
     [
@@ -116,7 +122,7 @@ export function Suppliers() {
   return (
     <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
-        collectionString={suppliers}
+        collectionString={collections.suppliers}
         converter={supplierConverter}
         data={suppliersData}
         filterConfig={filterConfig}
@@ -142,7 +148,7 @@ export function Suppliers() {
       </TabledPage>
 
       <AddDataForm<Supplier>
-        collectionString={suppliers}
+        collectionString={collections.suppliers}
         formRef={addFormRef}
         heading={'Add supplier'}
         initialData={{
@@ -262,7 +268,7 @@ function SuppliersTable({
       {dataToDelete &&
         <DeleteDataDialog
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={suppliers}
+          collectionString={collections.suppliers}
           docId={dataToDelete.docId}
           formRef={deleteDataFormRef}
           identifier={dataToDelete.businessName}
@@ -272,7 +278,7 @@ function SuppliersTable({
       {originalData &&
         <EditDataForm<SupplierData>
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={suppliers}
+          collectionString={collections.suppliers}
           formRef={editDataFormRef}
           heading={'Edit supplier'}
           initialData={originalData}

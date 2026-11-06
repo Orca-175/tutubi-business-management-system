@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { Products } from './Products';
+import { Stock } from './Stock';
 import { Suppliers } from './Suppliers';
 
 export function Inventory() {
@@ -29,8 +30,7 @@ export function Inventory() {
       <hr />
 
       {tab === 'Stock' ? (
-        // TODO: Show Stock component
-        <div>This is the Stock tab</div>
+        <Stock />
       ) : tab === 'Products' ? (
         <Products />
       ) : (

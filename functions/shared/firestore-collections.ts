@@ -10,7 +10,7 @@ export { Sale, SaleData } from './interfaces/firestore-collections/Sale';
 
 export { Supplier, SupplierData } from './interfaces/firestore-collections/Supplier';
 
-export { InventoryEntry, InventoryEntryData } from './interfaces/firestore-collections/Inventory';
+export { InventoryEntry, InventoryEntryData } from './interfaces/firestore-collections/InventoryEntry';
 
 export { InventorySummary, InventorySummaryData } from './interfaces/firestore-collections/InventorySummary';
 
