@@ -1,5 +1,23 @@
 import type { FirestoreDataConverter } from 'firebase/firestore';
-import type { LedgerEntry, Product, Purchase, Sale, Supplier } from 'shared/interfaces/firestore-collections';
+import type { InventoryEntry, InventorySummary, LedgerEntry, Product, Purchase, Sale, Supplier } from 'shared/interfaces/firestore-collections';
+
+export const inventoryConverter: FirestoreDataConverter<InventoryEntry> = {
+  fromFirestore(snapshot) {
+    return snapshot.data() as InventoryEntry;
+  },
+  toFirestore(ledgerEntry: InventoryEntry) {
+    return ledgerEntry;
+  },
+};
+
+export const inventorySummaryConverter: FirestoreDataConverter<InventorySummary> = {
+  fromFirestore(snapshot) {
+    return snapshot.data() as InventorySummary;
+  },
+  toFirestore(ledgerEntry: InventorySummary) {
+    return ledgerEntry;
+  },
+};
 
 export const ledgerConverter: FirestoreDataConverter<LedgerEntry> = {
   fromFirestore(snapshot) {
