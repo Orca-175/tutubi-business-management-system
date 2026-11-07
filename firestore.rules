@@ -7,7 +7,15 @@ service cloud.firestore {
     }
 
     match /filterFieldOptions/{docId} {
+      allow read: if request.auth.token.admin == true;
+    }
+
+    match /inventory/{inventoryEntryId} {
       allow read, write: if request.auth.token.admin == true;
+    }
+
+    match /inventorySummary/{inventorySummaryId} {
+      allow read: if request.auth.token.admin == true;
     }
 
     match /ledger/{ledgerEntryId} {

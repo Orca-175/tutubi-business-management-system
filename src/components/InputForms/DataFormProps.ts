@@ -9,12 +9,14 @@ export interface InputFormProps<T> {
 }
 
 export type InputsGroupsConfig<T> = {
-    // Each inner array is separated by an <hr /> on the form
     field: FieldPath<T>;
     label: string;
-    options?: (boolean | number | string)[];
+    options?: ({ 
+      label: string;
+      value: boolean | number | string;
+    })[];
     type: 'number' | 'select' | 'text';
-  }[][];
+  }[][]; // Each inner array is separated by an <hr /> on the form
 
 type FieldPath<T> = T extends object ? ({
   [K in keyof T]-?: K extends number | string ? (

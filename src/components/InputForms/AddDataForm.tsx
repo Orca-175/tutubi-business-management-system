@@ -13,6 +13,8 @@ interface Props<T> extends InputFormProps<T> {
   initialData: T;
 }
 
+// A wrapper for DataForm for general adding of data to the database.
+// If you need something more specialized, you should make your own wrapper
 export function AddDataForm<T>(props: Props<T>) {
   const { collectionString, initialData } = props;
 

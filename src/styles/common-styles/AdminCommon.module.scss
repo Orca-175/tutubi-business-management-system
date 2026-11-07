@@ -21,6 +21,11 @@
     }
 }
 
+.dataNotFoundMessage {
+    text-align: center;
+    padding: 1rem 0;
+}
+
 .filterButtonContainer {
     display: flex;
     justify-content: center;
@@ -127,6 +132,7 @@
 
 .tableCardButtons {
     display: flex;
+    gap: 4rem;
     justify-content: end;
     margin-bottom: 1rem;
 

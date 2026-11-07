@@ -1,9 +1,9 @@
 export interface InventorySummary {
-  productName: string;
+  createdAt: string;
   productId: string;
+  productName: string;
   totalCurrentQuantity: number;
   totalOutgoingQuantity: number;
-  price: number;
 }
 
 export interface InventorySummaryData extends InventorySummary {

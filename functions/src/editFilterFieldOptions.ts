@@ -1,8 +1,9 @@
-import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { FilterFieldOptions } from "shared/interfaces/firestore-collections";
-import { flattenData } from "./flattenData";
-import { db } from ".";
-import { onDocumentUpdated } from "firebase-functions/firestore";
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore';
+import { onDocumentUpdated } from 'firebase-functions/firestore';
+import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
+
+import { db } from '.';
+import { flattenData } from './flattenData';
 
 async function editFilterFieldOptions(collection: string, beforeDoc: QueryDocumentSnapshot, afterDoc: QueryDocumentSnapshot) {
   const fieldOptionsDoc = await db

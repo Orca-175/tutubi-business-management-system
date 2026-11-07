@@ -1,12 +1,13 @@
 export interface InventoryEntry {
-  productName: string;
-  productId: string;
   batchNumber: string;
+  createdAt: string;
   currentQuantity: number;
   outgoingQuantity: number;
-  dateStored: string;
-  daysBeforeExpiry: number;
+  productId: string;
+  productName: string;
+  shelfLife: number;
   supplier: string;
+  supplierId: string;
 }
 
 export interface InventoryEntryData extends InventoryEntry {
