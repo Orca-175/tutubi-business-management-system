@@ -14,7 +14,7 @@ service cloud.firestore {
       allow read, write: if request.auth.token.admin == true;
     }
 
-    match /inventorySummary/{inventorySummaryId} {
+    match /inventorySummaries/{inventorySummaryId} {
       allow read: if request.auth.token.admin == true;
     }
 
