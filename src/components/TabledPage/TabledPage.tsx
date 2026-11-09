@@ -191,8 +191,6 @@ export function TabledPage<T>({
       <div className={adminCommon.card}>
         {isLoading ? (
           'Loading...'
-        ) : data.length === 0 ? (
-          'Data not found.'
         ) : (
           children
         )}
