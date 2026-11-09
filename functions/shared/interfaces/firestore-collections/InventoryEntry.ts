@@ -6,7 +6,7 @@ export interface InventoryEntry {
   productId: string;
   productName: string;
   shelfLife: number;
-  supplier: string;
+  supplierName: string; // Supplier.businessName
   supplierId: string;
 }
 
