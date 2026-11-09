@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
 
-setGlobalOptions({maxInstances: 10});
+setGlobalOptions({ maxInstances: 10 });
 
 initializeApp();
 
@@ -31,4 +31,8 @@ export {
 export {
   recordTransactionToLedger,
 } from './recordTransactionToLedger';
+
+export {
+  writeInventorySummaries,
+} from './writeInventorySummaries';
 
