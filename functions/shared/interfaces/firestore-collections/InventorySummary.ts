@@ -1,6 +1,6 @@
+// Document ID in Firestore should be the product's document ID
 export interface InventorySummary {
   createdAt: string;
-  productId: string;
   productName: string;
   totalCurrentQuantity: number;
   totalOutgoingQuantity: number;

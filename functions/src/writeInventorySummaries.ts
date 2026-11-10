@@ -2,8 +2,10 @@ import { onDocumentWritten } from 'firebase-functions/firestore';
 import { InventoryEntry, InventorySummary } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 
-export const writeInventorySummaries = onDocumentWritten('inventory/{inventoryEntryId}',
+export const writeInventorySummaries = onDocumentWritten(
+  `${collections.inventorySummaries}/${collections.inventory}/{inventoryEntryId}`,
   async event => {
     const before = event.data!.before;
     const after = event.data!.after;
@@ -20,7 +22,6 @@ export const writeInventorySummaries = onDocumentWritten('inventory/{inventoryEn
     const inventorySummaryRef = db.collection('inventorySummaries')
         .doc(createdInventoryEntry.productId);
 
-
     if (isCreate) {
       // Get existing aggregate summary of inventory entry with productId
       await db.runTransaction(async transaction => {
@@ -31,7 +32,6 @@ export const writeInventorySummaries = onDocumentWritten('inventory/{inventoryEn
         if (!inventorySummaryDoc.exists) {
           const inventorySummary = {
             createdAt: new Date().toISOString(),
-            productId: createdInventoryEntry.productId,
             productName: createdInventoryEntry.productName,
             totalCurrentQuantity: createdInventoryEntry.currentQuantity,
             totalOutgoingQuantity: createdInventoryEntry.outgoingQuantity,
