@@ -98,8 +98,6 @@ export function Sales() {
         return { docId: doc.id, ...doc.data() };
       });
 
-      console.log('getSalesDataAtTabCursor: ', data);
-
       initPagination(docs[0], docs.at(-1)!, nextPageExists);
       setSalesData(data);
       setIsLoading(false);

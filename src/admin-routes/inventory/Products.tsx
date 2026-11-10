@@ -2,6 +2,7 @@ import type { Product, ProductData } from 'shared/interfaces/firestore-collectio
 
 import { useRef, useState } from 'react';
 import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
@@ -11,7 +12,6 @@ import { AddDataForm } from '../../components/InputForms/AddDataForm';
 import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
-import { products } from '../../constants/firebaseCollectionStrings';
 import { TabledPageContext } from '../../context/TabledPageContext';
 import { productConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
@@ -24,7 +24,7 @@ export function Products() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isMoreExpanded, setIsMoreExpanded] = useState(false);
 
-  const tabledPage = useTabledPage(products, productConverter, 'name', setProductsData);
+  const tabledPage = useTabledPage(collections.products, productConverter, 'name', setProductsData);
 
   const addFormRef = useRef<HTMLDialogElement>(null);
 
@@ -73,7 +73,7 @@ export function Products() {
   return(
     <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
-        collectionString={products}
+        collectionString={collections.products}
         converter={productConverter}
         data={productsData}
         filterConfig={filterConfig}
@@ -99,7 +99,7 @@ export function Products() {
       </TabledPage>
 
       <AddDataForm<Product>
-        collectionString={products}
+        collectionString={collections.products}
         formRef={addFormRef}
         heading={'Add product'}
         initialData={{
@@ -191,7 +191,7 @@ function ProductsTable({
       {dataToDelete &&
         <DeleteDataDialog
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={products}
+          collectionString={collections.products}
           docId={dataToDelete.docId}
           formRef={deleteDataFormRef}
           identifier={dataToDelete.name}
@@ -201,7 +201,7 @@ function ProductsTable({
       {originalData &&
         <EditDataForm<ProductData>
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={products}
+          collectionString={collections.products}
           formRef={editDataFormRef}
           heading={'Edit product'}
           initialData={originalData}

@@ -1,7 +1,9 @@
+
 import type { Supplier, SupplierData } from 'shared/interfaces/firestore-collections';
 
-import { useRef, useState } from 'react';
+import {  useState } from 'react';
 import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 import type { InputsGroupsConfig } from '../../components/InputForms/DataFormProps';
 import type { FilterConfig } from '../../interfaces/FilterConfig';
@@ -11,21 +13,25 @@ import { AddDataForm } from '../../components/InputForms/AddDataForm';
 import { EditDataForm } from '../../components/InputForms/EditDataForm';
 import { TableCardButtons } from '../../components/TableCardButtons';
 import { TabledPage } from '../../components/TabledPage/TabledPage';
-import { suppliers } from '../../constants/firebaseCollectionStrings';
 import { TabledPageContext } from '../../context/TabledPageContext';
 import { supplierConverter } from '../../firebase/converters/collectionConverters';
 import { useMutableTableData } from '../../hooks/useMutableTableData';
+import { useTableCardButtons } from '../../hooks/useTableCardButtons';
 import { useTabledPage } from '../../hooks/useTabledPage';
-import common from '../../styles/common-styles/AdminCommon.module.scss';
+import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
 
 export function Suppliers() {
   const [suppliersData, setSuppliersData] = useState<SupplierData[]>([]);
 
-  const addFormRef = useRef<HTMLDialogElement>(null);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [isMoreExpanded, setIsMoreExpanded] = useState(false);
+  const {
+    addFormRef,
+    isDeleteMode,
+    isMoreExpanded,
+    setIsDeleteMode,
+    setIsMoreExpanded,
+  } = useTableCardButtons();
 
-  const tabledPage = useTabledPage(suppliers, supplierConverter, 'businessName', setSuppliersData);
+  const tabledPage = useTabledPage(collections.suppliers, supplierConverter, 'businessName', setSuppliersData);
 
   const inputsGroups: InputsGroupsConfig<Supplier> = [
     [
@@ -116,7 +122,7 @@ export function Suppliers() {
   return (
     <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
-        collectionString={suppliers}
+        collectionString={collections.suppliers}
         converter={supplierConverter}
         data={suppliersData}
         filterConfig={filterConfig}
@@ -131,18 +137,24 @@ export function Suppliers() {
             setIsMoreExpanded={setIsMoreExpanded}
           />
 
-          <div className={common.tableContainer}>
-            <SuppliersTable
-              inputsGroups={inputsGroups}
-              isDeleteMode={isDeleteMode}
-              supplierData={suppliersData}
-            />
-          </div>
+          {suppliersData.length === 0 ? (
+            <div className={adminCommon.dataNotFoundMessage}>
+              Data not found.
+            </div>
+          ) : (
+            <div className={adminCommon.tableContainer}>
+              <SuppliersTable
+                inputsGroups={inputsGroups}
+                isDeleteMode={isDeleteMode}
+                supplierData={suppliersData}
+              />
+            </div>
+          )}
         </>
       </TabledPage>
 
       <AddDataForm<Supplier>
-        collectionString={suppliers}
+        collectionString={collections.suppliers}
         formRef={addFormRef}
         heading={'Add supplier'}
         initialData={{
@@ -186,7 +198,7 @@ function SuppliersTable({
 
   return (
     <>
-      <table className={common.tableAdmin}>
+      <table className={adminCommon.tableAdmin}>
         <thead>
           <tr>
             <th>Business Name</th>
@@ -195,9 +207,9 @@ function SuppliersTable({
             <th>Email</th>
             <th>Phone</th>
             {isDeleteMode ? (
-              <th className={common.tableButtonHeading}>Delete</th>
+              <th className={adminCommon.tableButtonHeading}>Delete</th>
             ) : (
-              <th className={common.tableButtonHeading}>Edit</th>
+              <th className={adminCommon.tableButtonHeading}>Edit</th>
             )}
           </tr>
         </thead>
@@ -227,9 +239,9 @@ function SuppliersTable({
                   {supplier.phone}
                 </td>
                 {isDeleteMode ? (
-                  <td className={common.tableButtonCell}>
+                  <td className={adminCommon.tableButtonCell}>
                     <button
-                      className={common.tableButtonDelete}
+                      className={adminCommon.tableButtonDelete}
                       onClick={async event => {
                         event.preventDefault();
 
@@ -240,9 +252,9 @@ function SuppliersTable({
                     </button>
                   </td>
                 ) : (
-                  <td className={common.tableButtonCell}>
+                  <td className={adminCommon.tableButtonCell}>
                     <button
-                      className={common.tableButtonNormal}
+                      className={adminCommon.tableButtonNormal}
                       onClick={event => {
                         event.preventDefault();
 
@@ -262,7 +274,7 @@ function SuppliersTable({
       {dataToDelete &&
         <DeleteDataDialog
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={suppliers}
+          collectionString={collections.suppliers}
           docId={dataToDelete.docId}
           formRef={deleteDataFormRef}
           identifier={dataToDelete.businessName}
@@ -272,7 +284,7 @@ function SuppliersTable({
       {originalData &&
         <EditDataForm<SupplierData>
           cleanupDataForDialogs={cleanupDataForDialogs}
-          collectionString={suppliers}
+          collectionString={collections.suppliers}
           formRef={editDataFormRef}
           heading={'Edit supplier'}
           initialData={originalData}

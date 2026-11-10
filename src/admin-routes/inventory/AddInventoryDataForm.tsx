@@ -28,8 +28,8 @@ export function AddInventoryDataForm({
     productId: '',
     productName: '',
     shelfLife: 0,
-    supplier: '',
     supplierId: '',
+    supplierName: '',
   });
   const [formMessage, setFormMessage] = useState<FormMessage>({ message: '', type: '' });
   const [inputsGroups, setInputsGroups] = useState<InputsGroupsConfig<InventoryEntry>>([]);
@@ -101,7 +101,6 @@ export function AddInventoryDataForm({
     getInputsGroups();
   }, []);
 
-  console.log('inventoryEntry:', inventoryEntry);
   return (
     <DataForm
       data={inventoryEntry}
@@ -117,7 +116,7 @@ export function AddInventoryDataForm({
               key === 'outgoingQuantity' ||
               key === 'productName' ||
               key === 'shelfLife' ||
-              key === 'supplier'
+              key === 'supplierName'
             ) {
               continue;
             } else if (value === '' || value === '0') {
@@ -148,8 +147,8 @@ export function AddInventoryDataForm({
               productId: productDoc.id,
               productName: productData.name,
               shelfLife: productData.shelfLife,
-              supplier: supplierData.businessName,
               supplierId: supplierDoc.id,
+              supplierName: supplierData.businessName,
             },
           );
           setFormMessage({ message: 'Data added successfully!', type: 'success' });

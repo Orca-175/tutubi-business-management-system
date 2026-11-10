@@ -18,7 +18,6 @@ interface Props<T> {
   children: ReactElement;
   collectionString: string;
   converter: FirestoreDataConverter<T>;
-  data: (T & { docId: string })[];
   filterConfig: FilterConfig;
   setData: Dispatch<SetStateAction<(T & { docId: string })[]>>;
   // setOrderByDirection
@@ -29,7 +28,6 @@ export function TabledPage<T>({
   children,
   collectionString,
   converter,
-  data,
   filterConfig,
   setData,
 }: Props<T>) {
