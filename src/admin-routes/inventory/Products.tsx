@@ -74,8 +74,6 @@ export function Products() {
     <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
         collectionString={collections.products}
-        converter={productConverter}
-        data={productsData}
         filterConfig={filterConfig}
         setData={setProductsData}
       >

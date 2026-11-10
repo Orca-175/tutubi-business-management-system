@@ -123,8 +123,6 @@ export function Suppliers() {
     <TabledPageContext value={{ ...tabledPage }}>
       <TabledPage
         collectionString={collections.suppliers}
-        converter={supplierConverter}
-        data={suppliersData}
         filterConfig={filterConfig}
         setData={setSuppliersData}
       >

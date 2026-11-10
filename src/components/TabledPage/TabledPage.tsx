@@ -13,11 +13,11 @@ import { ApplyFiltersButton } from '../FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput, FilterTextInput } from '../FilterInputs/FilterInputs';
 import { FilterDateRangeInput, FilterNumberRangeInput } from '../FilterInputs/FilterRangeInputs';
 import { PaginationButtons } from '../PaginationButtons/PaginationButtons';
+import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
 
 interface Props<T> {
   children: ReactElement;
   collectionString: string;
-  converter: FirestoreDataConverter<T>;
   filterConfig: FilterConfig;
   setData: Dispatch<SetStateAction<(T & { docId: string })[]>>;
   // setOrderByDirection
@@ -27,11 +27,12 @@ interface Props<T> {
 export function TabledPage<T>({
   children,
   collectionString,
-  converter,
   filterConfig,
   setData,
 }: Props<T>) {
   const [isLoading, setIsLoading] = useState(true);
+
+  const converter = getCollectionConverter<T>();
 
   const {
     filters,
