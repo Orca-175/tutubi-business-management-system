@@ -1,10 +1,9 @@
-import type { FirestoreDataConverter } from 'firebase/firestore';
-
-import { type Dispatch, type ReactElement, type SetStateAction, useContext, useEffect, useState } from 'react';
+import { type Dispatch, type ReactElement, type SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
 
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
 import { TabledPageContext } from '../../context/TabledPageContext';
+import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
 import { getFilterFieldOptions } from '../../firebase/queries/getFilterFieldOptions';
 import { getInitialData } from '../../firebase/queries/getInitialData';
 import { refreshData } from '../../firebase/queries/refreshData';
@@ -13,7 +12,6 @@ import { ApplyFiltersButton } from '../FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput, FilterTextInput } from '../FilterInputs/FilterInputs';
 import { FilterDateRangeInput, FilterNumberRangeInput } from '../FilterInputs/FilterRangeInputs';
 import { PaginationButtons } from '../PaginationButtons/PaginationButtons';
-import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
 
 interface Props<T> {
   children: ReactElement;
@@ -32,7 +30,9 @@ export function TabledPage<T>({
 }: Props<T>) {
   const [isLoading, setIsLoading] = useState(true);
 
-  const converter = getCollectionConverter<T>();
+  const getConverter = useCallback(() => {
+    return getCollectionConverter<T>();
+  }, []);
 
   const {
     filters,
@@ -75,7 +75,7 @@ export function TabledPage<T>({
     if (isLoading) {
       getInitialData<T>(
         collectionString,
-        converter,
+        getConverter(),
         itemsPerPage,
         orderByField,
         setData,
@@ -87,7 +87,7 @@ export function TabledPage<T>({
     } else {
       refreshData<T>(
         collectionString,
-        converter,
+        getConverter(),
         [...queryConstraints, ...rangeQueryConstraints],
         itemsPerPage,
         orderByField,
@@ -97,7 +97,7 @@ export function TabledPage<T>({
     }
   }, [
     collectionString,
-    converter,
+    getConverter,
     initPagination,
     isLoading,
     itemsPerPage,
