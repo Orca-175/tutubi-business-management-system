@@ -40,7 +40,7 @@ export function EditDataForm<T>(props: Props<T>) {
           }
 
           await setDoc(doc(db, collectionString, data.docId), data);
-          setFormMessage({ message: 'Data added successfully!', type: 'success'});
+          setFormMessage({ message: 'Data edited successfully!', type: 'success'});
           refreshPage();
         } catch (error) {
           setFormMessage({ message: error.message, type: 'error'});

@@ -58,6 +58,10 @@
     }
 }
 
+.innerTabButtons {
+    align-self: center;
+}
+
 .moreButton {
     @include mixins.button-ghost();
     @include mixins.icon-button;

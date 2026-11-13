@@ -1,4 +1,4 @@
-import type { InventoryEntry, Product, Supplier } from 'shared/interfaces/firestore-collections';
+import type { InventoryEntry, InventoryEntryData, Product, Supplier } from 'shared/interfaces/firestore-collections';
 
 import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { type RefObject, useContext, useEffect, useState } from 'react';
@@ -10,15 +10,16 @@ import type { FormMessage } from '../../interfaces/FormMessage';
 import { DataForm } from '../../components/InputForms/DataForm';
 import { TabledPageContext } from '../../context/TabledPageContext';
 import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
-import { productConverter, supplierConverter } from '../../firebase/converters/collectionConverters';
 import { db } from '../../firebase/firebase';
 
 interface Props {
   formRef: RefObject<HTMLDialogElement>;
+  inputsGroups: InputsGroupsConfig<InventoryEntry>;
 }
 
 export function AddInventoryDataForm({
   formRef,
+  inputsGroups,
 }: Props) {
   const [inventoryEntry, setInventoryEntry] = useState<InventoryEntry>({
     batchNumber: '',
@@ -32,74 +33,8 @@ export function AddInventoryDataForm({
     supplierName: '',
   });
   const [formMessage, setFormMessage] = useState<FormMessage>({ message: '', type: '' });
-  const [inputsGroups, setInputsGroups] = useState<InputsGroupsConfig<InventoryEntry>>([]);
 
   const { refreshPage } = useContext(TabledPageContext);
-
-  useEffect(() => {
-    async function getInputsGroups() {
-      const getProductsData = async () => {
-        const docs = (await getDocs(
-          collection(db, collections.products)
-            .withConverter(productConverter),
-        )).docs;
-
-        return docs.map(doc => ({ ...doc.data(), docId: doc.id }));
-      };
-
-      const getSuppliersData = async () => {
-        const docs = (await getDocs(
-          collection(db, collections.suppliers)
-            .withConverter(supplierConverter),
-        )).docs;
-
-        return docs.map(doc => ({ ...doc.data(), docId: doc.id }));
-      };
-
-      const productsData = await getProductsData();
-      const suppliersData = await getSuppliersData();
-
-      // set inputsGroups
-      setInputsGroups([
-        [
-          {
-            field: 'batchNumber',
-            label: 'Batch Number',
-            type: 'text',
-          },
-        ],
-        [
-          {
-            field: 'productId',
-            label: 'Product',
-            options: productsData.map(productData => ({
-              label: productData.name,
-              value: productData.docId,
-            })),
-            type: 'select',
-          },
-          {
-            field: 'currentQuantity',
-            label: 'Quantity',
-            type: 'number',
-          },
-        ],
-        [
-          {
-            field: 'supplierId',
-            label: 'Supplier',
-            options: suppliersData.map(supplierData => ({
-              label: supplierData.businessName,
-              value: supplierData.docId,
-            })),
-            type: 'select',
-          },
-        ],
-      ]);
-    }
-
-    getInputsGroups();
-  }, []);
 
   return (
     <DataForm
