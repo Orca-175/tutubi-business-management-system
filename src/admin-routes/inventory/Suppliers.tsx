@@ -37,12 +37,12 @@ export function Suppliers() {
     [
       {
         field: 'businessName',
-        label: 'Business Name',
+        label: 'Business name',
         type: 'text',
       },
       {
         field: 'ownerName',
-        label: 'Owner Name',
+        label: 'Owner name',
         type: 'text',
       },
     ],
@@ -91,12 +91,12 @@ export function Suppliers() {
     normal: [
       {
         field: 'businessName',
-        label: 'Business Name',
+        label: 'Business name',
         type: 'select',
       },
       {
         field: 'ownerName',
-        label: 'Owner Name',
+        label: 'Owner name',
         type: 'select',
       },
       {
@@ -199,8 +199,8 @@ function SuppliersTable({
       <table className={adminCommon.tableAdmin}>
         <thead>
           <tr>
-            <th>Business Name</th>
-            <th>Owner Name</th>
+            <th>Business name</th>
+            <th>Owner name</th>
             <th>Address</th>
             <th>Email</th>
             <th>Phone</th>

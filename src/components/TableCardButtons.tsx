@@ -54,7 +54,7 @@ export function TableCardButtons({
               setIsDeleteMode(!isDeleteMode);
             }}
           >
-            <BiMinus /> Delete
+            <BiMinus /> Delete Items
           </button>
         }
       </div>

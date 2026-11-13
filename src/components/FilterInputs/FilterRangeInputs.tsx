@@ -21,11 +21,6 @@ export function FilterDateRangeInput({
     <div className={styles.rangeInput}>
       <div>{label}</div>
 
-      <div className={styles.rangeInputIcons}>
-        <BiArrowToLeft />
-        <BiArrowToRight />
-      </div>
-
       <div className={styles.filterInputs}>
         <div className={styles.filterInput}>
           <label
@@ -54,6 +49,8 @@ export function FilterDateRangeInput({
             type="date"
           />
         </div>
+
+        <div>-</div>
 
         <div className={styles.filterInput}>
           <label
@@ -103,11 +100,6 @@ export function FilterNumberRangeInput({
     <div className={styles.rangeInput}>
       <div>{label}</div>
 
-      <div className={styles.rangeInputIcons}>
-        <BiArrowToLeft />
-        <BiArrowToRight />
-      </div>
-
       <div className={styles.filterInputs}>
         <div className={styles.filterInput}>
           <label
@@ -136,6 +128,8 @@ export function FilterNumberRangeInput({
             type="number"
           />
         </div>
+
+        <div>-</div>
 
         <div className={styles.filterInput}>
           <label
