@@ -5,9 +5,10 @@ export interface InventoryEntry {
   outgoingQuantity: number;
   productId: string;
   productName: string;
+  reservedQuantity: number;
   shelfLife: number;
-  supplierName: string; // Supplier.businessName
   supplierId: string;
+  supplierName: string; // Supplier.businessName
 }
 
 export interface InventoryEntryData extends InventoryEntry {

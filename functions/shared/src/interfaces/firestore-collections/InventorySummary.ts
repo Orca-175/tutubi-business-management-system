@@ -4,6 +4,7 @@ export interface InventorySummary {
   productName: string;
   totalCurrentQuantity: number;
   totalOutgoingQuantity: number;
+  totalReservedQuantity: number;
 }
 
 export interface InventorySummaryData extends InventorySummary {

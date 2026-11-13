@@ -1,8 +1,8 @@
 import { onDocumentWritten } from 'firebase-functions/firestore';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { InventoryEntry, InventorySummary } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
-import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 export const writeInventorySummaries = onDocumentWritten(
   `${collections.inventory}/{inventoryEntryId}`,
