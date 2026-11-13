@@ -37,7 +37,7 @@ export function Stock () {
         />
       ) : (
         <AllStock
-          productName={productName}
+          productNameToFilter={productName}
         />
       )}
     </>

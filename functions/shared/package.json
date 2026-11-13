@@ -4,12 +4,16 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "exports": {
-    "./interfaces/firestore-collections": "./firestore-collections.ts",
-    "./interfaces/firestore-collection-strings": "./firestore-collection-strings.ts"
+    "./interfaces/firestore-collections": "./lib/firestore-collections.js",
+    "./interfaces/firestore-collection-strings": "./lib/firestore-collection-strings.js"
   },
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
   }
 }

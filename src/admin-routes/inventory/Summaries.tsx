@@ -91,7 +91,7 @@ function SummariesTable({
           <th>Product name</th>
           <th>Total current quantity</th>
           <th>Total outgoing quantity</th>
-          <th>More</th>
+          <th className={adminCommon.tableButtonHeading}>More</th>
         </tr>
       </thead>
       <tbody>

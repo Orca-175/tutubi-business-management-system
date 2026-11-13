@@ -5,7 +5,7 @@ import { db } from '.';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 export const writeInventorySummaries = onDocumentWritten(
-  `${collections.inventorySummaries}/${collections.inventory}/{inventoryEntryId}`,
+  `${collections.inventory}/{inventoryEntryId}`,
   async event => {
     const before = event.data!.before;
     const after = event.data!.after;
