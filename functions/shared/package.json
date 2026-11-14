@@ -7,7 +7,8 @@
   "type": "module",
   "exports": {
     "./interfaces/firestore-collections": "./lib/firestore-collections.js",
-    "./interfaces/firestore-collection-strings": "./lib/firestore-collection-strings.js"
+    "./interfaces/firestore-collection-strings": "./lib/firestore-collection-strings.js",
+    "./interfaces": "./lib/interfaces.js"
   },
   "scripts": {
     "build": "tsc",
