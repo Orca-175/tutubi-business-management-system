@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
+import { getWriteFilterFieldOptions } from './filter-field-options/writeFilterFieldOptions';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -9,30 +11,17 @@ initializeApp();
 export const db = getFirestore();
 
 export {
-  addLedgerFilterFieldOptions,
-  addProductFilterFieldOptions,
-  addPurchaseFilterFieldOptions,
-  addSalesFilterFieldOptions,
-  addSupplierFilterFieldOptions,
-} from './addToFilterFieldOptions';
-
-export {
-  deleteLedgerFilterFieldOptions,
-  deleteProductFilterFieldOptions,
-  deletePurchaseFilterFieldOptions,
-  deleteSaleFilterFieldOptions,
-  deleteSupplierFilterFieldOptions,
-} from './deleteFromFilterFieldOptions';
-
-export {
-  editSuppliersFilterFieldOptions,
-} from './editFilterFieldOptions';
-
-export {
   recordTransactionToLedger,
 } from './recordTransactionToLedger';
 
 export {
   writeInventorySummaries,
 } from './writeInventorySummaries';
+
+export const writeLedgerFilterFieldOptions = getWriteFilterFieldOptions(collections.ledger);
+export const writeOrderFilterFieldOptions = getWriteFilterFieldOptions(collections.orders);
+export const writeProductFilterFieldOptions = getWriteFilterFieldOptions(collections.products);
+export const writePurchaseFilterFieldOptions = getWriteFilterFieldOptions(collections.purchases);
+export const writeSaleFilterFieldOptions = getWriteFilterFieldOptions(collections.sales);
+export const writeSupplierFilterFieldOptions = getWriteFilterFieldOptions(collections.suppliers);
 

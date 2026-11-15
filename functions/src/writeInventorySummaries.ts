@@ -35,6 +35,7 @@ export const writeInventorySummaries = onDocumentWritten(
             productName: createdInventoryEntry.productName,
             totalCurrentQuantity: createdInventoryEntry.currentQuantity,
             totalOutgoingQuantity: createdInventoryEntry.outgoingQuantity,
+            totalReservedQuantity: createdInventoryEntry.reservedQuantity,
           } satisfies InventorySummary;
 
           // Add values of newly created inventory entry to aggregate summary
