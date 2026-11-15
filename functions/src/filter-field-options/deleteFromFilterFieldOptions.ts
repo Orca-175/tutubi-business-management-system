@@ -11,7 +11,7 @@ export async function deleteFromFilterFieldOptions(collection: string, doc: Docu
     .doc(collection)
     .get();
 
-  if (!doc.exists || !fieldOptionsDoc.exists) {
+  if (!doc.exists) {
     throw new HttpsError(
       'not-found',
       'Document/s not found.'

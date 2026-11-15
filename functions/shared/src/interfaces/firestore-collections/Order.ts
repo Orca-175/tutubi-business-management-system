@@ -30,9 +30,9 @@ export interface Order {
   // Reserved: The order is a reservation. Will be set to "Confirmed" whe
   // the customer follows through and the business confirms the order
   //
-  // '': A new order whose status has not been set
+  // '--': A new order whose status has not been set
   status: 'Cancelled' | 'Confirmed' | 'Out for delivery' | 'Received' |
-    'Reserved';
+    'Reserved' | '--';
 }
 
 export interface OrderData extends Order {

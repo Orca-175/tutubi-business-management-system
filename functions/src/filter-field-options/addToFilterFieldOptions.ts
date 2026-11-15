@@ -11,7 +11,7 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
     .doc(collection)
     .get();
 
-  if (!doc.exists || !fieldOptionsDoc.exists) {
+  if (!doc.exists) {
     throw new HttpsError(
       'not-found',
       'Document/s not found.'
@@ -35,6 +35,8 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
 
         // If value is not a number and not a date
       } else if (typeof value === 'boolean' || Number.isNaN(Number(value)) && isNaN(new Date(value).getTime())) {
+        console.log('key: ', key);
+
         if (fieldOptionsData[key]) {
           if (!fieldOptionsData[key].some(someValue => someValue == value)) {
             fieldOptionsData[key].push(value);

@@ -27,25 +27,25 @@ export function AdminLayout() {
 
         <ul>
           <li>
-            <Link to="/admin">
+            <Link to={adminPaths.Home}>
               <BiSolidHome />
               <div>Home</div>
             </Link>
           </li>
           <li>
-            <Link to="/admin/inventory">
+            <Link to={adminPaths.Inventory}>
               <BiSolidCylinder />
               <div>Inventory</div>
             </Link>
           </li>
           <li>
-            <Link to="/admin/ledger">
+            <Link to={adminPaths.Ledger}>
               <BiSolidBookOpen />
               <div>Ledger</div>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to={adminPaths.Orders}>
               <BiSolidNotepad />
               <div>Orders</div>
             </Link>

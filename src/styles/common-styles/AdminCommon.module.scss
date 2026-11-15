@@ -116,6 +116,19 @@
         @include mixins.button-ghost($color: colors.$danger);
     }
 
+    .tableButtonDisabled {
+        @include mixins.button-ghost;
+
+        svg {
+            color: colors.$button-disabled;
+        }
+
+        &:hover {
+            background-color: unset;
+            cursor: default;
+        }
+    }
+
     .tableButtonHidden {
         visibility: hidden;
     }
@@ -136,13 +149,9 @@
 
 .tableCardButtons {
     display: flex;
-    gap: 4rem;
-    justify-content: end;
+    gap: 1rem;
+    justify-content: space-between;
     margin-bottom: 1rem;
-
-    &:has(> :nth-child(2)) {
-        justify-content: space-between;
-    }
 
     .deleteButton {
         @include mixins.button-outlined($color: colors.$danger);

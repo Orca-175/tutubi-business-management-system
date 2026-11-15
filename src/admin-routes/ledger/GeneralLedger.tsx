@@ -203,12 +203,16 @@ export function GeneralLedger() {
         ) : (
           <>
             <div className={common.tableCardButtons}>
-              <button
-                className={common.newButton}
-                onClick={() => dialogRef.current.showModal()}
-              >
-                <BiPlus /> New
-              </button>
+              <div></div>
+
+              <div>
+                <button
+                  className={common.newButton}
+                  onClick={() => dialogRef.current.showModal()}
+                >
+                  <BiPlus /> New
+                </button>
+              </div>
             </div>
             <div className={common.tableContainer}>
               <LedgerTable

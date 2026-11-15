@@ -6,7 +6,7 @@ import { BiChevronLeft, BiChevronRight, BiMinus, BiPlus } from 'react-icons/bi';
 import common from '../styles/common-styles/AdminCommon.module.scss';
 
 interface Props {
-  addFormRef: RefObject<HTMLDialogElement>;
+  addFormRef?: RefObject<HTMLDialogElement>;
   isDeleteMode: boolean;
   isMoreExpanded: boolean;
   setIsDeleteMode: Dispatch<SetStateAction<boolean>>;
@@ -59,12 +59,16 @@ export function TableCardButtons({
         }
       </div>
 
-      <button
-        className={common.newButton}
-        onClick={() => addFormRef.current.showModal()}
-      >
-        <BiPlus /> New
-      </button>
+      <div>
+        {addFormRef &&
+          <button
+            className={common.newButton}
+            onClick={() => addFormRef.current.showModal()}
+          >
+            <BiPlus /> New
+          </button>
+        }
+      </div>
     </div>
   );
 }

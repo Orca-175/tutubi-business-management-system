@@ -114,7 +114,9 @@ export function DataForm<T>({
                           />
                         </label>
                       );
-                    } else {
+                    }
+
+                    if (input.type === 'select'){
                       return (
                         <label
                           className={adminModals.input}

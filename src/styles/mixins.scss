@@ -3,49 +3,50 @@
 @use './colors.scss';
 @use './variables.scss';
 
-@mixin button-filled($background-color: colors.$primary, $color: colors.$secondary-text) {
+@mixin button() {
     all: unset;
-    background-color: $background-color;
+    border: 1px solid transparent;
     border-radius: variables.$border-radius-small;
-    color: $color;
+    min-height: 1.5rem;
     padding: .25em 1em;
     text-align: center;
     user-select: none;
 
     &:hover {
-        background-color: color.scale($background-color, $lightness: variables.$hover-color-lightness);
         cursor: pointer;
+    }
+}
+
+@mixin button-filled($background-color: colors.$primary, $color: colors.$secondary-text) {
+    @include button;
+    background-color: $background-color;
+    border-radius: variables.$border-radius-small;
+    color: $color;
+
+    &:hover {
+        background-color: color.scale($background-color, $lightness: variables.$hover-color-lightness);
     }
 }
 
 @mixin button-ghost($color: colors.$primary-text) {
-    all: unset;
+    @include button;
     background-color: transparent;
     border-radius: variables.$border-radius-small;
     color: $color;
-    padding: .25em 1em;
-    text-align: center;
-    user-select: none;
 
     &:hover {
         background-color: color.scale(colors.$button-ghost-hover, $alpha: variables.$hover-color-alpha);
-        cursor: pointer;
     }
 }
 
 @mixin button-outlined($color: colors.$primary-text) {
-    all: unset;
+    @include button;
     background-color: transparent;
     border: 1px solid $color;
-    border-radius: variables.$border-radius-small;
     color: $color;
-    padding: .25em 1em;
-    text-align: center;
-    user-select: none;
 
     &:hover {
         background-color: color.scale(colors.$button-ghost-hover, $alpha: variables.$hover-color-alpha);
-        cursor: pointer;
     }
 }
 

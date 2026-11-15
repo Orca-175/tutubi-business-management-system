@@ -12,6 +12,7 @@ import { AdminHome } from './admin-routes/home/Home';
 import { Inventory } from './admin-routes/inventory/Inventory';
 import { AdminLayout } from './admin-routes/layout/AdminLayout';
 import { Ledger } from './admin-routes/ledger/Ledger';
+import { Orders } from './admin-routes/orders/Orders';
 import { Home } from './client-routes/home/Home';
 import { AuthProvider } from './components/AuthProvider';
 
@@ -37,6 +38,10 @@ import { AuthProvider } from './components/AuthProvider';
               {
                 path: '/admin/ledger',
                 Component: Ledger,
+              },
+              {
+                path: '/admin/orders',
+                Component: Orders,
               },
             ],
           },
