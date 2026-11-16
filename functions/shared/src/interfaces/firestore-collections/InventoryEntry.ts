@@ -4,6 +4,7 @@ import type { TimestampBridge } from "../TimestampBridge.js";
 export interface InventoryEntry extends FirestoreDocument {
   batchNumber: string;
   currentQuantity: number; // Quantities are stored in kg
+  expiresAt: TimestampBridge;
   outgoingQuantity: number;
   productId: string;
   productName: string;

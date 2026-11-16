@@ -1,6 +1,6 @@
 import type { InventoryEntry, InventoryEntryData, Product, Supplier } from 'shared/interfaces/firestore-collections';
 
-import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { type RefObject, useContext, useEffect, useState } from 'react';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
@@ -23,11 +23,13 @@ export function AddInventoryDataForm({
 }: Props) {
   const [inventoryEntry, setInventoryEntry] = useState<InventoryEntry>({
     batchNumber: '',
-    createdAt: new Date().toISOString(),
+    createdAt: Timestamp.now(),
     currentQuantity: 0,
+    expiresAt: Timestamp.now(),
     outgoingQuantity: 0,
     productId: '',
     productName: '',
+    reservedQuantity: 0,
     shelfLife: 0,
     supplierId: '',
     supplierName: '',
@@ -71,6 +73,10 @@ export function AddInventoryDataForm({
           );
           const supplierData = supplierDoc.exists && supplierDoc.data();
 
+          const expiresAt = Timestamp.fromMillis(
+            (inventoryEntry.createdAt.toMillis() + (productData.shelfLife * 24 * 60 * 60 * 1000)),
+          );
+
           await addDoc(
             collection(db, collections.inventory)
               .withConverter(getCollectionConverter<InventoryEntry>()),
@@ -78,9 +84,11 @@ export function AddInventoryDataForm({
               batchNumber: inventoryEntry.batchNumber,
               createdAt: inventoryEntry.createdAt,
               currentQuantity: inventoryEntry.currentQuantity,
+              expiresAt: expiresAt,
               outgoingQuantity: 0,
               productId: productDoc.id,
               productName: productData.name,
+              reservedQuantity: 0,
               shelfLife: productData.shelfLife,
               supplierId: supplierDoc.id,
               supplierName: supplierData.businessName,

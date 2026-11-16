@@ -221,10 +221,13 @@ function AllStockTable({
       <table className={adminCommon.tableAdmin}>
         <thead>
           <tr>
+            <th>Created at</th>
             <th>Batch number</th>
             <th>Product name</th>
             <th>Current quantity</th>
             <th>Outgoing quantity</th>
+            <th>Reserved quantity</th>
+            <th>Expires at</th>
             {isDeleteMode ? (
               <th className={adminCommon.tableButtonHeading}>Delete</th>
             ) : (
@@ -234,12 +237,18 @@ function AllStockTable({
         </thead>
         <tbody>
           {inventoryEntriesData.map(data => {
+            const createdAt = data.createdAt.toDate().toLocaleDateString();
+            const expiresAt = data.expiresAt.toDate().toLocaleDateString();
+
             return (
               <tr key={data.docId}>
+                <td>{createdAt}</td>
                 <td>{data.batchNumber}</td>
                 <td>{data.productName}</td>
                 <td>{data.currentQuantity}</td>
                 <td>{data.outgoingQuantity}</td>
+                <td>{data.reservedQuantity}</td>
+                <td>{expiresAt}</td>
                 {isDeleteMode ? (
                   <td className={adminCommon.tableButtonCell}>
                     <button
