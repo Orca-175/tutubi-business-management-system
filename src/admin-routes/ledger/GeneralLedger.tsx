@@ -266,11 +266,12 @@ function LedgerTable({ ledgerData }: {
           const even = index % 2 === 0;
           const debit = ledgerEntry.debit === 0 ? '' : ledgerEntry.debit;
           const credit = ledgerEntry.credit === 0 ? '' : ledgerEntry.credit;
+          const createdAt = ledgerEntry.createdAt.toDate().toLocaleDateString();
 
           return (
             <tr key={ledgerEntry.docId}>
               <td>{even && ledgerEntry.transactionId}</td>
-              <td>{ledgerEntry.createdAt}</td>
+              <td>{createdAt}</td>
               <td>{ledgerEntry.account}</td>
               <td>{debit}</td>
               <td>{credit}</td>

@@ -1,8 +1,9 @@
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+
 // Document ID in Firestore should be the product's document ID
-export interface InventorySummary {
-  createdAt: string;
+export interface InventorySummary extends FirestoreDocument {
   productName: string;
-  totalCurrentQuantity: number;
+  totalCurrentQuantity: number; // Quantities are stored in kg
   totalOutgoingQuantity: number;
   totalReservedQuantity: number;
 }

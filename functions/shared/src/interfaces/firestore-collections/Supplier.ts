@@ -1,4 +1,6 @@
-export interface Supplier {
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+
+export interface Supplier extends FirestoreDocument {
   address: {
     barangay: string;
     city: string;
@@ -7,7 +9,6 @@ export interface Supplier {
     street: string;
   };
   businessName: string;
-  createdAt: string;
   email: string;
   ownerName: string;
   phone: string;

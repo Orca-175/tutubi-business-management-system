@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { useContext, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
@@ -40,7 +40,7 @@ export function AddDataForm<T>(props: Props<T>) {
 
           await addDoc(collection(db, collectionString), {
             ...data,
-            createdAt: new Date().toISOString(),
+            createdAt: Timestamp.now(),
           });
           setFormMessage({ message: 'Data added successfully!', type: 'success' });
           refreshPage();

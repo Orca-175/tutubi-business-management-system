@@ -1,12 +1,13 @@
 import type { Product } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { type RefObject, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 
 import { products } from '../../constants/firebaseCollectionStrings';
+import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
 import { db } from '../../firebase/firebase';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
@@ -40,9 +41,9 @@ export function ModalProductsForm({ productFormRef }: { productFormRef: RefObjec
             throw new Error('Please fill out all fields.');
           }
 
-          await addDoc(collection(db, products), {
+          await addDoc(collection(db, products).withConverter(getCollectionConverter<Product>()), {
             ...product,
-            createdAt: new Date().toISOString(),
+            createdAt: Timestamp.now(),
           });
 
           setFormMessage({ message: 'Product added successfully!', type: 'success' });

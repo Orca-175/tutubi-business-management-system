@@ -1,6 +1,7 @@
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+
 // A product that the business sells
-export interface Product {
-  createdAt: string;
+export interface Product extends FirestoreDocument {
   name: string;
   price: number; // Price per kg
   shelfLife: number; // Days before expiry in days

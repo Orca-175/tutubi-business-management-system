@@ -1,9 +1,9 @@
 import type { Address } from '../Address.js';
 import type { FullName } from '../FullName.js';
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
-export interface Order {
+export interface Order extends FirestoreDocument {
   batchNumber: string; // Batch number of products alloted by the system
-  createdAt: string;
   customerAddress: Address;
   customerId: string;
   customerName: FullName;

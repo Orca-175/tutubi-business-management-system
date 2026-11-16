@@ -1,12 +1,14 @@
-export interface InventoryEntry {
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+import type { TimestampBridge } from "../TimestampBridge.js";
+
+export interface InventoryEntry extends FirestoreDocument {
   batchNumber: string;
-  createdAt: string;
-  currentQuantity: number;
+  currentQuantity: number; // Quantities are stored in kg
   outgoingQuantity: number;
   productId: string;
   productName: string;
   reservedQuantity: number;
-  shelfLife: number;
+  shelfLife: number; // Shelf life in days
   supplierId: string;
   supplierName: string; // Supplier.businessName
 }

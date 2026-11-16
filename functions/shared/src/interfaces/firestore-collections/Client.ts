@@ -1,11 +1,11 @@
 import type { Address } from '../Address.ts';
 import type { FullName } from '../FullName.ts';
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
-export interface Client {
+export interface Client extends FirestoreDocument {
   address: Address;
   avatarPath: string;
   businessName: string;
-  createdAt: string;
   email: string;
   name: FullName;
   phone: string;

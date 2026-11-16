@@ -34,8 +34,7 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
         addFieldOptions(Object.entries(value));
 
         // If value is not a number and not a date
-      } else if (typeof value === 'boolean' || Number.isNaN(Number(value)) && isNaN(new Date(value).getTime())) {
-        console.log('key: ', key);
+      } else if (typeof value === 'boolean' || Number.isNaN(Number(value))) {
 
         if (fieldOptionsData[key]) {
           if (!fieldOptionsData[key].some(someValue => someValue == value)) {

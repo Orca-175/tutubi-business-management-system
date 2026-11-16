@@ -1,5 +1,7 @@
-export interface Sale {
-  createdAt: string; // Set in onCreate cloud function
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+
+// NOTE: createdAt is set in onCreate cloud function
+export interface Sale extends FirestoreDocument {
   customer: 'Walk-in' | string;
   price: number;
   product: string;

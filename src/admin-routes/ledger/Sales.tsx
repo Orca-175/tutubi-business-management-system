@@ -275,6 +275,8 @@ function SalesTable({ salesData, tabCursor }: {
       </thead>
       <tbody>
         {salesData.map(saleData => {
+          const createdAt = saleData.createdAt.toDate().toLocaleDateString();
+
           return (
             <tr
               className={
@@ -283,7 +285,7 @@ function SalesTable({ salesData, tabCursor }: {
               key={saleData.docId}
             >
               <td>{saleData.transactionId}</td>
-              <td>{saleData.createdAt}</td>
+              <td>{createdAt}</td>
               <td>{saleData.customer}</td>
               <td>{saleData.product}</td>
               <td>{saleData.price}</td>

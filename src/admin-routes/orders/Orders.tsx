@@ -1,5 +1,6 @@
 import type { Order, OrderData } from 'shared/interfaces/firestore-collections';
 
+import classNames from 'classnames';
 import { useState } from 'react';
 import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
@@ -18,7 +19,6 @@ import { useTabledPage } from '../../hooks/useTabledPage';
 import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
 import { addressToString } from '../../utils/helpers/addressToString';
 import { fullNameToString } from '../../utils/helpers/fullNameToString';
-import classNames from 'classnames';
 
 interface OrdersTableProps {
   isDeleteMode: boolean;
@@ -147,9 +147,11 @@ function OrdersTable({
         </thead>
         <tbody>
           {ordersData.map(data => {
+            const createdAt = data.createdAt.toDate().toLocaleDateString();
+
             return (
               <tr>
-                <td>{data.createdAt}</td>
+                <td>{createdAt}</td>
                 <td>{fullNameToString(data.customerName)}</td>
                 <td>{data.productName}</td>
                 <td>{data.quantity}</td>

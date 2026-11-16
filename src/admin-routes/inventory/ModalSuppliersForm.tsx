@@ -1,12 +1,13 @@
 import type { Supplier } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import {  type RefObject, useState } from 'react';
 
 import type { FormMessage } from '../../interfaces/FormMessage';
 
 import {  suppliers } from '../../constants/firebaseCollectionStrings';
+import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
 import { db } from '../../firebase/firebase';
 import adminModals from '../../styles/common-styles/AdminModals.module.scss';
 
@@ -20,7 +21,7 @@ export function ModalSuppliersForm({ supplierFormRef }: { supplierFormRef: RefOb
       street: '',
     },
     businessName: '',
-    createdAt: '',
+    createdAt: Timestamp.now(),
     email: '',
     ownerName: '',
     phone: '',
@@ -63,9 +64,9 @@ export function ModalSuppliersForm({ supplierFormRef }: { supplierFormRef: RefOb
             throw new Error('Please fill out all fields.');
           }
 
-          await addDoc(collection(db, suppliers), {
+          await addDoc(collection(db, suppliers).withConverter(getCollectionConverter<Supplier>()), {
             ...supplier,
-            createdAt: new Date().toISOString(),
+            createdAt: Timestamp.now(),
           });
 
           setFormMessage({ message: 'Supplier added successfully!', type: 'success' });

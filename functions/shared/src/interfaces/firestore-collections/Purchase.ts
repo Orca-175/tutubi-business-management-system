@@ -1,6 +1,8 @@
+import type { FirestoreDocument } from "./FirestoreDocument.js";
+
 // TODO: Add further source/supplier information
-export interface Purchase {
-  createdAt: string; // Set in onCreate cloud function
+// NOTE: createdAt is set in onCreate cloud function
+export interface Purchase extends FirestoreDocument {
   price: number;
   product: string;
   productId: string;

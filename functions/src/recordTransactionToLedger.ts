@@ -2,6 +2,7 @@ import { HttpsError, onCall } from 'firebase-functions/https';
 import { LedgerEntry, Purchase, Sale } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
+import { Timestamp } from 'firebase-admin/firestore';
 
 // A single call to recordTransactionToLedger will create two ledger entries, for
 // debit and credit
@@ -51,12 +52,12 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     const countSnap = await transaction.get(countRef);
     const count = countSnap.exists ? countSnap.data()!.count : 1;
 
-    transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, createdAt: new Date().toISOString(),transactionId: count});
+    transaction.create(saleOrPurchaseRef, { ...saleOrPurchase, createdAt: Timestamp.now(),transactionId: count});
 
     const debitEntry: LedgerEntry = {
         account: debit.account,
         collection: collection,
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.now(),
         credit: 0,
         debit: debit.value,
         entryType: 0,
@@ -68,7 +69,7 @@ export const recordTransactionToLedger = onCall<Arguments>(async request => {
     const creditEntry: LedgerEntry = {
       account: credit.account,
       collection: collection,
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       credit: credit.value,
       debit: 0,
       entryType: 1,

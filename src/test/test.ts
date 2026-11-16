@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 
 import { productConverter, supplierConverter } from '../firebase/converters/collectionConverters';
@@ -15,7 +15,7 @@ const tonton = {
     street: 'Sweet',
   },
   businessName: 'Tonton Meat Supplier',
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   email: 'tonton@email.com',
   ownerName: 'Tonton',
   phone: '09999999999',
@@ -29,7 +29,7 @@ const christian = {
     street: 'Io',
   },
   businessName: 'Christian Meat Supplier',
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   email: 'christian@email.com',
   ownerName: 'Chirstian',
   phone: '09999999999',
@@ -43,7 +43,7 @@ const bob = {
     street: 'Lua',
   },
   businessName: 'Bob Meat Supplier',
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   email: 'bob@email.com',
   ownerName: 'Bob',
   phone: '09999999999',
@@ -65,21 +65,21 @@ const chicken = {
 
 // Store products
 const porkBelly = {
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   name: 'Pork Belly',
   price: 80,
   shelfLife: 14,
 };
 
 const beefTapa = {
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   name: 'Beef Tapa',
   price: 90,
   shelfLife: 14,
 };
 
 const chickenBreast = {
-  createdAt: new Date().toISOString(),
+  createdAt: Timestamp.now(),
   name: 'Chicken Breast',
   price: 70,
   shelfLife: 14,
@@ -133,8 +133,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Cash', value: total },
     debit: { account: 'Inventory', value: total },
     purchase: {
-      createdAt: new Date().toISOString(),
-      date: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       price: pig.price,
       product: pig.name,
       productId: pigId,
@@ -155,7 +154,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Cash', value: total },
     debit: { account: 'Inventory', value: total },
     purchase: {
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       price: beef.price,
       product: beef.name,
       productId: beefId,
@@ -176,7 +175,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Accounts Payable', value: total },
     debit: { account: 'Inventory', value: total },
     purchase: {
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       price: chicken.price,
       product: chicken.name,
       productId: chickenId,
@@ -197,7 +196,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Inventory', value: total },
     debit: { account: 'Cash', value: total },
     sale: {
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       customer: 'Walk-in',
       price: porkBelly.price,
       product: porkBelly.name,
@@ -213,7 +212,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Inventory', value: total },
     debit: { account: 'Cash', value: total },
     sale: {
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       customer: 'Walk-in',
       price: beefTapa.price,
       product: beefTapa.name,
@@ -229,7 +228,7 @@ async function recordLedgerEntries(suppliers: string[], products: string[]) {
     credit: { account: 'Inventory', value: total },
     debit: { account: 'Cash', value: total },
     sale: {
-      createdAt: new Date().toISOString(),
+      createdAt: Timestamp.now(),
       customer: 'Walk-in',
       price: chickenBreast.price,
       product: chickenBreast.name,

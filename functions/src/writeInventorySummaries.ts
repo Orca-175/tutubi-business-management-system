@@ -3,6 +3,7 @@ import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { InventoryEntry, InventorySummary } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export const writeInventorySummaries = onDocumentWritten(
   `${collections.inventory}/{inventoryEntryId}`,
@@ -31,7 +32,7 @@ export const writeInventorySummaries = onDocumentWritten(
         // product is added to inventory), create it
         if (!inventorySummaryDoc.exists) {
           const inventorySummary = {
-            createdAt: new Date().toISOString(),
+            createdAt: Timestamp.now(),
             productName: createdInventoryEntry.productName,
             totalCurrentQuantity: createdInventoryEntry.currentQuantity,
             totalOutgoingQuantity: createdInventoryEntry.outgoingQuantity,

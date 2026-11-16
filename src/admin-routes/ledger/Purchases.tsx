@@ -285,6 +285,7 @@ function PurchasesTable({ purchasesData, tabCursor }: {
       <tbody>
         {purchasesData.map(purchaseData => {
           const purchaseInfo = purchaseData.purchaseInfo;
+          const createdAt = purchaseData.createdAt.toDate().toLocaleDateString();
 
           return (
             <Fragment key={purchaseData.docId}>
@@ -293,7 +294,7 @@ function PurchasesTable({ purchasesData, tabCursor }: {
                 key={purchaseData.docId}
               >
                 <td>{purchaseData.transactionId}</td>
-                <td>{purchaseData.createdAt}</td>
+                <td>{createdAt}</td>
                 <td>{purchaseData.source}</td>
                 <td>{purchaseData.product}</td>
                 <td>{purchaseData.price}</td>

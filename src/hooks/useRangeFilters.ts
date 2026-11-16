@@ -1,4 +1,4 @@
-import { or, type QueryFilterConstraint, where } from 'firebase/firestore';
+import { or, type QueryFilterConstraint, Timestamp, where } from 'firebase/firestore';
 import { useState } from 'react';
 
 import type { FilterRangeFieldValues } from '../interfaces/FilterRangeFieldValues';
@@ -19,7 +19,7 @@ export function useRangeFilters() {
         if (number) {
           return number;
         } else if (date.getTime()) {
-          return date.toISOString();
+          return Timestamp.fromDate(date);
         } else if (value === '') {
           // An empty string is interpreted as no filter for that value
           return value;
