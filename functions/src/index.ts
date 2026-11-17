@@ -10,6 +10,8 @@ initializeApp();
 
 export const db = getFirestore();
 
+export { assignBatchToOrder } from './assignBatchToOrder';
+
 export {
   recordTransactionToLedger,
 } from './recordTransactionToLedger';
