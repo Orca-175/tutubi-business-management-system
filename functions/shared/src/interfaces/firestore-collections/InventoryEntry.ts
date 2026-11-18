@@ -1,5 +1,5 @@
-import type { FirestoreDocument } from "./FirestoreDocument.js";
-import type { TimestampBridge } from "../TimestampBridge.js";
+import type { TimestampBridge } from '../TimestampBridge.js';
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
 export interface InventoryEntry extends FirestoreDocument {
   batchNumber: string;

@@ -1,14 +1,14 @@
+import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { HttpsError } from 'firebase-functions/https';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
-import { HttpsError } from 'firebase-functions/https';
-import { DocumentSnapshot } from 'firebase-admin/firestore';
 import { db } from '..';
 import { flattenData } from '../helpers/flattenData';
 
 export async function editFilterFieldOptions(
   collection: string,
   beforeDoc: DocumentSnapshot,
-  afterDoc: DocumentSnapshot
+  afterDoc: DocumentSnapshot,
 ) {
   const fieldOptionsDoc = await db
     .collection('filterFieldOptions')
@@ -18,7 +18,7 @@ export async function editFilterFieldOptions(
   if (!beforeDoc.exists || !afterDoc.exists) {
     throw new HttpsError(
       'not-found',
-      'Document/s not found.'
+      'Document/s not found.',
     );
   }
 

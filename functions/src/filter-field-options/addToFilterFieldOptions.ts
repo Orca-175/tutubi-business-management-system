@@ -1,8 +1,8 @@
+import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { HttpsError } from 'firebase-functions/ai';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
 import { db } from '../';
-import { HttpsError } from 'firebase-functions/ai';
-import { DocumentSnapshot } from 'firebase-admin/firestore';
 
 export async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot) {
   // Getting specific collection document from filterFieldOptions collection
@@ -14,7 +14,7 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
   if (!doc.exists) {
     throw new HttpsError(
       'not-found',
-      'Document/s not found.'
+      'Document/s not found.',
     );
   }
   const docData = doc.data()!;

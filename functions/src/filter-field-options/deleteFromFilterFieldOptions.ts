@@ -1,7 +1,7 @@
+import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { HttpsError } from 'firebase-functions/ai';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
-import { HttpsError } from 'firebase-functions/ai';
-import { DocumentSnapshot } from 'firebase-admin/firestore';
 import { db } from '..';
 import { flattenData } from '../helpers/flattenData';
 
@@ -14,7 +14,7 @@ export async function deleteFromFilterFieldOptions(collection: string, doc: Docu
   if (!doc.exists) {
     throw new HttpsError(
       'not-found',
-      'Document/s not found.'
+      'Document/s not found.',
     );
   }
   const docData = doc.data()!;

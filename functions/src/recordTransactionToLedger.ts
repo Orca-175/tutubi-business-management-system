@@ -1,8 +1,8 @@
+import { Timestamp } from 'firebase-admin/firestore';
 import { HttpsError, onCall } from 'firebase-functions/https';
 import { LedgerEntry, Purchase, Sale } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
-import { Timestamp } from 'firebase-admin/firestore';
 
 // A single call to recordTransactionToLedger will create two ledger entries, for
 // debit and credit

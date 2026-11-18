@@ -1,4 +1,4 @@
-import type { FirestoreDocument } from "./FirestoreDocument.js";
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
 // Document ID in Firestore should be the product's document ID
 export interface InventorySummary extends FirestoreDocument {

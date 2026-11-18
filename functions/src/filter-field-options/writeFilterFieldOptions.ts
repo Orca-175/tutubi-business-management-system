@@ -1,8 +1,9 @@
-import { onDocumentWritten } from "firebase-functions/firestore";
-import { collections } from "shared/interfaces/firestore-collection-strings";
-import { editFilterFieldOptions } from "./editFilterFieldOptions";
-import { addToFilterFieldOptions } from "./addToFilterFieldOptions";
-import { deleteFromFilterFieldOptions } from "./deleteFromFilterFieldOptions";
+import { onDocumentWritten } from 'firebase-functions/firestore';
+import { collections } from 'shared/interfaces/firestore-collection-strings';
+
+import { addToFilterFieldOptions } from './addToFilterFieldOptions';
+import { deleteFromFilterFieldOptions } from './deleteFromFilterFieldOptions';
+import { editFilterFieldOptions } from './editFilterFieldOptions';
 
 export function getWriteFilterFieldOptions(collectionString: typeof collections[keyof typeof collections]) {
   return onDocumentWritten(`${collectionString}/{${collectionString}DocumentId}`, async event => {

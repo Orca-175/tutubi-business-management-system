@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
-import { getWriteFilterFieldOptions } from './filter-field-options/writeFilterFieldOptions';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
+
+import { getWriteFilterFieldOptions } from './filter-field-options/writeFilterFieldOptions';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -10,11 +11,13 @@ initializeApp();
 
 export const db = getFirestore();
 
-export { assignBatchToOrder } from './assignBatchToOrder';
-
 export {
   recordTransactionToLedger,
 } from './recordTransactionToLedger';
+
+export {
+  writeBatchInfoFromOrder,
+} from './writeBatchInfoFromOrder';
 
 export {
   writeInventorySummaries,

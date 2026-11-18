@@ -1,4 +1,4 @@
-import type { TimestampBridge } from "../TimestampBridge.js";
+import type { TimestampBridge } from '../TimestampBridge.js';
 
 // A typical Firestore document
 // Some collections may not need or want the properties in this interface

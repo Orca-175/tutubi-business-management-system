@@ -1,4 +1,4 @@
-import type { FirestoreDocument } from "./FirestoreDocument.js";
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
 // A product that the business sells
 export interface Product extends FirestoreDocument {

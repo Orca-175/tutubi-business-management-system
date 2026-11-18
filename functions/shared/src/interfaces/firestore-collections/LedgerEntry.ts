@@ -1,4 +1,4 @@
-import type { FirestoreDocument } from "./FirestoreDocument.js";
+import type { FirestoreDocument } from './FirestoreDocument.js';
 
 export interface LedgerEntry extends FirestoreDocument {
   account: string;
