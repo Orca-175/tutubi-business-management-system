@@ -1,7 +1,7 @@
 import type { ProductData, Purchase, Sale } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { type Dispatch, type RefObject, type SetStateAction, useEffect, useRef, useState } from 'react';
 
@@ -19,18 +19,16 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
   const [debitAccount, setDebitAccount] = useState('');
 
   const [purchase, setPurchase] = useState<Purchase>({
-    createdAt: '',
+    createdAt: Timestamp.now(),
     price: 0,
     product: '',
-    productId: '',
     quantity: 0,
     source: '',
-    supplierId: '',
     total: 0,
     transactionId: 0,
   });
   const [sale, setSale] = useState<Sale>({
-    createdAt: '',
+    createdAt: Timestamp.now(),
     customer: 'Walk-in',
     price: 0,
     product: '',
@@ -63,8 +61,10 @@ export function ModalLedgerForm({ledgerFormRef}: { ledgerFormRef: RefObject<HTML
               }
 
               if (typeof value === 'string' && value === '') {
+                console.log('key: ', key);
                 return true;
               } else if (typeof value === 'number' && value === 0) {
+                console.log('key: ', key);
                 return true;
               }
             });
@@ -326,7 +326,9 @@ function ModalPurchaseForm({
             Price
             <input
               onChange={(event) => {
-                handleChange('price', Number(event.target.value));
+                const value = Number(event.target.value);
+                handleChange('price', value);
+                handleChange('total', value * purchase.quantity);
               }}
               placeholder="PHP"
               type="number"
@@ -337,7 +339,9 @@ function ModalPurchaseForm({
             Quantity
             <input
               onChange={(event) => {
-                handleChange('quantity', Number(event.target.value));
+                const value = Number(event.target.value);
+                handleChange('quantity', value);
+                handleChange('total', value * purchase.price);
               }}
               placeholder="kg"
               type="number"
@@ -350,7 +354,7 @@ function ModalPurchaseForm({
 
         <div className={adminModals.formSummary}>
           <div>Total:</div>
-          <div>PHP {purchase.price * purchase.quantity}</div> 
+          <div>PHP {purchase.total}</div> 
         </div>
       </div>
 
@@ -459,13 +463,18 @@ function ModalSaleForm({
             <select
               id="enterProduct"
               onChange={(event) => {
-                handleChange('product', event.target.value);
+                const value = event.target.value.split(',');
+                const productId = value[0];
+                const productName = value[1];
+
+                handleChange('productId', productId);
+                handleChange('product', productName);
               }}
               value={sale.product}
             >
               <option disabled value="">Select</option>
               {productData.map(product => (
-                <option value={product.name}>{product.name}</option>
+                <option value={`${product.docId},${product.name}`}>{product.name}</option>
               ))}
             </select>
           </label>
@@ -503,7 +512,7 @@ function ModalSaleForm({
 
         <div className={adminModals.formSummary}>
           <div>Total:</div>
-          <div>PHP {sale.price * sale.quantity}</div> 
+          <div>PHP {sale.total}</div> 
         </div>
       </div>
 
