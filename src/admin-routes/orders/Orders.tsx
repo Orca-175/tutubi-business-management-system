@@ -150,7 +150,7 @@ function OrdersTable({
             const createdAt = data.createdAt.toDate().toLocaleDateString();
 
             return (
-              <tr>
+              <tr key={data.docId}>
                 <td>{createdAt}</td>
                 <td>{fullNameToString(data.customerName)}</td>
                 <td>{data.productName}</td>
@@ -204,7 +204,7 @@ function OrdersTable({
           collectionString={collections.orders}
           docId={dataToDelete.docId}
           formRef={deleteDataFormRef}
-          identifier={`${dataToDelete.customerName.firstName}'s order`}
+          identifier={`${fullNameToString(dataToDelete.customerName)}'s order`}
         />
       }
 
@@ -220,6 +220,10 @@ function OrdersTable({
               field: 'status',
               label: 'Status',
               options: [
+                {
+                  label: 'New',
+                  value: 'New',
+                },
                 {
                   label: 'Confirmed',
                   value: 'Confirmed',

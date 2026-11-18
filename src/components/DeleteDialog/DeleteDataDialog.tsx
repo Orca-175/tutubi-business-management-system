@@ -38,7 +38,7 @@ export function DeleteDataDialog({
 
         try {
           await deleteDoc(doc(db, collectionString, docId));
-          setFormMessage({ message: `"${identifier}" has been deleted!`, type: 'success'});
+          setFormMessage({ message: `"${identifier}" has been deleted!`, type: 'success' });
           refreshPage();
         } catch (error) {
           setFormMessage({ message: error.message, type: 'error' });

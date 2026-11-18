@@ -103,6 +103,7 @@ export function DataForm<T>({
                       return (
                         <label
                           className={adminModals.input}
+                          key={input.field + input.type}
                         >
                           {input.label}
                           <input
@@ -120,6 +121,7 @@ export function DataForm<T>({
                       return (
                         <label
                           className={adminModals.input}
+                          key={input.field + input.type}
                         >
                           {input.label}
                           <select
@@ -131,7 +133,12 @@ export function DataForm<T>({
                             <option disabled={true} value="">Select</option>
                             {input.options.map(option => {
                               return (
-                                <option value={String(option.value)}>{option.label}</option>
+                                <option
+                                  key={option.value + option.label}
+                                  value={String(option.value)}
+                                >
+                                  {option.label}
+                                </option>
                               );
                             })}
                           </select>
