@@ -30,12 +30,18 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
   // Recursive function that adds the subfields of object values
   const addFieldOptions = (entries: typeof dataEntries) => {
     for (const [key, value] of entries) {
+      // If value is a Timestamp, skip it
+      if (value.seconds && value.nanoseconds) {
+        continue;
+      }
+
       if (value && typeof value === 'object') {
         addFieldOptions(Object.entries(value));
 
-        // If value is not a number and not a date
-      } else if (typeof value === 'boolean' || Number.isNaN(Number(value))) {
+      }
 
+      // If value is not a number
+      if (typeof value !== 'number') {
         if (fieldOptionsData[key]) {
           if (!fieldOptionsData[key].some(someValue => someValue == value)) {
             fieldOptionsData[key].push(value);
@@ -45,8 +51,6 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
         }
       }
     }
-
-    return;
   };
   addFieldOptions(dataEntries);
 
