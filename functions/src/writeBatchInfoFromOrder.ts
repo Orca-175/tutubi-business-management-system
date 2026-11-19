@@ -11,7 +11,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
 
   const isCreated = !before.exists && after.exists;
   const isUpdate = before.exists && after.exists;
-  const isDelete = !before.exists && after.exists;
+  const isDelete = before.exists && !after.exists;
 
   if (isCreated) {
     const createdDoc = after;
@@ -49,7 +49,8 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
       return false;
     });
     if (!inventoryEntryDocSnap) {
-      return;
+      // A client should not be able to place an order if no batch satisfies it in the first place
+      throw new Error('Available batch not found.');
     }
     const inventoryEntryData = inventoryEntryDocSnap.data() as InventoryEntry;
 
@@ -59,13 +60,13 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
         .doc(inventoryEntryDocSnap.id)
         .update({
           reservedQuantity: inventoryEntryData.reservedQuantity + createdData.quantity,
-        });
+        } satisfies Partial<InventoryEntry>);
     } else {
       await db.collection(collections.inventory)
         .doc(inventoryEntryDocSnap.id)
         .update({
           outgoingQuantity: inventoryEntryData.outgoingQuantity + createdData.quantity,
-        });
+        } satisfies Partial<InventoryEntry>);
     }
 
     // Update batch number field of order
@@ -74,7 +75,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
       .update({
         batchNumber: inventoryEntryData.batchNumber,
         inventoryEntryId: inventoryEntryDocSnap.id,
-      });
+      } satisfies Partial<Order>);
   }
 
   if (isUpdate) {
@@ -82,7 +83,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
     const afterData = after.data()! as Order;
 
     // Handle change in status
-    if (beforeData.status !== afterData.status) {
+    if (afterData.status !== beforeData.status) {
       const inventoryEntryDocSnap = await db.collection(collections.inventory)
         .doc(afterData.inventoryEntryId)
         .get();
@@ -92,9 +93,6 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
       }
       const inventoryEntryData = inventoryEntryDocSnap.data()! as InventoryEntry;
 
-      // If status changed to Received:
-      // Reduce current quantity of batch
-      // Reduce outgoing quantity of batch
       if (afterData.status === 'Received') {
         if (beforeData.status !== 'Out for delivery') {
           throw new Error('Order status set to "Received" before being set to "Out for delivery".');
@@ -105,31 +103,25 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
           .update({
             currentQuantity: inventoryEntryData.currentQuantity - afterData.quantity,
             outgoingQuantity: inventoryEntryData.outgoingQuantity - afterData.quantity,
-          });
+          } satisfies Partial<InventoryEntry>);
       }
 
-      // If status changed to Confirmed from Reserved:
-      // Remove reserved quantity in batch
-      // Add outgoing quantity in batch
       if (afterData.status === 'Confirmed' && beforeData.status === 'Reserved') {
         await db.collection(collections.inventory)
           .doc(afterData.inventoryEntryId)
           .update({
             outgoingQuantity: inventoryEntryData.outgoingQuantity + afterData.quantity,
             reservedQuantity: inventoryEntryData.reservedQuantity - afterData.quantity,
-          });
+          } satisfies Partial<InventoryEntry>);
       }
 
-      // If status changed to Cancelled:
-      // Remove outgoing quantity in batch
-      // Remove reserved quantity in batch
       if (afterData.status === 'Cancelled') {
         if (beforeData.status === 'Confirmed') {
           await db.collection(collections.inventory)
             .doc(afterData.inventoryEntryId)
             .update({
               outgoingQuantity: inventoryEntryData.outgoingQuantity - afterData.quantity,
-            });
+            } satisfies Partial<InventoryEntry>);
         }
 
         if (beforeData.status === 'Reserved') {
@@ -137,7 +129,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
             .doc(afterData.inventoryEntryId)
             .update({
               reservedQuantity: inventoryEntryData.reservedQuantity - afterData.quantity,
-            });
+            } satisfies Partial<InventoryEntry>);
         }
       }
     }
@@ -164,7 +156,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
 
       await db.collection(collections.inventory)
         .doc(deletedData.inventoryEntryId)
-        .update(updatedData);
+        .update(updatedData satisfies Partial<InventoryEntry>);
     }
   }
 });

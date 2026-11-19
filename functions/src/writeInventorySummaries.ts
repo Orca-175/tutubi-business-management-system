@@ -51,7 +51,7 @@ export const writeInventorySummaries = onDocumentWritten(
         transaction.update(inventorySummaryRef, {
           totalCurrentQuantity: inventorySummaryData.totalCurrentQuantity +
             createdInventoryEntry.currentQuantity,
-        });
+        } satisfies Partial<InventorySummary>);
       });
     }
 
@@ -77,6 +77,11 @@ export const writeInventorySummaries = onDocumentWritten(
           inventoryEntryAfter.outgoingQuantity,
         );
 
+        const reservedQuantityDiff = getNumberDiff(
+          inventoryEntryBefore.reservedQuantity,
+          inventoryEntryAfter.reservedQuantity,
+        );
+
         // Update quantities
         transaction.update(inventorySummaryRef, {
           totalCurrentQuantity: 
@@ -85,7 +90,10 @@ export const writeInventorySummaries = onDocumentWritten(
           totalOutgoingQuantity:
             inventorySummaryData.totalOutgoingQuantity +
             outgoingQuantityDiff,
-        });
+          totalReservedQuantity:
+            inventorySummaryData.totalReservedQuantity +
+            reservedQuantityDiff,
+        } satisfies Partial<InventorySummary>);
       });
     }
 
@@ -102,7 +110,9 @@ export const writeInventorySummaries = onDocumentWritten(
             inventoryEntryBefore.currentQuantity,
           totalOutgoingQuantity: inventorySummaryData.totalOutgoingQuantity -
             inventoryEntryBefore.outgoingQuantity,
-        });
+          totalReservedQuantity: inventorySummaryData.totalReservedQuantity -
+            inventoryEntryBefore.reservedQuantity,
+        } satisfies Partial<InventorySummary>);
       });
     }
   },
