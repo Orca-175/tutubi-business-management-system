@@ -273,24 +273,26 @@ function LedgerTable({ ledgerData }: {
               <td>{even && ledgerEntry.transactionId}</td>
               <td>{createdAt}</td>
               <td>{ledgerEntry.account}</td>
-              <td>{debit}</td>
-              <td>{credit}</td>
+              <td>{debit && 'PHP'} {debit}</td>
+              <td>{credit && 'PHP'} {credit}</td>
               <td>{ledgerEntry.transactionType}</td>
               <td className={common.tableButtonCell}>
-                <button
-                  className={classNames(
-                    common.tableButtonNormal,
-                    !even && common.tableButtonHidden,
-                  )}
-                  onClick={() => {
-                    // Change tab
-                    setTab(`${ledgerEntry.transactionType}s`);
-                    // Pass referenceId to next tab to show on that page
-                    setTabCursor(ledgerEntry.referenceId);
-                  }}
-                >
-                  <BiChevronRight />
-                </button>
+                {even &&
+                  <button
+                    className={classNames(
+                      common.tableButtonNormal,
+                      !even && common.tableButtonHidden,
+                    )}
+                    onClick={() => {
+                      // Change tab
+                      setTab(`${ledgerEntry.transactionType}s`);
+                      // Pass referenceId to next tab to show on that page
+                      setTabCursor(ledgerEntry.referenceId);
+                    }}
+                  >
+                    <BiChevronRight />
+                  </button>
+                }
               </td>
             </tr>
           );

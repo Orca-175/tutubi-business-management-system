@@ -157,7 +157,7 @@ function OrdersTable({
                   <td>{createdAt}</td>
                   <td>{fullNameToString(data.customerName)}</td>
                   <td>{data.productName}</td>
-                  <td>{data.quantity}</td>
+                  <td>{data.quantity} kg</td>
                   <td>{data.batchNumber}</td>
                   <td>{addressToString(data.customerAddress)}</td>
                   <td>{data.status}</td>

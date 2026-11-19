@@ -297,9 +297,9 @@ function PurchasesTable({ purchasesData, tabCursor }: {
                 <td>{createdAt}</td>
                 <td>{purchaseData.source}</td>
                 <td>{purchaseData.product}</td>
-                <td>{purchaseData.price}</td>
-                <td>{purchaseData.quantity}</td>
-                <td>{purchaseData.total}</td>
+                <td>PHP {purchaseData.price}</td>
+                <td>{purchaseData.quantity} kg</td>
+                <td>PHP {purchaseData.total}</td>
                 {purchaseInfo &&
                   <td className={common.tableButtonCell}>
                     <button

@@ -151,8 +151,8 @@ function ProductsTable({
             return (
               <tr key={product.docId}>
                 <td>{product.name}</td>
-                <td>{product.price}</td>
-                <td>{product.shelfLife}</td>
+                <td>PHP {product.price}</td>
+                <td>{product.shelfLife} kg</td>
                 {isDeleteMode ? (
                   <td className={common.tableButtonCell}>
                     <button

@@ -100,9 +100,9 @@ function SummariesTable({
           return (
             <tr key={data.docId}>
               <td>{data.productName}</td>
-              <td>{data.totalCurrentQuantity}</td>
-              <td>{data.totalOutgoingQuantity}</td>
-              <td>{data.totalReservedQuantity}</td>
+              <td>{data.totalCurrentQuantity} kg</td>
+              <td>{data.totalOutgoingQuantity} kg</td>
+              <td>{data.totalReservedQuantity} kg </td>
               <td className={adminCommon.tableButtonCell}>
                 <button
                   className={adminCommon.tableButtonNormal}

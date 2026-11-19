@@ -245,9 +245,9 @@ function AllStockTable({
                 <td>{createdAt}</td>
                 <td>{data.batchNumber}</td>
                 <td>{data.productName}</td>
-                <td>{data.currentQuantity}</td>
-                <td>{data.outgoingQuantity}</td>
-                <td>{data.reservedQuantity}</td>
+                <td>{data.currentQuantity} kg</td>
+                <td>{data.outgoingQuantity} kg</td>
+                <td>{data.reservedQuantity} kg</td>
                 <td>{expiresAt}</td>
                 {isDeleteMode ? (
                   <td className={adminCommon.tableButtonCell}>

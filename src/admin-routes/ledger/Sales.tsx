@@ -288,9 +288,9 @@ function SalesTable({ salesData, tabCursor }: {
               <td>{createdAt}</td>
               <td>{saleData.customer}</td>
               <td>{saleData.product}</td>
-              <td>{saleData.price}</td>
-              <td>{saleData.quantity}</td>
-              <td>{saleData.total}</td>
+              <td>PHP {saleData.price}</td>
+              <td>{saleData.quantity} kg</td>
+              <td>PHP {saleData.total}</td>
             </tr>
           );
         })}
