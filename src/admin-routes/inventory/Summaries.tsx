@@ -91,6 +91,7 @@ function SummariesTable({
           <th>Product name</th>
           <th>Total current quantity</th>
           <th>Total outgoing quantity</th>
+          <th>Total reserved quantity</th>
           <th className={adminCommon.tableButtonHeading}>More</th>
         </tr>
       </thead>
@@ -101,6 +102,7 @@ function SummariesTable({
               <td>{data.productName}</td>
               <td>{data.totalCurrentQuantity}</td>
               <td>{data.totalOutgoingQuantity}</td>
+              <td>{data.totalReservedQuantity}</td>
               <td className={adminCommon.tableButtonCell}>
                 <button
                   className={adminCommon.tableButtonNormal}

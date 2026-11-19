@@ -46,13 +46,8 @@ export function Orders() {
   const filterConfig: FilterConfig = {
     normal: [
       {
-        field: 'customerName',
-        label: 'Customer name',
-        type: 'text',
-      },
-      {
         field: 'product',
-        label: 'Customer name',
+        label: 'Product name',
         type: 'text',
       },
       {
