@@ -152,8 +152,8 @@ function OrdersTable({
         <tbody>
           {ordersData.map(data => {
             const createdAt = data.createdAt.toDate().toLocaleDateString();
-            const isToBeDelivered = capitalize(String(data.reservationInfo.isToBeDelivered));
-            const reserveUntil = data.reservationInfo.reservedUntil.toDate().toLocaleDateString();
+            const isToBeDelivered = capitalize(String(data.reservationInfo?.isToBeDelivered));
+            const reserveUntil = data.reservationInfo?.reservedUntil.toDate().toLocaleDateString();
 
             return (
               <>
@@ -166,8 +166,8 @@ function OrdersTable({
                   <td>{data.batchNumber}</td>
                   <td>{addressToString(data.customerAddress)}</td>
                   <td>{data.status}</td>
-                  {data.isReservation &&
-                    <td className={adminCommon.tableButtonCell}>
+                  <td className={adminCommon.tableButtonCell}>
+                    {data.isReservation &&
                       <button
                         className={adminCommon.tableButtonNormal}
                         onClick={() => {
@@ -186,8 +186,8 @@ function OrdersTable({
                           <BiChevronDown />
                         )}
                       </button>
-                    </td>
-                  }
+                    }
+                  </td>
                   {isDeleteMode ? (
                     <td className={adminCommon.tableButtonCell}>
                       <button
@@ -225,7 +225,7 @@ function OrdersTable({
                 </tr>
 
                 {/* Subtable (reservation info) */}
-                {data && expanded.includes(data.docId) &&
+                {data.isReservation && expanded.includes(data.docId) &&
                   <tr>
                     <td colSpan={9}>
                       <div className={adminCommon.subtableContainer}>
@@ -274,11 +274,11 @@ function OrdersTable({
             [{
               field: 'status',
               label: 'Status',
+              optionDefault: {
+                label: originalData.isReservation ? 'Reserved' : 'New',
+                value: originalData.isReservation ? 'Reserved' : 'New',
+              },
               options: [
-                {
-                  label: 'New',
-                  value: 'New',
-                },
                 {
                   label: 'Confirmed',
                   value: 'Confirmed',

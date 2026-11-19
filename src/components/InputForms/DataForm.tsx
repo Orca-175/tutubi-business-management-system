@@ -130,7 +130,13 @@ export function DataForm<T>({
                             }}
                             value={getDeepestObject(data, input.field)[finalField]}
                           >
-                            <option disabled={true} value="">Select</option>
+                            {input.optionDefault ? (
+                              <option disabled={true} value={String(input.optionDefault.value)}>
+                                {input.optionDefault.label}
+                              </option>
+                            ) : (
+                              <option disabled={true} value="">Select</option>
+                            )}
                             {input.options.map(option => {
                               return (
                                 <option

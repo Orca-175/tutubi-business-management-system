@@ -156,7 +156,7 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
     const inventoryEntryData = inventoryEntryDocSnap.data()! as InventoryEntry;
 
     if (deletedData.status !== 'Received') {
-      const updatedData = deletedData.status === 'Reserved' ? (
+      const updatedData = deletedData.isReservation ? (
         { reservedQuantity:  inventoryEntryData.reservedQuantity - deletedData.quantity }
       ) : (
         { outgoingQuantity: inventoryEntryData.outgoingQuantity - deletedData.quantity }

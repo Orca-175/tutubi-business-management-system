@@ -11,6 +11,7 @@ export interface InputFormProps<T> {
 export type InputsGroupsConfig<T> = {
     field: FieldPath<T>;
     label: string;
+    optionDefault?: { label: string, value: boolean | number | string};
     options?: ({ 
       label: string;
       value: boolean | number | string;
