@@ -300,9 +300,10 @@ function PurchasesTable({ purchasesData, tabCursor }: {
                 <td>{purchaseData.price}</td>
                 <td>{purchaseData.quantity}</td>
                 <td>{purchaseData.total}</td>
-                {purchaseInfo && 
+                {purchaseInfo &&
                   <td className={common.tableButtonCell}>
                     <button
+                      className={common.tableButtonNormal}
                       onClick={() => {
                         if (expanded.includes(purchaseData.docId)) {
                           setExpanded(expanded.toSpliced(expanded.findIndex(id => id === purchaseData.docId), 1));
@@ -325,21 +326,13 @@ function PurchasesTable({ purchasesData, tabCursor }: {
 
               {purchaseInfo && expanded.includes(purchaseData.docId) &&
                 <tr>
-                  <td colSpan={7}>
+                  <td colSpan={8}>
                     <div className={common.subtableContainer}>
                       <table>
                         <thead>
                           <tr>
                             {Object.keys(purchaseInfo).map(key => {
-                              const finalKey = key == 'withHead' ? (
-                                'Head'
-                              ) : key === 'withMenudencia' ? (
-                                'Menudencia'
-                              ) : (
-                                key
-                              );
-
-                              return <th>{capitalize(finalKey)}</th>;
+                              return <th>{key}</th>;
                             })}
                           </tr>
                         </thead>

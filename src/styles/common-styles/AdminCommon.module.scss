@@ -109,8 +109,7 @@
 }
 
 .tableButtonCell {
-    display: flex;
-    justify-content: center;
+    text-align: center;
 
     .tableButtonDelete {
         @include mixins.button-ghost($color: colors.$danger);

@@ -1,5 +1,6 @@
 import type { Address } from '../Address.js';
 import type { FullName } from '../FullName.js';
+import type { TimestampBridge } from '../TimestampBridge.js';
 import type { FirestoreDocument } from './FirestoreDocument.js';
 
 export interface Order extends FirestoreDocument {
@@ -13,11 +14,11 @@ export interface Order extends FirestoreDocument {
   productName: string;
   quantity: number;
   reservationInfo?: {
-    isSetToBeDelivered: boolean;
+    // Will be set to true when client follows through with reservation
+    isToBeDelivered: boolean;
 
     // Date to un-reserve quantity when client does not follow through
-    reservedUntil: string;
-
+    reservedUntil: TimestampBridge;
   };
 
   // 'Cancelled': Order has been cancelled

@@ -2,7 +2,7 @@ import type { Order, OrderData } from 'shared/interfaces/firestore-collections';
 
 import classNames from 'classnames';
 import { useState } from 'react';
-import { BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
+import { BiChevronDown, BiChevronUp, BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 import type { FilterConfig } from '../../interfaces/FilterConfig';
@@ -19,6 +19,7 @@ import { useTabledPage } from '../../hooks/useTabledPage';
 import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
 import { addressToString } from '../../utils/helpers/addressToString';
 import { fullNameToString } from '../../utils/helpers/fullNameToString';
+import { capitalize } from '../../utils/strings';
 
 interface OrdersTableProps {
   isDeleteMode: boolean;
@@ -126,6 +127,8 @@ function OrdersTable({
     setOriginalData,
   } = useMutableTableData<OrderData>();
 
+  const [expanded, setExpanded] = useState<string[]>([]);
+
   return (
     <>
       <table className={adminCommon.tableAdmin}>
@@ -138,6 +141,7 @@ function OrdersTable({
             <th>Batch number</th>
             <th>Address</th>
             <th>Status</th>
+            <th className={adminCommon.tableButtonHeading}>More</th>
             {isDeleteMode ? (
               <th className={adminCommon.tableButtonHeading}>Delete</th>
             ) : (
@@ -148,51 +152,102 @@ function OrdersTable({
         <tbody>
           {ordersData.map(data => {
             const createdAt = data.createdAt.toDate().toLocaleDateString();
+            const isToBeDelivered = capitalize(String(data.reservationInfo.isToBeDelivered));
+            const reserveUntil = data.reservationInfo.reservedUntil.toDate().toLocaleDateString();
 
             return (
-              <tr key={data.docId}>
-                <td>{createdAt}</td>
-                <td>{fullNameToString(data.customerName)}</td>
-                <td>{data.productName}</td>
-                <td>{data.quantity}</td>
-                <td>{data.batchNumber}</td>
-                <td>{addressToString(data.customerAddress)}</td>
-                <td>{data.status}</td>
-                {isDeleteMode ? (
-                  <td className={adminCommon.tableButtonCell}>
-                    <button
-                      className={adminCommon.tableButtonDelete}
-                      onClick={event => {
-                        event.preventDefault();
-
-                        setDataToDelete(data);
-                      }}
-                    >
-                      <BiSolidTagX />
-                    </button>
-                  </td>
-                ) : (
-                  <td className={adminCommon.tableButtonCell}>
-                    <button
-                      className={classNames(
-                        data.status === 'Cancelled' || data.status === 'Received' ? (
-                          adminCommon.tableButtonDisabled
+              <>
+                {/* Main table */}
+                <tr key={data.docId}>
+                  <td>{createdAt}</td>
+                  <td>{fullNameToString(data.customerName)}</td>
+                  <td>{data.productName}</td>
+                  <td>{data.quantity}</td>
+                  <td>{data.batchNumber}</td>
+                  <td>{addressToString(data.customerAddress)}</td>
+                  <td>{data.status}</td>
+                  {data.isReservation &&
+                    <td className={adminCommon.tableButtonCell}>
+                      <button
+                        className={adminCommon.tableButtonNormal}
+                        onClick={() => {
+                          if (expanded.includes(data.docId)) {
+                            setExpanded(expanded.toSpliced(expanded.findIndex(id => id === data.docId), 1));
+                          } else {
+                            const tempExpanded = [...expanded];
+                            tempExpanded.push(data.docId);
+                            setExpanded(tempExpanded);
+                          }
+                        }}
+                      >
+                        {expanded.includes(data.docId) ? (
+                          <BiChevronUp />
                         ) : (
-                          adminCommon.tableButtonNormal
-                        ),
-                      )}
-                      disabled={data.status === 'Cancelled' || data.status === 'Received'}
-                      onClick={event => {
-                        event.preventDefault();
+                          <BiChevronDown />
+                        )}
+                      </button>
+                    </td>
+                  }
+                  {isDeleteMode ? (
+                    <td className={adminCommon.tableButtonCell}>
+                      <button
+                        className={adminCommon.tableButtonDelete}
+                        onClick={event => {
+                          event.preventDefault();
 
-                        setOriginalData(data);
-                      }}
-                    >
-                      <BiSolidEdit />
-                    </button>
-                  </td>
-                )}
-              </tr>
+                          setDataToDelete(data);
+                        }}
+                      >
+                        <BiSolidTagX />
+                      </button>
+                    </td>
+                  ) : (
+                    <td className={adminCommon.tableButtonCell}>
+                      <button
+                        className={classNames(
+                          data.status === 'Cancelled' || data.status === 'Received' ? (
+                            adminCommon.tableButtonDisabled
+                          ) : (
+                            adminCommon.tableButtonNormal
+                          ),
+                        )}
+                        disabled={data.status === 'Cancelled' || data.status === 'Received'}
+                        onClick={event => {
+                          event.preventDefault();
+
+                          setOriginalData(data);
+                        }}
+                      >
+                        <BiSolidEdit />
+                      </button>
+                    </td>
+                  )}
+                </tr>
+
+                {/* Subtable (reservation info) */}
+                {data && expanded.includes(data.docId) &&
+                  <tr>
+                    <td colSpan={9}>
+                      <div className={adminCommon.subtableContainer}>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>To be delivered</th>
+                              <th>Reserve until</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{isToBeDelivered}</td>
+                              <td>{reserveUntil}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </>
             );
           })}
         </tbody>
