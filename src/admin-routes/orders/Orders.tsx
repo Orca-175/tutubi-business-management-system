@@ -17,9 +17,8 @@ import { useMutableTableData } from '../../hooks/useMutableTableData';
 import { useTableCardButtons } from '../../hooks/useTableCardButtons';
 import { useTabledPage } from '../../hooks/useTabledPage';
 import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
-import { addressToString } from '../../utils/helpers/addressToString';
-import { fullNameToString } from '../../utils/helpers/fullNameToString';
 import { capitalize } from '../../utils/strings';
+import { fullNameToString, addressToString } from 'shared/helpers';
 
 interface OrdersTableProps {
   isDeleteMode: boolean;
@@ -132,7 +131,9 @@ function OrdersTable({
             <th>Created at</th>
             <th>Customer</th>
             <th>Product</th>
+            <th>Price</th>
             <th>Quantity</th>
+            <th>Total</th>
             <th>Batch number</th>
             <th>Address</th>
             <th>Status</th>
@@ -157,7 +158,9 @@ function OrdersTable({
                   <td>{createdAt}</td>
                   <td>{fullNameToString(data.customerName)}</td>
                   <td>{data.productName}</td>
+                  <td>PHP {data.price}</td>
                   <td>{data.quantity} kg</td>
+                  <td>PHP {data.total}</td>
                   <td>{data.batchNumber}</td>
                   <td>{addressToString(data.customerAddress)}</td>
                   <td>{data.status}</td>
@@ -222,7 +225,7 @@ function OrdersTable({
                 {/* Subtable (reservation info) */}
                 {data.isReservation && expanded.includes(data.docId) &&
                   <tr>
-                    <td colSpan={9}>
+                    <td colSpan={11}>
                       <div className={adminCommon.subtableContainer}>
                         <table>
                           <thead>

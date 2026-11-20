@@ -1,6 +1,5 @@
 import type { FirestoreDocument } from './FirestoreDocument.js';
 
-// NOTE: createdAt is set in onCreate cloud function
 export interface Purchase extends FirestoreDocument {
   price: number;
   product: string;

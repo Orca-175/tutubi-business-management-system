@@ -1,14 +1,54 @@
 import { QueryDocumentSnapshot, Timestamp } from 'firebase-admin/firestore';
+import { DocumentSnapshot } from 'firebase-admin/firestore';
 import { onDocumentWritten } from 'firebase-functions/firestore';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { InventoryEntry, Order } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
+import { recordTransaction } from './helpers/recordTransaction';
 
-export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/{orderId}`, async event => {
+export const handleOrderWrites = onDocumentWritten(`${collections.orders}/{orderId}`, async event => {
   const before = event.data!.before;
   const after = event.data!.after;
 
+  writeBatchInfoFromOrder(before, after);
+
+  const isUpdate = before.exists && after.exists;
+  if (isUpdate) {
+    const beforeData = before.data()! as Order;
+    const afterData = after.data()! as Order;
+
+    if (afterData.status === 'Confirmed' && beforeData.status !== 'Confirmed') {
+      recordConfirmedOrderToLedger(afterData);
+    }
+  }
+});
+
+async function recordConfirmedOrderToLedger(confirmedOrder: Order) {
+  recordTransaction({
+    credit: {
+      account: 'Sales Revenue',
+      value: confirmedOrder.total,
+    },
+    debit: {
+      account: 'Cash',
+      value: confirmedOrder.total,
+    },
+    sale: {
+      createdAt: Timestamp.now(),
+      customerId: confirmedOrder.customerId,
+      customerName: confirmedOrder.customerName,
+      price: confirmedOrder.price,
+      product: confirmedOrder.productName,
+      productId: confirmedOrder.productId,
+      quantity: confirmedOrder.quantity,
+      total: confirmedOrder.total,
+      transactionId: 0,
+    },
+  });
+}
+ 
+async function writeBatchInfoFromOrder(before: DocumentSnapshot, after: DocumentSnapshot) {
   const isCreated = !before.exists && after.exists;
   const isUpdate = before.exists && after.exists;
   const isDelete = before.exists && !after.exists;
@@ -159,5 +199,5 @@ export const writeBatchInfoFromOrder = onDocumentWritten(`${collections.orders}/
         .update(updatedData satisfies Partial<InventoryEntry>);
     }
   }
-});
- 
+}
+

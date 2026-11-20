@@ -10,6 +10,7 @@ export interface Order extends FirestoreDocument {
   customerName: FullName;
   inventoryEntryId: string; // Document ID of inventory batch
   isReservation: boolean;
+  price: number; // Price at the time of order
   productId: string;
   productName: string;
   quantity: number;
@@ -35,6 +36,7 @@ export interface Order extends FirestoreDocument {
   // 'New': A new order whose status has not been set
   status: 'Cancelled' | 'Confirmed' | 'New' | 'Out for delivery' |
     'Received' | 'Reserved';
+  total: number;
 }
 
 export interface OrderData extends Order {

@@ -12,12 +12,12 @@ initializeApp();
 export const db = getFirestore();
 
 export {
-  recordTransactionToLedger,
-} from './recordTransactionToLedger';
+  handleOrderWrites,
+} from './handleOrderWrites';
 
 export {
-  writeBatchInfoFromOrder,
-} from './writeBatchInfoFromOrder';
+  recordTransactionToLedger,
+} from './recordTransactionToLedger';
 
 export {
   writeInventorySummaries,

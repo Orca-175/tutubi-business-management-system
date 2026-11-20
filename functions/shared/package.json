@@ -8,7 +8,8 @@
   "exports": {
     "./interfaces/firestore-collections": "./lib/firestore-collections.js",
     "./interfaces/firestore-collection-strings": "./lib/firestore-collection-strings.js",
-    "./interfaces": "./lib/interfaces.js"
+    "./interfaces": "./lib/interfaces.js",
+    "./helpers": "./lib/helpers.js"
   },
   "scripts": {
     "build": "tsc",
