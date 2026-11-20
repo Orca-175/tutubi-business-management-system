@@ -149,7 +149,7 @@ function OrdersTable({
           {ordersData.map(data => {
             const createdAt = data.createdAt.toDate().toLocaleDateString();
             const isToBeDelivered = capitalize(String(data.reservationInfo?.isToBeDelivered));
-            const reserveUntil = data.reservationInfo?.reservedUntil.toDate().toLocaleDateString();
+            const reserveUntil = data.reservationInfo?.unreserveAt.toDate().toLocaleDateString();
 
             return (
               <>

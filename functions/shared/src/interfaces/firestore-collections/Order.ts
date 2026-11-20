@@ -19,7 +19,7 @@ export interface Order extends FirestoreDocument {
     isToBeDelivered: boolean;
 
     // Date to un-reserve quantity when client does not follow through
-    reservedUntil: TimestampBridge;
+    unreserveAt: TimestampBridge;
   };
 
   // 'Cancelled': Order has been cancelled
