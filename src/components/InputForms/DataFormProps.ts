@@ -9,6 +9,7 @@ export interface InputFormProps<T> {
 }
 
 export type InputsGroupsConfig<T> = {
+    disabled?: boolean;
     field: FieldPath<T>;
     label: string;
     optionDefault?: { label: string, value: boolean | number | string};

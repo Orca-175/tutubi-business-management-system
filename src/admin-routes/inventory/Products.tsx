@@ -152,7 +152,7 @@ function ProductsTable({
               <tr key={product.docId}>
                 <td>{product.name}</td>
                 <td>PHP {product.price}</td>
-                <td>{product.shelfLife} kg</td>
+                <td>{product.shelfLife} days</td>
                 {isDeleteMode ? (
                   <td className={common.tableButtonCell}>
                     <button

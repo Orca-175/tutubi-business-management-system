@@ -107,6 +107,7 @@ export function DataForm<T>({
                         >
                           {input.label}
                           <input
+                            disabled={input.disabled}
                             onChange={event => {
                               handleChangeCatchall(event.target.value, input.type);
                             }}
@@ -125,6 +126,7 @@ export function DataForm<T>({
                         >
                           {input.label}
                           <select
+                            disabled={input.disabled}
                             onChange={event => {
                               handleChangeCatchall(event.target.value, input.type);
                             }}
