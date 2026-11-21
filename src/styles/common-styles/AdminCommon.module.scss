@@ -60,6 +60,7 @@
 
 .innerTabButtons {
     align-self: center;
+    margin-bottom: 1rem;
 }
 
 .moreButton {
@@ -173,15 +174,43 @@
     padding-bottom: .5rem;
 }
 
-// @media (max-width: 1240px) {
-//     .filterInputs {
-//         .normalInputs {
-//             grid-template-columns: 1fr 1fr;
-//         }
-//
-//         .rangeInputs {
-//             grid-template-columns: 1fr 1fr;
-//         }
-//     }
-// }
+.toggleFiltersButton {
+    @include mixins.button-ghost;
+    align-items: center;
+    align-self: center;
+    box-sizing: border-box;
+    display: flex;
+    font-size: 1.17rem;
+    gap: .5rem;
+    margin-bottom: .5rem;
+    width: 100%;
+}
+
+.toggleFiltersButtonContainer {
+    align-self: center;
+    margin-bottom: 1rem;
+    min-width: 61.25rem;
+}
+
+@media (max-width: 980px) {
+    .filterInputs {
+        .normalInputs {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .rangeInputs {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .toggleFiltersButton {
+        align-self: stretch;
+        font-size: 1.17rem;
+    }
+
+    .toggleFiltersButtonContainer {
+        align-self: stretch;
+        min-width: 0;
+    }
+}
 

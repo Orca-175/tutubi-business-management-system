@@ -1,4 +1,5 @@
 import { type Dispatch, type ReactElement, type SetStateAction, useCallback, useContext, useEffect, useState } from 'react';
+import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 
 import type { FilterConfig } from '../../interfaces/FilterConfig';
 
@@ -29,6 +30,7 @@ export function TabledPage<T>({
   setData,
 }: Props<T>) {
   const [isLoading, setIsLoading] = useState(true);
+  const [areFiltersExpanded, setAreFiltersExpanded] = useState(false);
 
   const getConverter = useCallback(() => {
     return getCollectionConverter<T>();
@@ -110,82 +112,103 @@ export function TabledPage<T>({
 
   return (
     <>
-      <div className={adminCommon.filters}>
-        <div className={adminCommon.filterInputs}>
-          <div className={adminCommon.normalInputs}>
-            {filterConfig.normal.map(filter => {
-              // When a field is a nested property in a Firestore map, get
-              // the name of the deepest property
-              const deepestField = filter.field.split('.').at(-1);
+      <div className={adminCommon.toggleFiltersButtonContainer}>
+        <button
+          className={adminCommon.toggleFiltersButton}
+          onClick={() => setAreFiltersExpanded(prev => !prev)}
+        >
+          {areFiltersExpanded ? (
+            <>
+              Hide Filters <BiChevronUp />
+            </>
+          ) : (
+            <>
+              Show Filters <BiChevronDown />
+            </>
+          )}
+        </button>
 
-              if (filter.type === 'text') {
-                return (
-                  <FilterTextInput
-                    field={filter.field}
-                    filterFieldValues={filterFieldValues}
-                    id={deepestField}
-                    key={filter.field + filter.type}
-                    label={filter.label}
-                    setFilterFieldValues={setFilterFieldValues}
-                  />
-                );
-              } else if (
-                filter.type === 'select' &&
-                Object.values(filterFieldOptions).length > 0
-              ) {
-                return (
-                  <FilterSelectInput
-                    field={filter.field}
-                    filterFieldValues={filterFieldValues}
-                    id={deepestField}
-                    key={filter.field + filter.type}
-                    label={filter.label}
-                    options={filterFieldOptions[deepestField]}
-                    setFilterFieldValues={setFilterFieldValues}
-                  />
-                );
-              }
-            })}
-          </div>
-
-          <div className={adminCommon.rangeInputs}>
-            {filterConfig.ranged.map(filter => {
-              if (filter.type === 'date') {
-                return (
-                  <FilterDateRangeInput
-                    field={filter.field}
-                    filterRangeFieldValues={filterRangeFieldValues}
-                    id={filter.field}
-                    key={filter.field + filter.type}
-                    label={filter.label}
-                    setFilterRangeFieldValues={setFilterRangeFieldValues}
-                  />
-                ); 
-              } else if (filter.type === 'number') {
-                return (
-                  <FilterNumberRangeInput
-                    field={filter.field}
-                    filterRangeFieldValues={filterRangeFieldValues}
-                    id={filter.field}
-                    key={filter.field + filter.type}
-                    label={filter.label}
-                    setFilterRangeFieldValues={setFilterRangeFieldValues}
-                  />
-                );
-              }
-            })}
-          </div>
-        </div>
-
-        <div className={adminCommon.filterButtonContainer}>
-          <ApplyFiltersButton
-            onClick={() => {
-              applyFilters();
-              applyRangeFilters();
-            }}
-          />
-        </div>
+        <hr />
       </div>
+
+      {areFiltersExpanded &&
+        <div className={adminCommon.filters}>
+          <div className={adminCommon.filterInputs}>
+            <div className={adminCommon.normalInputs}>
+              {filterConfig.normal.map(filter => {
+                // When a field is a nested property in a Firestore map, get
+                // the name of the deepest property
+                const deepestField = filter.field.split('.').at(-1);
+
+                if (filter.type === 'text') {
+                  return (
+                    <FilterTextInput
+                      field={filter.field}
+                      filterFieldValues={filterFieldValues}
+                      id={deepestField}
+                      key={filter.field + filter.type}
+                      label={filter.label}
+                      setFilterFieldValues={setFilterFieldValues}
+                    />
+                  );
+                } else if (
+                  filter.type === 'select' &&
+                  Object.values(filterFieldOptions).length > 0
+                ) {
+                  return (
+                    <FilterSelectInput
+                      field={filter.field}
+                      filterFieldValues={filterFieldValues}
+                      id={deepestField}
+                      key={filter.field + filter.type}
+                      label={filter.label}
+                      options={filterFieldOptions[deepestField]}
+                      setFilterFieldValues={setFilterFieldValues}
+                    />
+                  );
+                }
+              })}
+            </div>
+
+            <div className={adminCommon.rangeInputs}>
+              {filterConfig.ranged.map(filter => {
+                if (filter.type === 'date') {
+                  return (
+                    <FilterDateRangeInput
+                      field={filter.field}
+                      filterRangeFieldValues={filterRangeFieldValues}
+                      id={filter.field}
+                      key={filter.field + filter.type}
+                      label={filter.label}
+                      setFilterRangeFieldValues={setFilterRangeFieldValues}
+                    />
+                  ); 
+                } else if (filter.type === 'number') {
+                  return (
+                    <FilterNumberRangeInput
+                      field={filter.field}
+                      filterRangeFieldValues={filterRangeFieldValues}
+                      id={filter.field}
+                      key={filter.field + filter.type}
+                      label={filter.label}
+                      setFilterRangeFieldValues={setFilterRangeFieldValues}
+                    />
+                  );
+                }
+              })}
+            </div>
+          </div>
+
+          <div className={adminCommon.filterButtonContainer}>
+            <ApplyFiltersButton
+              onClick={() => {
+                applyFilters();
+                applyRangeFilters();
+              }}
+            />
+          </div>
+        </div>
+      }
 
       <div className={adminCommon.card}>
         {isLoading ? (
