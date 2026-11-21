@@ -1,6 +1,9 @@
+import classNames from 'classnames';
 import { signOut } from 'firebase/auth';
+import { useState } from 'react';
 import {
   BiLogOut,
+  BiMenu,
   BiSolidBookOpen,
   BiSolidContact,
   BiSolidCylinder,
@@ -20,9 +23,23 @@ export function AdminLayout() {
   const currentPageEntry = Object.entries(adminPaths).find(([_, path]) => path == location.pathname);
   const currentPageHeading = currentPageEntry ? currentPageEntry[0] : '';
 
+  const [sidebarShown, setSidebarShown] = useState(false);
+
   return (
     <div className={styles.root}>
-      <nav className={styles.sidebar}>
+      {sidebarShown &&
+        <div
+          className={styles.sidebarBackground}
+          onClick={() => setSidebarShown(prev => !prev)}
+        ></div>
+      }
+
+      <nav
+        className={classNames(
+          styles.sidebar,
+          sidebarShown && styles.sidebarShown,
+        )}
+      >
         <h1 className={styles.brand}>Tutubi</h1>
 
         <ul>
@@ -85,9 +102,18 @@ export function AdminLayout() {
       </nav>
 
       <main>
-        <h1 className={styles.pageHeading}>
-          {currentPageHeading}
-        </h1>
+        <div className={styles.pageHeading}>
+          <div>
+            <button
+              className={styles.menuButton}
+              onClick={() => setSidebarShown(prev => !prev)}
+            >
+              <BiMenu />
+            </button>
+          </div>
+
+          <h1>{currentPageHeading}</h1>
+        </div>
         <Outlet />
       </main>
     </div>

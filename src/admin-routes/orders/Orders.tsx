@@ -99,10 +99,12 @@ export function Orders() {
                 Data not found.
               </div>
             ) : (
-              <OrdersTable
-                isDeleteMode={isDeleteMode}
-                ordersData={ordersData}
-              />
+              <div className={adminCommon.tableContainer}>
+                <OrdersTable
+                  isDeleteMode={isDeleteMode}
+                  ordersData={ordersData}
+                />
+              </div>
             )}
           </>
         </TabledPage>
