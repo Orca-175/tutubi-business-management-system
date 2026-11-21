@@ -50,6 +50,11 @@ export function Orders() {
         type: 'text',
       },
       {
+        field: 'reservationInfo.isToBeDelivered',
+        label: 'To be delivered',
+        type: 'select',
+      },
+      {
         field: 'status',
         label: 'Order status',
         type: 'select',
