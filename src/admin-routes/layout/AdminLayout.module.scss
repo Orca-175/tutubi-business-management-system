@@ -14,6 +14,10 @@ main {
     min-width: 0;
 }
 
+.mainContainer {
+    padding-left: 16rem;
+}
+
 .menuButton {
     @include mixins.button-outlined;
     display: none;
@@ -35,6 +39,9 @@ main {
     background-color: colors.$primary-background;
     display: flex;
     flex-direction: column;
+    min-height: 100dvh;
+    min-width: 16rem;
+    position: fixed;
     padding: 1rem;
 
     .bottomNavItems {
@@ -81,12 +88,14 @@ main {
 }
 
 .root {
-    display: grid;
-    grid-template-columns: 16rem 1fr;
     min-height: 100dvh;
 }
 
 @media (max-width: 1240px) {
+    .mainContainer {
+        padding: 0;
+    }
+
     .menuButton {
         display: inline-block;
     }
@@ -96,9 +105,6 @@ main {
     }
 
     .sidebar {
-        position: fixed;
-        min-height: 100dvh;
-        min-width: 16rem;
         left: -100%;
         z-index: 2;
     }

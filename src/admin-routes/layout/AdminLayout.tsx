@@ -101,21 +101,23 @@ export function AdminLayout() {
         </ul>
       </nav>
 
-      <main>
-        <div className={styles.pageHeading}>
-          <div>
-            <button
-              className={styles.menuButton}
-              onClick={() => setSidebarShown(prev => !prev)}
-            >
-              <BiMenu />
-            </button>
-          </div>
+      <div className={styles.mainContainer}>
+        <main>
+          <div className={styles.pageHeading}>
+            <div>
+              <button
+                className={styles.menuButton}
+                onClick={() => setSidebarShown(prev => !prev)}
+              >
+                <BiMenu />
+              </button>
+            </div>
 
-          <h1>{currentPageHeading}</h1>
-        </div>
-        <Outlet />
-      </main>
+            <h1>{currentPageHeading}</h1>
+          </div>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }
