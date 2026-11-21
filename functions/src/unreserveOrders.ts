@@ -5,12 +5,14 @@ import { Order } from 'shared/interfaces/firestore-collections';
 
 import { db } from '.';
 
-export const unreserveOrders = onSchedule('every 4:00', async _ => {
+export const unreserveOrders = onSchedule({ schedule: 'every day 04:00', timeZone: 'Asia/Manila' }, async () => {
   const dateToday = new Date();
   dateToday.setHours(0, 0, 0, 0);
 
   const ordersDocs = (await db.collection(collections.orders)
     .where('reservationInfo.unreserveAt', '>=', Timestamp.fromDate(dateToday))
+    .where('status', '!=', 'Cancelled')
+    .where('status', '!=', 'Received')
     .get()).docs as QueryDocumentSnapshot<Order>[];
 
   // If no orders are pass their unreserveAt date, then
