@@ -270,7 +270,7 @@ function OrdersTable({
           initialData={originalData}
           inputsGroups={[
             [{
-              disabled: !originalData.reservationInfo.isToBeDelivered,
+              disabled: originalData.isReservation && !originalData.reservationInfo.isToBeDelivered,
               field: 'status',
               label: 'Status',
               optionDefault: {
