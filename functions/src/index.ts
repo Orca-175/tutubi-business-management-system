@@ -20,6 +20,10 @@ export {
 } from './recordTransactionToLedger';
 
 export {
+  unreserveOrders,
+} from './unreserveOrders';
+
+export {
   writeInventorySummaries,
 } from './writeInventorySummaries';
 
