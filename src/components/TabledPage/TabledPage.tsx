@@ -17,7 +17,7 @@ import { PaginationButtons } from '../PaginationButtons/PaginationButtons';
 interface Props<T> {
   children: ReactElement;
   collectionString: string;
-  filterConfig: FilterConfig;
+  filterConfig?: FilterConfig;
   setData: Dispatch<SetStateAction<(T & { docId: string })[]>>;
   // setOrderByDirection
   // setOrderByString
@@ -131,7 +131,7 @@ export function TabledPage<T>({
         <hr />
       </div>
 
-      {areFiltersExpanded &&
+      {(filterConfig && areFiltersExpanded) &&
         <div className={adminCommon.filters}>
           <div className={adminCommon.filterInputs}>
             <div className={adminCommon.normalInputs}>
