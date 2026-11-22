@@ -1,5 +1,7 @@
 export type { Client, ClientData } from './interfaces/firestore-collections/Client.js';
 
+export type { Employee, EmployeeData } from './interfaces/firestore-collections/Employees.js';
+
 export type { FilterFieldOptions } from './interfaces/firestore-collections/FilterFieldOptions.js';
 
 export type { InventoryEntry, InventoryEntryData } from './interfaces/firestore-collections/InventoryEntry.js';
@@ -13,6 +15,8 @@ export type { Order, OrderData } from './interfaces/firestore-collections/Order.
 export type { Product, ProductData } from './interfaces/firestore-collections/Product.js';
 
 export type { Purchase, PurchaseData } from './interfaces/firestore-collections/Purchase.js';
+
+export type { Role, RoleData } from './interfaces/firestore-collections/Role.js';
 
 export type { Sale, SaleData } from './interfaces/firestore-collections/Sale.js';
 
