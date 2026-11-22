@@ -25,6 +25,7 @@ export function Purchases() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
+  const [areFiltersExpanded, setAreFiltersExpanded] = useState(false);
 
   const itemsPerPage = 20;
 
@@ -163,7 +164,26 @@ export function Purchases() {
 
   return (
     <>
-      {Object.keys(filterFieldOptions).length > 0 &&
+      <div className={common.toggleFiltersButtonContainer}>
+        <button
+          className={common.toggleFiltersButton}
+          onClick={() => setAreFiltersExpanded(prev => !prev)}
+        >
+          {areFiltersExpanded ? (
+            <>
+              Hide Filters <BiChevronUp />
+            </>
+          ) : (
+            <>
+              Show Filters <BiChevronDown />
+            </>
+          )}
+        </button>
+
+        <hr />
+      </div>
+
+      {(areFiltersExpanded && Object.keys(filterFieldOptions).length > 0) &&
         <>
           <div className={common.filters}>
             <div className={common.filterInputs}>

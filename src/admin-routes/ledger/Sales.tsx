@@ -16,12 +16,14 @@ import { usePagination } from '../../hooks/usePagination';
 import { useRangeFilters } from '../../hooks/useRangeFilters';
 import common from '../../styles/common-styles/AdminCommon.module.scss';
 import { LedgerTabContext } from './LedgerTabContext';
+import { BiChevronUp, BiChevronDown } from 'react-icons/bi';
 
 export function Sales() {
   const [salesData, setSalesData] = useState<SaleData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
+  const [areFiltersExpanded, setAreFiltersExpanded] = useState(false);
 
   const itemsPerPage = 20;
 
@@ -160,7 +162,26 @@ export function Sales() {
 
   return (
     <>
-      {Object.keys(filterFieldOptions).length > 0 &&
+      <div className={common.toggleFiltersButtonContainer}>
+        <button
+          className={common.toggleFiltersButton}
+          onClick={() => setAreFiltersExpanded(prev => !prev)}
+        >
+          {areFiltersExpanded ? (
+            <>
+              Hide Filters <BiChevronUp />
+            </>
+          ) : (
+            <>
+              Show Filters <BiChevronDown />
+            </>
+          )}
+        </button>
+
+        <hr />
+      </div>
+
+      {(areFiltersExpanded && Object.keys(filterFieldOptions).length > 0) &&
         <div className={common.filters}>
           <div className={common.filterInputs}>
             <div className={common.normalInputs}>

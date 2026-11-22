@@ -3,7 +3,7 @@ import type { LedgerEntryData } from 'shared/interfaces/firestore-collections';
 import classNames from 'classnames';
 import { and, collection, doc, getDoc, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useContext, useEffect, useRef, useState } from 'react';
-import {  BiChevronRight, BiPlus } from 'react-icons/bi';
+import {  BiChevronDown, BiChevronRight, BiChevronUp, BiPlus } from 'react-icons/bi';
 
 import { ApplyFiltersButton } from '../../components/FilterInputs/ApplyFiltersButton';
 import { FilterSelectInput } from '../../components/FilterInputs/FilterInputs';
@@ -25,6 +25,7 @@ export function GeneralLedger() {
   const [isLoading, setIsLoading] = useState(true); // Loading on initial render
   const [orderByString, setOrderByString] = useState('createdAt');
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>('desc');
+  const [areFiltersExpanded, setAreFiltersExpanded] = useState(false);
 
   const itemsPerPage = 20;
 
@@ -141,58 +142,79 @@ export function GeneralLedger() {
 
   return (
     <>
-      {/* Filters */}
-      <div className={common.filters}>
-        <div className={common.filterInputs}>
-          <div className={common.normalInputs}>
-            {Object.keys(filterFieldOptions).length > 0 && (
-              <>
-                <FilterSelectInput
-                  field="account"
-                  filterFieldValues={filterFieldValues}
-                  id="account"
-                  label="Account"
-                  options={filterFieldOptions.account}
-                  setFilterFieldValues={setFilterFieldValues}
-                />
-                <FilterSelectInput
-                  field="type"
-                  filterFieldValues={filterFieldValues}
-                  id="type"
-                  label="Type"
-                  options={filterFieldOptions.transactionType}
-                  setFilterFieldValues={setFilterFieldValues}
-                />
-              </>
-            )}
-          </div>
+      <div className={common.toggleFiltersButtonContainer}>
+        <button
+          className={common.toggleFiltersButton}
+          onClick={() => setAreFiltersExpanded(prev => !prev)}
+        >
+          {areFiltersExpanded ? (
+            <>
+              Hide Filters <BiChevronUp />
+            </>
+          ) : (
+            <>
+              Show Filters <BiChevronDown />
+            </>
+          )}
+        </button>
 
-          <div className={common.rangeInputs}>
-            <FilterDateRangeInput
-              field="createdAt"
-              filterRangeFieldValues={filterRangeFieldValues}
-              id="createdAt"
-              label="Created at"
-              setFilterRangeFieldValues={setFilterRangeFieldValues}
-            />
-            <FilterNumberRangeInput
-              field="debit"
-              filterRangeFieldValues={filterRangeFieldValues}
-              id="debit"
-              label="Debit or Credit"
-              setFilterRangeFieldValues={setFilterRangeFieldValues}
+        <hr />
+      </div>
+
+      {/* Filters */}
+      {areFiltersExpanded &&
+        <div className={common.filters}>
+          <div className={common.filterInputs}>
+            <div className={common.normalInputs}>
+              {Object.keys(filterFieldOptions).length > 0 && (
+                <>
+                  <FilterSelectInput
+                    field="account"
+                    filterFieldValues={filterFieldValues}
+                    id="account"
+                    label="Account"
+                    options={filterFieldOptions.account}
+                    setFilterFieldValues={setFilterFieldValues}
+                  />
+                  <FilterSelectInput
+                    field="type"
+                    filterFieldValues={filterFieldValues}
+                    id="type"
+                    label="Type"
+                    options={filterFieldOptions.transactionType}
+                    setFilterFieldValues={setFilterFieldValues}
+                  />
+                </>
+              )}
+            </div>
+
+            <div className={common.rangeInputs}>
+              <FilterDateRangeInput
+                field="createdAt"
+                filterRangeFieldValues={filterRangeFieldValues}
+                id="createdAt"
+                label="Created at"
+                setFilterRangeFieldValues={setFilterRangeFieldValues}
+              />
+              <FilterNumberRangeInput
+                field="debit"
+                filterRangeFieldValues={filterRangeFieldValues}
+                id="debit"
+                label="Debit or Credit"
+                setFilterRangeFieldValues={setFilterRangeFieldValues}
+              />
+            </div>
+          </div>
+          <div className={common.filterButtonContainer}>
+            <ApplyFiltersButton
+              onClick={() => {
+                applyFilters();
+                applyRangeFilters();
+              }}
             />
           </div>
         </div>
-        <div className={common.filterButtonContainer}>
-          <ApplyFiltersButton
-            onClick={() => {
-              applyFilters();
-              applyRangeFilters();
-            }}
-          />
-        </div>
-      </div>
+      }
 
       {/* Main content */}
       <div className={common.card}>
