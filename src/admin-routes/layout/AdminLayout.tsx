@@ -74,7 +74,7 @@ export function AdminLayout() {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to={adminPaths.Staff}>
               <BiSolidGroup />
               <div>Staff</div>
             </Link>
