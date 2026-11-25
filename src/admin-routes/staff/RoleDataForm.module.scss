@@ -15,6 +15,17 @@
     width: 100%;
 }
 
+.inputsSection {
+    align-self: stretch;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 2fr;
+
+    :nth-child(2) input {
+        width: 100%;
+    }
+}
+
 .pageInputs {
     display: grid;
     gap: 1rem;

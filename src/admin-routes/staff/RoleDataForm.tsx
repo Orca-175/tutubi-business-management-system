@@ -86,7 +86,7 @@ export function RoleDataForm({
 
           <hr />
 
-          <div className={adminModals.inputsSection}>
+          <div className={styles.inputsSection}>
             <label className={adminModals.input}>
               Name
               <input
@@ -170,7 +170,9 @@ export function RoleDataForm({
           <div className={styles.addPageSection}>
             <button
               className={styles.addPageButton}
-              onClick={() => {
+              onClick={event => {
+                event.preventDefault();
+
                 const newPages = [
                   ...pages,
                   { docId: '', key: crypto.randomUUID(), read: false, write: false },
