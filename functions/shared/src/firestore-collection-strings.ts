@@ -6,6 +6,7 @@ export const collections = {
   inventorySummaries: 'inventorySummaries',
   ledger: 'ledger',
   orders: 'orders',
+  pages: 'pages',
   products: 'products',
   purchases: 'purchases',
   roles: 'roles',

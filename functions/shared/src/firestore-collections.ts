@@ -12,6 +12,8 @@ export type { LedgerEntry, LedgerEntryData } from './interfaces/firestore-collec
 
 export type { Order, OrderData } from './interfaces/firestore-collections/Order.js';
 
+export type { Page, PageData } from './interfaces/firestore-collections/Page.js';
+
 export type { Product, ProductData } from './interfaces/firestore-collections/Product.js';
 
 export type { Purchase, PurchaseData } from './interfaces/firestore-collections/Purchase.js';
