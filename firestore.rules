@@ -30,6 +30,10 @@ service cloud.firestore {
       allow read, write: if request.auth.token.admin == true;
     }
 
+    match /pages/{pageId} {
+      allow read, write: if request.auth.token.admin == true;
+    }
+
     match /products/{productId} {
       allow read, write: if request.auth.token.admin == true;
     }

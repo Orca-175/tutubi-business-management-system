@@ -1,0 +1,22 @@
+[
+  {
+    "docId": "inventory",
+    "name": "Inventory",
+    "collections": ["inventory", "inventorySummaries", "products", "suppliers"]
+  },
+  {
+    "docId": "ledger",
+    "name": "Ledger",
+    "collections": ["ledger", "purchases", "supplier"]
+  },
+  {
+    "docId": "orders",
+    "name": "Orders",
+    "collections": ["orders"]
+  },
+  {
+    "docId": "staff",
+    "name": "Staff",
+    "collections": ["roles", "employees", "pages"]
+  }
+]
