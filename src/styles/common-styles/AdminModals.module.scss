@@ -77,7 +77,7 @@
 
 .inputCheckbox {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 
     > input {
         height: 1.25rem;
