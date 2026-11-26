@@ -1,5 +1,7 @@
 import type { RefObject } from 'react';
 
+import type { FieldPath } from '../../interfaces/FieldPath';
+
 export type Data<T> = T & { docId: string };
 
 export interface InputFormProps<T> {
@@ -19,18 +21,4 @@ export type InputsGroupsConfig<T> = {
     })[];
     type: 'number' | 'select' | 'text';
   }[][]; // Each inner array is separated by an <hr /> on the form
-
-type FieldPath<T> = T extends object ? ({
-  [K in keyof T]-?: K extends number | string ? (
-    `${K}` | (FieldPath<T[K]> extends infer R ? (
-      R extends string ? `${K}.${R}` : never
-    ) : (
-      never
-    ))
-  ) : (
-    never
-  )
-}[keyof T]) : (
-  never
-);
 

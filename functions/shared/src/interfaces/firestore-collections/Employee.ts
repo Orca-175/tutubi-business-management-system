@@ -7,6 +7,10 @@ export interface Employee extends FirestoreDocument {
   email: string;
   fullName: FullName;
   phone: string;
+  role: {
+    docId: string;
+    name: string;
+  },
 }
 
 export interface EmployeeData extends Employee {

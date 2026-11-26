@@ -1,6 +1,6 @@
 export type { Client, ClientData } from './interfaces/firestore-collections/Client.js';
 
-export type { Employee, EmployeeData } from './interfaces/firestore-collections/Employees.js';
+export type { Employee, EmployeeData } from './interfaces/firestore-collections/Employee.js';
 
 export type { FilterFieldOptions } from './interfaces/firestore-collections/FilterFieldOptions.js';
 
