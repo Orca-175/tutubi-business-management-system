@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import { useState } from 'react';
 
 import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
-import { Employees } from './Employees';
-import { Roles } from './Roles';
+import { Employees } from './employees-tab/Employees';
+import { Roles } from './roles-tab/Roles';
 
 export function Staff() {
   const [tab, setTab] = useState('Roles');

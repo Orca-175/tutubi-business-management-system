@@ -4,13 +4,13 @@ import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { useContext, useState } from 'react';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
-import type { InputFormProps } from '../../components/InputForms/DataFormProps';
-import type { FormMessage } from '../../interfaces/FormMessage';
-import type { Pages } from './RoleInputFormProps';
+import type { InputFormProps } from '../../../components/InputForms/DataFormProps';
+import type { FormMessage } from '../../../interfaces/FormMessage';
+import type { PageInput } from './PageInput';
 
-import { TabledPageContext } from '../../context/TabledPageContext';
-import { db } from '../../firebase/firebase';
-import { getNewRoleData } from './helpers/getNewRoleData';
+import { TabledPageContext } from '../../../context/TabledPageContext';
+import { db } from '../../../firebase/firebase';
+import { getNewRoleData } from '../helpers/getNewRoleData';
 import { RoleDataForm } from './RoleDataForm';
 
 type Props = Omit<InputFormProps<null>, 'heading' | 'inputsGroups'>;
@@ -25,7 +25,7 @@ export function AddRoleDataForm({
     name: '',
     pagePermissions: {},
   });
-  const [pages, setPages] = useState<Pages[]>([
+  const [pageInputs, setPageInputs] = useState<PageInput[]>([
     { docId: '', key: crypto.randomUUID(), read: false, write: false },
   ]);
   const [formMessage, setFormMessage] = useState<FormMessage>({ message: '', type: '' });
@@ -39,7 +39,7 @@ export function AddRoleDataForm({
       heading="Add role"
       onSubmit={async () => {
         try {
-          const newRoleData = await getNewRoleData(structuredClone(roleData), pages);
+          const newRoleData = await getNewRoleData(structuredClone(roleData), pageInputs);
 
           await addDoc(collection(db, collections.roles), newRoleData);
           setFormMessage({ message: 'Data successfully added!', type: 'success' });
@@ -48,9 +48,9 @@ export function AddRoleDataForm({
           setFormMessage({ message: error.message, type: 'error' });
         }
       }}
-      pages={pages}
+      pages={pageInputs}
       roleData={roleData}
-      setPages={setPages}
+      setPages={setPageInputs}
       setRoleData={setRoleData}
     />
   );

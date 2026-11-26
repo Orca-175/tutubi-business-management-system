@@ -4,19 +4,19 @@ import { useState } from 'react';
 import { BiChevronDown, BiChevronUp, BiSolidEdit, BiSolidTagX } from 'react-icons/bi';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
-import type { FilterConfig } from '../../interfaces/FilterConfig';
+import type { FilterConfig } from '../../../interfaces/FilterConfig';
 
-import { DeleteDataDialog } from '../../components/DeleteDialog/DeleteDataDialog';
-import { TableCardButtons } from '../../components/TableCardButtons';
-import { TabledPage } from '../../components/TabledPage/TabledPage';
-import { TabledPageContext } from '../../context/TabledPageContext';
-import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
-import { useMutableTableData } from '../../hooks/useMutableTableData';
-import { useTableCardButtons } from '../../hooks/useTableCardButtons';
-import { useTabledPage } from '../../hooks/useTabledPage';
-import adminCommon from '../../styles/common-styles/AdminCommon.module.scss';
-import { handleExpandTable } from '../../utils/helpers/handleExpandTable';
-import { capitalize } from '../../utils/strings';
+import { DeleteDataDialog } from '../../../components/DeleteDialog/DeleteDataDialog';
+import { TableCardButtons } from '../../../components/TableCardButtons';
+import { TabledPage } from '../../../components/TabledPage/TabledPage';
+import { TabledPageContext } from '../../../context/TabledPageContext';
+import { getCollectionConverter } from '../../../firebase/converters/collectionConverter';
+import { useMutableTableData } from '../../../hooks/useMutableTableData';
+import { useTableCardButtons } from '../../../hooks/useTableCardButtons';
+import { useTabledPage } from '../../../hooks/useTabledPage';
+import adminCommon from '../../../styles/common-styles/AdminCommon.module.scss';
+import { handleExpandTable } from '../../../utils/helpers/handleExpandTable';
+import { capitalize } from '../../../utils/strings';
 import { AddRoleDataForm } from './AddRoleDataForm';
 import { EditRoleDataForm } from './EditRoleDataForm';
 

@@ -1,5 +1,5 @@
-@use '../../styles/colors.scss';
-@use '../../styles/mixins.scss';
+@use '../../../styles/colors.scss';
+@use '../../../styles/mixins.scss';
 
 .addPageButton {
     @include mixins.button-outlined(colors.$primary);

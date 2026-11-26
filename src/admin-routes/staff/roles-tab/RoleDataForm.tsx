@@ -6,21 +6,22 @@ import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
-import type { FormMessage } from '../../interfaces/FormMessage';
-import type { Pages, RoleInputFormProps } from './RoleInputFormProps';
+import type { FormMessage } from '../../../interfaces/FormMessage';
+import type { StaffInputFormProps } from '../StaffInputFormProps';
+import type { PageInput } from './PageInput';
 
-import { getCollectionConverter } from '../../firebase/converters/collectionConverter';
-import { db } from '../../firebase/firebase';
-import adminModals from '../../styles/common-styles/AdminModals.module.scss';
+import { getCollectionConverter } from '../../../firebase/converters/collectionConverter';
+import { db } from '../../../firebase/firebase';
+import adminModals from '../../../styles/common-styles/AdminModals.module.scss';
 import styles from './RoleDataForm.module.scss';
 
-interface Props extends RoleInputFormProps {
+interface Props extends StaffInputFormProps {
   cleanupDataForDialogs?: () => void;
   formMessage: FormMessage;
   onSubmit: () => void;
-  pages: Pages[];
+  pages: PageInput[];
   roleData: Role | RoleData;
-  setPages: Dispatch<SetStateAction<Pages[]>>;
+  setPages: Dispatch<SetStateAction<PageInput[]>>;
   setRoleData: Dispatch<SetStateAction<Role>>;
 }
 
@@ -40,7 +41,7 @@ export function RoleDataForm({
   // pagesData is from the pages collection
   const [pagesData, setPagesData] = useState<PageData[]>([]);
 
-  const handlePagesChange = <K extends keyof Pages>(index: number, field: K, value: Pages[K]) => {
+  const handlePagesChange = <K extends keyof PageInput>(index: number, field: K, value: PageInput[K]) => {
     setPages(prevPages => {
       const pages = [...prevPages];
       pages[index][field] = value;
