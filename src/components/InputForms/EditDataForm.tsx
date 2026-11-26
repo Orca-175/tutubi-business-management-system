@@ -39,7 +39,10 @@ export function EditDataForm<T>(props: Props<T>) {
             }
           }
 
-          await setDoc(doc(db, collectionString, data.docId), data);
+          const newData = structuredClone(data);
+          delete newData.docId;
+
+          await setDoc(doc(db, collectionString, data.docId), newData);
           setFormMessage({ message: 'Data edited successfully!', type: 'success'});
           refreshPage();
         } catch (error) {
