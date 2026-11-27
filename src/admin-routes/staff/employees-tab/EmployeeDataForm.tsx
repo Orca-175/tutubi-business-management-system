@@ -106,9 +106,13 @@ export function EmployeeDataForm({
 
                   setEmployeeData(newEmployeeData);
                 }}
-                value={employeeData.role.docId}
+                value={employeeData.role.docId === '' ? (
+                  ''
+                ) : (
+                  `${employeeData.role.docId},${employeeData.role.name}`
+                )}
               >
-                <option value="">Select</option>
+                <option disabled value="">Select</option>
                 {rolesData.map(roleData => {
                   return (
                     <option value={`${roleData.docId},${roleData.name}`}>{roleData.name}</option>
