@@ -41,6 +41,8 @@ export function AddRoleDataForm({
         try {
           const newRoleData = await getNewRoleData(structuredClone(roleData), pageInputs);
 
+          // TODO: Form validation. Fail when empty fields
+
           await addDoc(collection(db, collections.roles), newRoleData);
           setFormMessage({ message: 'Data successfully added!', type: 'success' });
           refreshPage();

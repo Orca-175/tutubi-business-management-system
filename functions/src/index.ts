@@ -28,10 +28,12 @@ export {
   writeInventorySummaries,
 } from './writeInventorySummaries';
 
+export const writeEmployeeFilterFieldOptions = getWriteFilterFieldOptions(collections.employees);
 export const writeLedgerFilterFieldOptions = getWriteFilterFieldOptions(collections.ledger);
 export const writeOrderFilterFieldOptions = getWriteFilterFieldOptions(collections.orders);
 export const writeProductFilterFieldOptions = getWriteFilterFieldOptions(collections.products);
 export const writePurchaseFilterFieldOptions = getWriteFilterFieldOptions(collections.purchases);
 export const writeSaleFilterFieldOptions = getWriteFilterFieldOptions(collections.sales);
 export const writeSupplierFilterFieldOptions = getWriteFilterFieldOptions(collections.suppliers);
+export const writeRoleFilterFieldOptions = getWriteFilterFieldOptions(collections.roles);
 

@@ -40,8 +40,8 @@ export function Roles() {
   const filterConfig: FilterConfig = {
     normal: [{
       field: 'name',
-      label: 'Role name',
-      type: 'text',
+      label: 'Role',
+      type: 'select',
     }],
   };
 

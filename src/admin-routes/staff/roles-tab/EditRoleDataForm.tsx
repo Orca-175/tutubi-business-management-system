@@ -47,6 +47,8 @@ export function EditRoleDataForm({
         try {
           const newRoleData = await getNewRoleData(structuredClone(roleData), pagesInputs);
 
+          // TODO: Form validation. Fail when empty fields
+
           await setDoc(doc(db, collections.roles, roleData.docId), newRoleData);
           setFormMessage({ message: 'Data edited successfully!', type: 'success' });
           refreshPage();
