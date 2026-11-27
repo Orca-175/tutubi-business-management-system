@@ -5,6 +5,8 @@ import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 const db = getFirestore();
 
 export async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot) {
+  // TODO: Use transaction
+
   // Getting specific collection document from filterFieldOptions collection
   const fieldOptionsDoc = await db
     .collection('filterFieldOptions')
@@ -35,13 +37,19 @@ export async function addToFilterFieldOptions(collection: string, doc: DocumentS
         continue;
       }
 
+      // Skip arrays
+      if (Array.isArray(value)) {
+        continue;
+      }
+
+      // TODO: Skip booleans
+
       if (value && typeof value === 'object') {
         addFieldOptions(Object.entries(value));
-
       }
 
       // If value is not a number
-      if (typeof value !== 'number') {
+      if (typeof value !== 'number' && typeof value !== 'object') {
         if (fieldOptionsData[key]) {
           if (!fieldOptionsData[key].some(someValue => someValue == value)) {
             fieldOptionsData[key].push(value);
