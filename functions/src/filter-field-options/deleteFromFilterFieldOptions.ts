@@ -1,9 +1,10 @@
-import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
 import { HttpsError } from 'firebase-functions/ai';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
-import { db } from '..';
 import { flattenData } from '../helpers/flattenData';
+
+const db = getFirestore();
 
 export async function deleteFromFilterFieldOptions(collection: string, doc: DocumentSnapshot) {
   const fieldOptionsDoc = await db

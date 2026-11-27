@@ -1,9 +1,9 @@
-import { Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { HttpsError } from 'firebase-functions/https';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { LedgerEntry, Purchase, Sale } from 'shared/interfaces/firestore-collections';
 
-import { db } from '..';
+const db = getFirestore();
 
 interface TransactionInfo {
   credit: {

@@ -1,15 +1,16 @@
 import { initializeApp } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
+
+initializeApp();
 
 import { getWriteFilterFieldOptions } from './filter-field-options/writeFilterFieldOptions';
 
 setGlobalOptions({ maxInstances: 10 });
 
-initializeApp();
-
-export const db = getFirestore();
+export {
+  createAdminUserWithEmailAndPassword,
+} from './createAdminUserWithEmailAndPassword';
 
 export {
   handleOrderWrites,

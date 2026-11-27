@@ -1,11 +1,12 @@
-import { QueryDocumentSnapshot, Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, QueryDocumentSnapshot, Timestamp } from 'firebase-admin/firestore';
 import { DocumentSnapshot } from 'firebase-admin/firestore';
 import { onDocumentWritten } from 'firebase-functions/firestore';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { InventoryEntry, Order } from 'shared/interfaces/firestore-collections';
 
-import { db } from '.';
 import { recordTransaction } from './helpers/recordTransaction';
+
+const db = getFirestore();
 
 export const handleOrderWrites = onDocumentWritten(`${collections.orders}/{orderId}`, async event => {
   const before = event.data!.before;

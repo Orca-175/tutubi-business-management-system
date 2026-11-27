@@ -1,8 +1,8 @@
-import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
 import { HttpsError } from 'firebase-functions/ai';
 import { FilterFieldOptions } from 'shared/interfaces/firestore-collections';
 
-import { db } from '../';
+const db = getFirestore();
 
 export async function addToFilterFieldOptions(collection: string, doc: DocumentSnapshot) {
   // Getting specific collection document from filterFieldOptions collection

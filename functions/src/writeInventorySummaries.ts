@@ -1,9 +1,9 @@
-import { Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { onDocumentWritten } from 'firebase-functions/firestore';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 import { InventoryEntry, InventorySummary } from 'shared/interfaces/firestore-collections';
 
-import { db } from '.';
+const db = getFirestore();
 
 export const writeInventorySummaries = onDocumentWritten(
   `${collections.inventory}/{inventoryEntryId}`,
