@@ -29,6 +29,8 @@ export const createAdminUserWithEmailAndPassword = onCall<Arguments>(async reque
     password: password,
   });
 
+  auth.setCustomUserClaims(userRecord.uid, { admin: true })
+
   return userRecord.uid;
 });
 
