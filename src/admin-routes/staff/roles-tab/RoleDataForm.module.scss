@@ -8,11 +8,19 @@
     gap: .5rem;
 }
 
-.addPageSection {
+.buttonsSection {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.deletePageButton {
+    @include mixins.button-outlined($color: colors.$danger);
     align-items: center;
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    gap: .5rem;
 }
 
 .inputsSection {

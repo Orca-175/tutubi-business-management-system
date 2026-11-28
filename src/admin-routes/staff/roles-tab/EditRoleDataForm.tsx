@@ -24,7 +24,7 @@ export function EditRoleDataForm({
   initialData,
 }: Props) {
   const [roleData, setRoleData] = useState<RoleData>(initialData);
-  const [pagesInputs, setPagesInputs] = useState<PageInput[]>(
+  const [pageInputs, setPageInputs] = useState<PageInput[]>(
     Object.entries(roleData.pagePermissions).map(([docId, permissions]) => {
       return {
         docId: docId,
@@ -45,7 +45,7 @@ export function EditRoleDataForm({
       heading={'Edit role'}
       onSubmit={async () => {
         try {
-          const newRoleData = await getNewRoleData(structuredClone(roleData), pagesInputs);
+          const newRoleData = await getNewRoleData(structuredClone(roleData), pageInputs);
 
           // TODO: Form validation. Fail when empty fields
 
@@ -56,9 +56,9 @@ export function EditRoleDataForm({
           setFormMessage({ message: error.message, type: 'error' });
         }
       }}
-      pages={pagesInputs}
+      pageInputs={pageInputs}
       roleData={roleData}
-      setPages={setPagesInputs}
+      setPageInputs={setPageInputs}
       setRoleData={setRoleData}
     />
   );

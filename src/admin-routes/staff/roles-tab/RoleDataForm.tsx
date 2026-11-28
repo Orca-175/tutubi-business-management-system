@@ -3,7 +3,7 @@ import type { Page, PageData, Role, RoleData } from 'shared/interfaces/firestore
 import classNames from 'classnames';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
-import { BiPlus } from 'react-icons/bi';
+import { BiMinus, BiPlus } from 'react-icons/bi';
 import { collections } from 'shared/interfaces/firestore-collection-strings';
 
 import type { FormMessage } from '../../../interfaces/FormMessage';
@@ -19,9 +19,9 @@ interface Props extends StaffInputFormProps {
   cleanupDataForDialogs?: () => void;
   formMessage: FormMessage;
   onSubmit: () => void;
-  pages: PageInput[];
+  pageInputs: PageInput[];
   roleData: Role | RoleData;
-  setPages: Dispatch<SetStateAction<PageInput[]>>;
+  setPageInputs: Dispatch<SetStateAction<PageInput[]>>;
   setRoleData: Dispatch<SetStateAction<Role>>;
 }
 
@@ -31,22 +31,23 @@ export function RoleDataForm({
   formRef,
   heading,
   onSubmit,
-  pages,
+  pageInputs,
   roleData,
-  setPages,
+  setPageInputs,
   setRoleData,
 }: Props) {
   // NOTE:
-  // pages is where the form inputs of this component store their values
+  // pageInputs is where the form inputs of this component store their values
   // pagesData is from the pages collection
   const [pagesData, setPagesData] = useState<PageData[]>([]);
 
   const handlePagesChange = <K extends keyof PageInput>(index: number, field: K, value: PageInput[K]) => {
-    setPages(prevPages => {
-      const pages = [...prevPages];
-      pages[index][field] = value;
+    console.log('handlePagesChange');
+    setPageInputs(prevPages => {
+      const pageInputs = [...prevPages];
+      pageInputs[index][field] = value;
 
-      return pages;
+      return pageInputs;
     });
   };
 
@@ -120,7 +121,7 @@ export function RoleDataForm({
           <hr />
 
           <div className={styles.pagesInputs}>
-            {pages.map((page, index) => {
+            {pageInputs.map((page, index) => {
               return (
                 <div
                   className={styles.pageInputs}
@@ -136,7 +137,7 @@ export function RoleDataForm({
                       {pagesData && pagesData.map(pageData => {
                         return (
                           <option
-                            disabled={pages.some(page => page.docId === pageData.docId)}
+                            disabled={pageInputs.some(page => page.docId === pageData.docId)}
                             value={pageData.docId}
                           >
                             {pageData.name}
@@ -168,21 +169,38 @@ export function RoleDataForm({
             })}
           </div>
 
-          <div className={styles.addPageSection}>
-            <button
-              className={styles.addPageButton}
-              onClick={event => {
-                event.preventDefault();
+          <div className={styles.buttonsSection}>
+            {pageInputs.length > 1 &&
+              <button
+                className={styles.deletePageButton}
+                onClick={event => {
+                  event.preventDefault();
 
-                const newPages = [
-                  ...pages,
-                  { docId: '', key: crypto.randomUUID(), read: false, write: false },
-                ];
-                setPages(newPages);
-              }}
-            >
-              <BiPlus /> Add Page
-            </button>
+                  const newPageInputs = [...pageInputs];
+                  newPageInputs.pop();
+                  setPageInputs(newPageInputs);
+                }}
+              >
+                <BiMinus /> Remove
+              </button>
+            }
+
+            {pageInputs.length < pagesData.length &&
+              <button
+                className={styles.addPageButton}
+                onClick={event => {
+                  event.preventDefault();
+
+                  const newPages = [
+                    ...pageInputs,
+                    { docId: '', key: crypto.randomUUID(), read: false, write: false },
+                  ];
+                  setPageInputs(newPages);
+                }}
+              >
+                <BiPlus /> Add
+              </button>
+            }
           </div>
         </div>
 

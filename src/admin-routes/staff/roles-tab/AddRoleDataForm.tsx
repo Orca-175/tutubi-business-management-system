@@ -50,9 +50,9 @@ export function AddRoleDataForm({
           setFormMessage({ message: error.message, type: 'error' });
         }
       }}
-      pages={pageInputs}
+      pageInputs={pageInputs}
       roleData={roleData}
-      setPages={setPageInputs}
+      setPageInputs={setPageInputs}
       setRoleData={setRoleData}
     />
   );
