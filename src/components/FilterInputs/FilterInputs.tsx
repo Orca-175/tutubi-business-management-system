@@ -17,7 +17,7 @@ export function FilterSelectInput({
   options: (boolean | number | string)[];
   setFilterFieldValues: (filterFieldValues: FilterFieldValues) => void;
 }) {
-  const stringOptions = options.map(option => String(option)).sort();
+  const stringOptions = options?.map(option => String(option)).sort();
   const deepestField = field.split('.').at(-1);
 
   return (
@@ -35,7 +35,7 @@ export function FilterSelectInput({
         value={filterFieldValues[field] || ''}
       >
         <option value="">All</option>
-        {stringOptions.map(option => {
+        {stringOptions?.map(option => {
           return <option
             key={deepestField + option}
             value={option}

@@ -154,10 +154,7 @@ export function TabledPage<T>({
                             setFilterFieldValues={setFilterFieldValues}
                           />
                         );
-                      } else if (
-                        filter.type === 'select' &&
-                        Object.values(filterFieldOptions).length > 0
-                      ) {
+                      } else if (filter.type === 'select') {
                         return (
                           <FilterSelectInput
                             field={filter.field}
