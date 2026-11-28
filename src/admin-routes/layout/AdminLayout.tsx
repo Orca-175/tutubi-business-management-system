@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { signOut } from 'firebase/auth';
-import { useState } from 'react';
+import { type ReactNode, useContext, useState } from 'react';
 import {
   BiLogOut,
   BiMenu,
@@ -14,9 +14,16 @@ import {
 } from 'react-icons/bi';
 import { Link, Outlet, useLocation } from 'react-router';
 
+import { adminPageNames } from '../../constants/adminPageNames';
 import { adminPaths } from '../../constants/route-paths/adminPaths';
+import { AuthContext } from '../../context/AuthContext';
 import { auth } from '../../firebase/firebase';
 import styles from './AdminLayout.module.scss';
+
+interface NavItemProps {
+  children: ReactNode;
+  pageName: string;
+}
 
 export function AdminLayout() {
   const location = useLocation();
@@ -49,42 +56,72 @@ export function AdminLayout() {
               <div>Home</div>
             </Link>
           </li>
-          <li>
-            <Link to={adminPaths.Inventory}>
-              <BiSolidCylinder />
-              <div>Inventory</div>
-            </Link>
-          </li>
-          <li>
-            <Link to={adminPaths.Ledger}>
-              <BiSolidBookOpen />
-              <div>Ledger</div>
-            </Link>
-          </li>
-          <li>
-            <Link to={adminPaths.Orders}>
-              <BiSolidNotepad />
-              <div>Orders</div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <BiSolidPurchaseTag />
-              <div>Purchases</div>
-            </Link>
-          </li>
-          <li>
-            <Link to={adminPaths.Staff}>
-              <BiSolidGroup />
-              <div>Staff</div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/">
-              <BiSolidContact />
-              <div>Clients</div>
-            </Link>
-          </li>
+          <NavItem
+            pageName={adminPageNames.inventory}
+          >
+            <li>
+              <Link to={adminPaths.Inventory}>
+                <BiSolidCylinder />
+                <div>Inventory</div>
+              </Link>
+            </li>
+          </NavItem>
+
+          <NavItem
+            pageName={adminPageNames.ledger}
+          >
+            <li>
+              <Link to={adminPaths.Ledger}>
+                <BiSolidBookOpen />
+                <div>Ledger</div>
+              </Link>
+            </li>
+          </NavItem>
+
+          <NavItem
+            pageName={adminPageNames.orders}
+          >
+            <li>
+              <Link to={adminPaths.Orders}>
+                <BiSolidNotepad />
+                <div>Orders</div>
+              </Link>
+            </li>
+          </NavItem>
+
+          <NavItem
+            pageName={adminPageNames.purchases}
+          >
+            <li>
+              <Link to="/">
+                <BiSolidPurchaseTag />
+                <div>Purchases</div>
+              </Link>
+            </li>
+          </NavItem>
+
+
+          <NavItem
+            pageName={adminPageNames.purchases}
+          >
+            <li>
+              <Link to={adminPaths.Staff}>
+                <BiSolidGroup />
+                <div>Staff</div>
+              </Link>
+            </li>
+          </NavItem>
+
+          <NavItem
+            pageName={adminPageNames.clients}
+          >
+            <li>
+              <Link to="/">
+                <BiSolidContact />
+                <div>Clients</div>
+              </Link>
+            </li>
+          </NavItem>
 
           <li className={styles.bottomNavItems}>
             <button
@@ -121,3 +158,14 @@ export function AdminLayout() {
     </div>
   );
 }
+
+function NavItem({ children, pageName }: NavItemProps) {
+  const { isSuperuser, roleData } = useContext(AuthContext);
+
+  if (!isSuperuser) {
+    return roleData.pagePermissions[pageName]?.read && children ;
+  }
+
+  return children;
+}
+
